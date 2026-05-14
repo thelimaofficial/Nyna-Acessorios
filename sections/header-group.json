@@ -1,0 +1,23 @@
+{
+  "type": "header",
+  "name": "t:general.header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "show_announcement": true,
+        "text": "DELICADEZA • SOFISTICAÇÃO • ATEMPORALIDADE"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu"
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "hero-banner": {
+      "type": "hero-banner",
+      "settings": {
+        "subheading": "NYNA Acessórios",
+        "heading": "Elegância em cada detalhe",
+        "description": "Acessórios que traduzem feminilidade moderna de forma leve e sofisticada.",
+        "button_label": "Descubra",
+        "button_link": "/collections/all"
+      }
+    }
+  },
+  "order": [
+    "hero-banner"
+  ]
+}
