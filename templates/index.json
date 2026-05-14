@@ -2,16 +2,109 @@
   "sections": {
     "hero-banner": {
       "type": "hero-banner",
+      "settings": {},
+      "blocks": {
+        "slide-1": {
+          "type": "slide",
+          "settings": {
+            "subheading": "NYNA Acessórios",
+            "heading": "Elegância em cada detalhe",
+            "description": "Acessórios que traduzem feminilidade moderna de forma leve e sofisticada.",
+            "button_label": "Descubra",
+            "button_link": "/collections/all"
+          }
+        },
+        "slide-2": {
+          "type": "slide",
+          "settings": {
+            "subheading": "Nova Coleção",
+            "heading": "Brilho atemporal",
+            "description": "Peças exclusivas feitas para destacar sua beleza natural em todas as ocasiões.",
+            "button_label": "Ver Novidades",
+            "button_link": "/collections/new"
+          }
+        },
+        "slide-3": {
+          "type": "slide",
+          "settings": {
+            "subheading": "O Presente Ideal",
+            "heading": "Surpreenda",
+            "description": "Joias selecionadas a dedo para criar momentos inesquecíveis.",
+            "button_label": "Comprar Agora",
+            "button_link": "/collections/gifts"
+          }
+        }
+      },
+      "block_order": [
+        "slide-1",
+        "slide-2",
+        "slide-3"
+      ]
+    },
+    "featured-collections": {
+      "type": "featured-collections",
       "settings": {
-        "subheading": "NYNA Acessórios",
-        "heading": "Elegância em cada detalhe",
-        "description": "Acessórios que traduzem feminilidade moderna de forma leve e sofisticada.",
-        "button_label": "Descubra",
-        "button_link": "/collections/all"
+        "heading": "Shop by Category",
+        "subheading": "Encontre o acessório perfeito"
+      },
+      "blocks": {
+        "rings": {
+          "type": "collection",
+          "settings": {
+            "title": "Anéis"
+          }
+        },
+        "earrings": {
+          "type": "collection",
+          "settings": {
+            "title": "Brincos"
+          }
+        },
+        "necklaces": {
+          "type": "collection",
+          "settings": {
+            "title": "Colares"
+          }
+        },
+        "bracelets": {
+          "type": "collection",
+          "settings": {
+            "title": "Pulseiras"
+          }
+        }
+      },
+      "block_order": [
+        "rings",
+        "earrings",
+        "necklaces",
+        "bracelets"
+      ]
+    },
+    "image-with-text": {
+      "type": "image-with-text",
+      "settings": {
+        "layout": "image_first",
+        "subheading": "Nossa Essência",
+        "heading": "Sobre a NYNA",
+        "text": "<p>Acreditamos que a beleza mora nos detalhes. Cada acessório é pensado para realçar a feminilidade de forma leve, sofisticada e atemporal. Joias feitas para durar e te acompanhar em todos os momentos.</p>",
+        "button_label": "Conheça nossa história",
+        "button_link": "/pages/sobre-nos"
+      }
+    },
+    "featured-products": {
+      "type": "featured-products",
+      "settings": {
+        "subheading": "Seleção Exclusiva",
+        "heading": "Mais Vendidos",
+        "products_to_show": 4,
+        "show_view_all": true
       }
     }
   },
   "order": [
-    "hero-banner"
+    "hero-banner",
+    "featured-collections",
+    "image-with-text",
+    "featured-products"
   ]
 }

@@ -1,0 +1,194 @@
+<section class="featured-collections section-{{ section.id }}" aria-label="{{ section.settings.heading }}">
+  <div class="featured-collections__header">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="featured-collections__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.subheading != blank -%}
+      <p class="featured-collections__subheading">{{ section.settings.subheading }}</p>
+    {%- endif -%}
+  </div>
+
+  <div class="featured-collections__grid">
+    {%- for block in section.blocks -%}
+      <a href="{{ block.settings.collection.url | default: '#' }}" class="featured-collections__item" {{ block.shopify_attributes }}>
+        <div class="featured-collections__media">
+          {%- assign collection_image = block.settings.image | default: block.settings.collection.image | default: block.settings.collection.products.first.featured_image -%}
+          {%- if collection_image != blank -%}
+            {{
+              collection_image
+              | image_url: width: 600
+              | image_tag:
+                class: 'featured-collections__img',
+                alt: collection_image.alt | default: block.settings.collection.title,
+                loading: 'lazy'
+            }}
+          {%- else -%}
+            {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg featured-collections__img' }}
+          {%- endif -%}
+        </div>
+        <div class="featured-collections__title-wrapper">
+          <h3 class="featured-collections__title">
+            {{ block.settings.title | default: block.settings.collection.title | default: 'Categoria' }}
+          </h3>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .featured-collections {
+    padding-block: clamp(4rem, 8vw, 6rem);
+  }
+
+  .featured-collections__header {
+    text-align: center;
+    margin-bottom: clamp(2rem, 5vw, 4rem);
+  }
+
+  .featured-collections__heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 400;
+    color: #2c2420;
+    margin-bottom: 0.5rem;
+  }
+
+  .featured-collections__subheading {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #8b7355;
+  }
+
+  .featured-collections__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .featured-collections__item {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    group;
+  }
+
+  .featured-collections__media {
+    position: relative;
+    border-radius: 999px; /* Arched/pill look or full circle */
+    border-radius: 4px; /* Using rounded corners instead for a more timeless look */
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
+
+  .featured-collections__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s ease;
+  }
+
+  .featured-collections__item:hover .featured-collections__img {
+    transform: scale(1.05);
+  }
+
+  .featured-collections__title-wrapper {
+    text-align: center;
+  }
+
+  .featured-collections__title {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #2c2420;
+    transition: color 0.3s ease;
+  }
+
+  .featured-collections__item:hover .featured-collections__title {
+    color: #8b7355;
+  }
+
+  @media (max-width: 990px) {
+    .featured-collections__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .featured-collections__grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 1rem;
+      gap: 1rem;
+    }
+
+    .featured-collections__item {
+      flex: 0 0 70%;
+      scroll-snap-align: start;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Featured Collections",
+  "class": "shopify-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Encontre o acessório perfeito"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom Image",
+          "info": "Overrides the collection image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Custom Title",
+          "info": "Overrides the collection title"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collections",
+      "blocks": [
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" }
+      ]
+    }
+  ]
+}
+{% endschema %}

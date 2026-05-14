@@ -1,89 +1,180 @@
-<section class="hero full-width" aria-label="{{ section.settings.heading }}">
+<section class="hero-carousel full-width" data-autoplay="true" data-speed="7000" aria-label="Banners principais">
+  {%- for block in section.blocks -%}
+    <div
+      class="hero-slide {% if forloop.first %}is-active{% endif %}"
+      {{ block.shopify_attributes }}
+      data-index="{{ forloop.index0 }}"
+    >
+      {%- comment -%} Background image {%- endcomment -%}
+      <div class="hero-slide__media">
+        {%- if block.settings.image != blank -%}
+          {{
+            block.settings.image
+            | image_url: width: 2000
+            | image_tag: class: 'hero-slide__img', alt: block.settings.image.alt
+            | default: block.settings.heading, loading: 'eager'
+          }}
+        {%- else -%}
+          <img
+            class="hero-slide__img"
+            src="{{ 'hero-model.png' | asset_url }}"
+            alt="Hero placeholder"
+            width="2000"
+            height="1000"
+            loading="eager"
+          >
+        {%- endif -%}
+      </div>
 
-  {%- comment -%} Background image ─ acts as the model photo {%- endcomment -%}
-  <div class="hero__media">
-    {%- if section.settings.image != blank -%}
-      {{
-        section.settings.image
-        | image_url: width: 2000
-        | image_tag:
-          class: 'hero__img',
-          alt: section.settings.image.alt | default: section.settings.heading,
-          width: 2000,
-          height: 1000,
-          loading: 'eager',
-          fetchpriority: 'high'
-      }}
-    {%- else -%}
-      <img
-        class="hero__img"
-        src="{{ 'hero-model.png' | asset_url }}"
-        alt="{{ section.settings.heading }}"
-        width="2000"
-        height="1000"
-        loading="eager"
-        fetchpriority="high"
-      >
-    {%- endif -%}
-  </div>
+      {%- comment -%} Overlay gradient {%- endcomment -%}
+      <div class="hero-slide__overlay" aria-hidden="true"></div>
 
-  {%- comment -%} Overlay gradient {%- endcomment -%}
-  <div class="hero__overlay" aria-hidden="true"></div>
+      {%- comment -%} Content {%- endcomment -%}
+      <div class="hero-slide__content">
+        {%- if block.settings.subheading != blank -%}
+          <p class="hero-slide__eyebrow">{{ block.settings.subheading }}</p>
+        {%- endif -%}
 
-  {%- comment -%} Content ─ positioned left-center {%- endcomment -%}
-  <div class="hero__content">
-    {%- if section.settings.subheading != blank -%}
-      <p class="hero__eyebrow">{{ section.settings.subheading }}</p>
-    {%- endif -%}
+        {%- if block.settings.heading != blank -%}
+          <h2 class="hero-slide__heading">{{ block.settings.heading }}</h2>
+        {%- endif -%}
 
-    {%- if section.settings.heading != blank -%}
-      <h1 class="hero__heading">{{ section.settings.heading }}</h1>
-    {%- endif -%}
+        {%- if block.settings.description != blank -%}
+          <p class="hero-slide__description">{{ block.settings.description }}</p>
+        {%- endif -%}
 
-    {%- if section.settings.description != blank -%}
-      <p class="hero__description">{{ section.settings.description }}</p>
-    {%- endif -%}
+        {%- if block.settings.button_label != blank -%}
+          <a
+            class="hero-slide__btn"
+            href="{{ block.settings.button_link | default: routes.collections_url }}"
+          >
+            {{ block.settings.button_label }}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endfor -%}
 
-    {%- if section.settings.button_label != blank -%}
-      <a
-        class="hero__btn"
-        href="{{ section.settings.button_link | default: routes.collections_url }}"
-        id="hero-cta"
-      >
-        {{ section.settings.button_label }}
-      </a>
-    {%- endif -%}
-  </div>
-
+  {%- if section.blocks.size > 1 -%}
+    <div class="hero-carousel__dots">
+      {%- for block in section.blocks -%}
+        <button
+          class="hero-carousel__dot {% if forloop.first %}is-active{% endif %}"
+          data-target="{{ forloop.index0 }}"
+          aria-label="Ir para banner {{ forloop.index }}"
+        ></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
 </section>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const carousel = document.querySelector('.hero-carousel');
+    if (!carousel) return;
+
+    const slides = carousel.querySelectorAll('.hero-slide');
+    const dots = carousel.querySelectorAll('.hero-carousel__dot');
+    const speed = parseInt(carousel.dataset.speed) || 7000;
+    let currentIndex = 0;
+    let interval;
+
+    if (slides.length <= 1) return;
+
+    function goToSlide(index) {
+      slides[currentIndex].classList.remove('is-active');
+      if (dots.length) dots[currentIndex].classList.remove('is-active');
+
+      currentIndex = index;
+
+      slides[currentIndex].classList.add('is-active');
+      if (dots.length) dots[currentIndex].classList.add('is-active');
+    }
+
+    function nextSlide() {
+      let nextIndex = (currentIndex + 1) % slides.length;
+      goToSlide(nextIndex);
+    }
+
+    function startAutoplay() {
+      interval = setInterval(nextSlide, speed);
+    }
+
+    function stopAutoplay() {
+      clearInterval(interval);
+    }
+
+    // Dot click events
+    dots.forEach((dot) => {
+      dot.addEventListener('click', function () {
+        stopAutoplay();
+        goToSlide(parseInt(this.dataset.target));
+        startAutoplay();
+      });
+    });
+
+    startAutoplay();
+
+    // Pause on tab inactivity to save resources
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        stopAutoplay();
+      } else {
+        startAutoplay();
+      }
+    });
+  });
+</script>
+
 {% stylesheet %}
-  /* ── Hero wrapper ── */
-  .hero {
+  .hero-carousel {
     position: relative;
     overflow: hidden;
     min-height: var(--hero-height, 88svh);
     display: flex;
     align-items: center;
+    background-color: #b08f7a;
+  }
+
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1.5s ease-in-out, visibility 1.5s;
+    z-index: 1;
+  }
+
+  .hero-slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
   }
 
   /* ── Background image ── */
-  .hero__media {
+  .hero-slide__media {
     position: absolute;
     inset: 0;
     z-index: 0;
   }
 
-  .hero__img {
+  .hero-slide__img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center top;
-    max-width: none;
+    transition: transform 10s linear;
+  }
+
+  /* Subtle zoom effect while active */
+  .hero-slide.is-active .hero-slide__img {
+    transform: scale(1.03);
   }
 
   /* ── Gradient overlay ── */
-  .hero__overlay {
+  .hero-slide__overlay {
     position: absolute;
     inset: 0;
     z-index: 1;
@@ -96,25 +187,29 @@
   }
 
   /* ── Content box ── */
-  .hero__content {
+  .hero-slide__content {
     position: relative;
     z-index: 2;
     padding-inline: var(--page-margin, 1.25rem);
     max-width: min(42rem, calc(100% - var(--page-margin, 1.25rem) * 2));
-    margin-inline-start: max(var(--page-margin, 1.25rem), calc((100% - var(--page-width, 90rem)) / 2 + var(--page-margin, 1.25rem)));
+    margin-inline-start: max(
+      var(--page-margin, 1.25rem),
+      calc((100% - var(--page-width, 90rem)) / 2 + var(--page-margin, 1.25rem))
+    );
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
-    animation: hero-fade-in 0.9s ease both;
+    transform: translateY(1rem);
+    opacity: 0;
+    transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
   }
 
-  @keyframes hero-fade-in {
-    from { opacity: 0; transform: translateY(1.5rem); }
-    to   { opacity: 1; transform: translateY(0); }
+  .hero-slide.is-active .hero-slide__content {
+    transform: translateY(0);
+    opacity: 1;
   }
 
-  /* ── Eyebrow ── */
-  .hero__eyebrow {
+  .hero-slide__eyebrow {
     font-size: 0.6875rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
@@ -122,17 +217,16 @@
     font-weight: 500;
   }
 
-  /* ── Heading ── */
-  .hero__heading {
+  .hero-slide__heading {
     font-size: clamp(2rem, 5vw, 3.25rem);
     font-weight: 300;
     line-height: 1.15;
     color: #faf5ee;
     letter-spacing: 0.01em;
+    font-family: 'Cormorant Garamond', serif;
   }
 
-  /* ── Description ── */
-  .hero__description {
+  .hero-slide__description {
     font-size: clamp(0.875rem, 1.5vw, 1rem);
     line-height: 1.65;
     color: rgba(250, 245, 238, 0.8);
@@ -140,8 +234,7 @@
     font-weight: 300;
   }
 
-  /* ── CTA Button ── */
-  .hero__btn {
+  .hero-slide__btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -159,78 +252,113 @@
     border-radius: 2px;
   }
 
-  .hero__btn:hover {
+  .hero-slide__btn:hover {
     background-color: transparent;
     color: #e8d5b0;
     border-color: #e8d5b0;
   }
 
+  /* ── Dots ── */
+  .hero-carousel__dots {
+    position: absolute;
+    bottom: 2rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    z-index: 3;
+  }
+
+  .hero-carousel__dot {
+    width: 2rem;
+    height: 2px;
+    background-color: rgba(250, 245, 238, 0.4);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .hero-carousel__dot.is-active {
+    background-color: #faf5ee;
+  }
+
   /* ── Mobile ── */
   @media (max-width: 768px) {
-    .hero {
+    .hero-carousel {
       min-height: 75svh;
       align-items: flex-end;
     }
 
-    .hero__overlay {
-      background: linear-gradient(
-        to top,
-        rgba(30, 22, 18, 0.72) 0%,
-        rgba(30, 22, 18, 0.1) 60%
-      );
+    .hero-slide {
+      align-items: flex-end;
     }
 
-    .hero__content {
+    .hero-slide__overlay {
+      background: linear-gradient(to top, rgba(30, 22, 18, 0.72) 0%, rgba(30, 22, 18, 0.1) 60%);
+    }
+
+    .hero-slide__content {
       margin-inline-start: 0;
       max-width: 100%;
       padding-inline: var(--page-margin, 1.25rem);
-      padding-bottom: 3rem;
+      padding-bottom: 4.5rem;
     }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Hero Banner",
-  "settings": [
+  "name": "Hero Carousel",
+  "max_blocks": 5,
+  "settings": [],
+  "blocks": [
     {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Background image"
-    },
-    {
-      "type": "text",
-      "id": "subheading",
-      "label": "Eyebrow text",
-      "default": "NYNA Acessórios"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Elegância em cada detalhe"
-    },
-    {
-      "type": "textarea",
-      "id": "description",
-      "label": "Description",
-      "default": "Acessórios que traduzem feminilidade moderna de forma leve e sofisticada."
-    },
-    {
-      "type": "text",
-      "id": "button_label",
-      "label": "Button label",
-      "default": "Descubra"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button link"
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Eyebrow text",
+          "default": "NYNA Acessórios"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Elegância em cada detalhe"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Acessórios que traduzem feminilidade moderna de forma leve e sofisticada."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Descubra"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Hero Banner"
+      "name": "Hero Carousel",
+      "blocks": [{ "type": "slide" }]
     }
   ]
 }
