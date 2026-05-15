@@ -44,15 +44,15 @@
       {%- endfor -%}
 
       <div class="site-header__icons">
+        <a href="{{ routes.search_url }}" class="site-header__icon-btn" aria-label="{{ 'accessibility.search' | t }}">
+          {{ 'icon-busca.svg' | inline_asset_content }}
+        </a>
+
         {%- if shop.customer_accounts_enabled -%}
           <shopify-account menu="{{ section.settings.customer_account_menu }}" aria-label="{{ 'accessibility.account' | t }}" class="site-header__icon-btn">
             {{ 'icon-account.svg' | inline_asset_content }}
           </shopify-account>
         {%- endif -%}
-
-        <a href="{{ routes.search_url }}" class="site-header__icon-btn" aria-label="{{ 'accessibility.search' | t }}">
-          {{ 'icon-busca.svg' | inline_asset_content }}
-        </a>
 
         <a href="{{ routes.cart_url }}" class="site-header__icon-btn site-header__cart" aria-label="{{ 'accessibility.cart' | t: count: cart.item_count }}">
           {%- if cart.item_count > 0 -%}
