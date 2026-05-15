@@ -50,7 +50,7 @@
 
         {%- if shop.customer_accounts_enabled -%}
           <shopify-account menu="{{ section.settings.customer_account_menu }}" aria-label="{{ 'accessibility.account' | t }}" class="site-header__icon-btn">
-            {{ 'icon-account.svg' | inline_asset_content }}
+            {{ 'icon-user.svg' | inline_asset_content }}
           </shopify-account>
         {%- endif -%}
 
@@ -174,7 +174,7 @@
   .site-header__icons {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.25rem;
     margin-left: 1.5rem;
   }
 
@@ -193,10 +193,10 @@
     opacity: 0.6;
   }
 
-  .site-header__icon-btn svg,
-  .site-header__icon-btn shopify-account svg {
-    width: 1.2rem;
-    height: 1.2rem;
+  .site-header__icon-btn svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    display: block;
   }
 
   .site-header__cart-count {
@@ -227,11 +227,17 @@
     }
 
     .site-header__inner {
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: 1fr auto 1fr;
     }
 
     .site-header__logo {
+      grid-column: 2;
       justify-content: center;
+    }
+
+    .site-header__nav--right {
+      grid-column: 3;
+      justify-content: flex-end;
     }
   }
 {% endstylesheet %}
