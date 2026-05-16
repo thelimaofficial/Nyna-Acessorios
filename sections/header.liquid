@@ -13,15 +13,38 @@
     <nav class="site-header__nav site-header__nav--left" aria-label="{{ 'accessibility.nav_left' | t }}">
       {%- for link in section.settings.menu.links -%}
         {%- if forloop.last == false -%}
-          <a
-            class="site-header__nav-link"
-            href="{{ link.url }}"
-            {% if link.active %}
-              aria-current="page"
-            {% endif %}
-          >
-            {{ link.title }}
-          </a>
+          {%- assign is_mega_menu = false -%}
+          {%- assign handle_check = link.title | handleize -%}
+          {%- if handle_check == 'joias' and linklists['menu-joias'].links.size > 0 -%}
+            {%- assign is_mega_menu = true -%}
+          {%- endif -%}
+
+          <div class="site-header__nav-item" {% if is_mega_menu %}data-mega-menu-trigger{% endif %}>
+            <a
+              class="site-header__nav-link"
+              href="{{ link.url }}"
+              {% if link.active %}
+                aria-current="page"
+              {% endif %}
+              {% if is_mega_menu %}
+                aria-haspopup="true" aria-expanded="false"
+              {% endif %}
+            >
+              {{ link.title }}
+            </a>
+
+            {%- if is_mega_menu -%}
+              <div class="mega-menu" aria-hidden="true" data-mega-menu>
+                <div class="mega-menu__inner">
+                  <div class="mega-menu__list">
+                    {%- for child_link in linklists['menu-joias'].links -%}
+                      <a href="{{ child_link.url }}" class="mega-menu__link">{{ child_link.title }}</a>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
         {%- endif -%}
       {%- endfor -%}
     </nav>
@@ -49,15 +72,17 @@
     <div class="site-header__nav site-header__nav--right">
       {%- for link in section.settings.menu.links -%}
         {%- if forloop.last -%}
-          <a
-            class="site-header__nav-link"
-            href="{{ link.url }}"
-            {% if link.active %}
-              aria-current="page"
-            {% endif %}
-          >
-            {{ link.title }}
-          </a>
+          <div class="site-header__nav-item">
+            <a
+              class="site-header__nav-link"
+              href="{{ link.url }}"
+              {% if link.active %}
+                aria-current="page"
+              {% endif %}
+            >
+              {{ link.title }}
+            </a>
+          </div>
         {%- endif -%}
       {%- endfor -%}
 
@@ -159,6 +184,76 @@
     display: flex;
     align-items: center;
     gap: 2rem;
+    height: 100%;
+  }
+
+  .site-header__nav-item {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  /* ══════════════════════════════════════════
+     Mega Menu
+     ══════════════════════════════════════════ */
+  .mega-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--header-bg, #faf8f5);
+    border-bottom: 1px solid var(--header-border, rgba(44, 36, 32, 0.08));
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    z-index: -1;
+    
+    /* Animation initial state */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-15px);
+    transition:
+      opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+      transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+      visibility 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    pointer-events: none;
+  }
+
+  .mega-menu.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .mega-menu__inner {
+    max-width: var(--page-width, 90rem);
+    margin: 0 auto;
+    padding: 2rem var(--page-margin, 1.25rem) 2.5rem;
+    display: flex;
+  }
+
+  .mega-menu__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .mega-menu__link {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--header-text, #2c2420);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+  }
+
+  .mega-menu__link:hover {
+    opacity: 0.5;
+    transform: translateX(6px);
   }
 
   .site-header__nav--right {
@@ -463,6 +558,52 @@
       if (e.key === 'Escape' && overlay.classList.contains('is-active')) {
         closeSearch();
       }
+    });
+
+    // ── Mega Menu Logic ──
+    var megaTriggers = document.querySelectorAll('[data-mega-menu-trigger]');
+    
+    megaTriggers.forEach(function(trigger) {
+      var menu = trigger.querySelector('[data-mega-menu]');
+      var link = trigger.querySelector('.site-header__nav-link');
+      var timeoutId;
+      
+      if (!menu) return;
+
+      function openMenu() {
+        clearTimeout(timeoutId);
+        menu.classList.add('is-active');
+        menu.setAttribute('aria-hidden', 'false');
+        if (link) link.setAttribute('aria-expanded', 'true');
+      }
+
+      function closeMenu() {
+        timeoutId = setTimeout(function() {
+          menu.classList.remove('is-active');
+          menu.setAttribute('aria-hidden', 'true');
+          if (link) link.setAttribute('aria-expanded', 'false');
+        }, 150);
+      }
+
+      trigger.addEventListener('mouseenter', openMenu);
+      trigger.addEventListener('mouseleave', closeMenu);
+      
+      if (link) {
+        link.addEventListener('focus', openMenu);
+      }
+      
+      menu.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeMenu();
+          if (link) link.focus();
+        }
+      });
+      
+      trigger.addEventListener('focusout', function(e) {
+        if (!trigger.contains(e.relatedTarget)) {
+          closeMenu();
+        }
+      });
     });
   })();
 {% endjavascript %}

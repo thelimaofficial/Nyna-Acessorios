@@ -1,0 +1,550 @@
+<div class="ca-wrap">
+  <aside class="ca-sidebar" id="ca-sidebar">
+    <div class="ca-avatar">
+      <span>{{ customer.first_name | slice: 0 | upcase }}</span>
+    </div>
+    <p class="ca-name">{{ customer.name }}</p>
+    <p class="ca-email">{{ customer.email }}</p>
+    <nav class="ca-nav">
+      <button class="ca-nav__item is-active" data-section="account">Minha Conta</button>
+      <button class="ca-nav__item" data-section="orders">Pedidos</button>
+      <button class="ca-nav__item" data-section="addresses">Endereços</button>
+      <button class="ca-nav__item" data-section="settings">Configurações</button>
+      <a href="{{ routes.account_logout_url }}" class="ca-nav__item ca-nav__item--logout">Sair</a>
+    </nav>
+  </aside>
+
+  <main class="ca-main">
+    {%- comment -%} MINHA CONTA {%- endcomment -%}
+    <section class="ca-section is-active" id="ca-account">
+      <h1 class="ca-heading">Minha Conta</h1>
+      <div class="ca-card">
+        <div class="ca-info-grid">
+          <div class="ca-info-item">
+            <span class="ca-info-label">Nome</span>
+            <span class="ca-info-value">{{ customer.name }}</span>
+          </div>
+          <div class="ca-info-item">
+            <span class="ca-info-label">Email</span>
+            <span class="ca-info-value">{{ customer.email }}</span>
+          </div>
+          <div class="ca-info-item">
+            <span class="ca-info-label">Telefone</span>
+            <span class="ca-info-value">{{ customer.phone | default: '—' }}</span>
+          </div>
+          <div class="ca-info-item">
+            <span class="ca-info-label">Pedidos</span>
+            <span class="ca-info-value">{{ customer.orders_count }}</span>
+          </div>
+          <div class="ca-info-item">
+            <span class="ca-info-label">Total gasto</span>
+            <span class="ca-info-value">{{ customer.total_spent | money }}</span>
+          </div>
+          <div class="ca-info-item">
+            <span class="ca-info-label">Membro desde</span>
+            <span class="ca-info-value">{{ customer.created_at | date: "%d/%m/%Y" }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {%- comment -%} PEDIDOS {%- endcomment -%}
+    <section class="ca-section" id="ca-orders">
+      <h1 class="ca-heading">Pedidos</h1>
+      {% if customer.orders.size == 0 %}
+        <div class="ca-empty">
+          <p>Você ainda não fez nenhum pedido.</p>
+          <a href="{{ routes.all_products_collection_url }}" class="ca-btn">Explorar produtos</a>
+        </div>
+      {% else %}
+        <div class="ca-orders-list">
+          {% for order in customer.orders %}
+            <div class="ca-order-card">
+              <div class="ca-order-header">
+                <div>
+                  <span class="ca-order-num">Pedido {{ order.name }}</span>
+                  <span class="ca-order-date">{{ order.created_at | date: "%d/%m/%Y" }}</span>
+                </div>
+                <span class="ca-badge ca-badge--{{ order.financial_status }}">{{ order.financial_status_label }}</span>
+              </div>
+              <div class="ca-order-items">
+                {% for line_item in order.line_items limit: 3 %}
+                  <div class="ca-order-item">
+                    {% if line_item.product.featured_image %}
+                      <img src="{{ line_item.product.featured_image | image_url: width: 80 }}" alt="{{ line_item.title }}" class="ca-order-img">
+                    {% endif %}
+                    <div>
+                      <p class="ca-order-item-title">{{ line_item.title }}</p>
+                      <p class="ca-order-item-qty">Qtd: {{ line_item.quantity }}</p>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="ca-order-footer">
+                <span class="ca-order-total">{{ order.total_price | money }}</span>
+                <a href="{{ order.customer_url }}" class="ca-btn ca-btn--sm">Ver pedido</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </section>
+
+    {%- comment -%} ENDEREÇOS {%- endcomment -%}
+    <section class="ca-section" id="ca-addresses">
+      <h1 class="ca-heading">Endereços</h1>
+      <div class="ca-addresses-grid">
+        {% for address in customer.addresses %}
+          <div class="ca-address-card {% if address == customer.default_address %}ca-address-card--default{% endif %}">
+            {% if address == customer.default_address %}
+              <span class="ca-badge ca-badge--default">Padrão</span>
+            {% endif %}
+            <p class="ca-address-name">{{ address.name }}</p>
+            <p class="ca-address-line">{{ address.address1 }}</p>
+            {% if address.address2 != blank %}<p class="ca-address-line">{{ address.address2 }}</p>{% endif %}
+            <p class="ca-address-line">{{ address.city }}, {{ address.zip }}</p>
+            <p class="ca-address-line">{{ address.country }}</p>
+            <div class="ca-address-actions">
+              <a href="{{ routes.account_addresses_url }}" class="ca-btn ca-btn--sm ca-btn--outline">Editar</a>
+            </div>
+          </div>
+        {% endfor %}
+        <a href="{{ routes.account_addresses_url }}" class="ca-address-add">
+          <span>+</span>
+          <span>Novo endereço</span>
+        </a>
+      </div>
+    </section>
+
+    {%- comment -%} CONFIGURAÇÕES {%- endcomment -%}
+    <section class="ca-section" id="ca-settings">
+      <h1 class="ca-heading">Configurações</h1>
+      <div class="ca-card">
+        {% form 'customer', customer %}
+          {{ form.errors | default_errors }}
+          <div class="ca-field">
+            <label>Nome</label>
+            <input type="text" name="customer[first_name]" value="{{ customer.first_name }}">
+          </div>
+          <div class="ca-field">
+            <label>Sobrenome</label>
+            <input type="text" name="customer[last_name]" value="{{ customer.last_name }}">
+          </div>
+          <div class="ca-field">
+            <label>Telefone</label>
+            <input type="tel" name="customer[phone]" value="{{ customer.phone }}">
+          </div>
+          <button type="submit" class="ca-btn">Salvar alterações</button>
+        {% endform %}
+        <hr class="ca-divider">
+        <h3 class="ca-subheading">Alterar senha</h3>
+        {% form 'customer', customer %}
+          {{ form.errors | default_errors }}
+          <div class="ca-field">
+            <label>Senha atual</label>
+            <input type="password" name="customer[current_password]">
+          </div>
+          <div class="ca-field">
+            <label>Nova senha</label>
+            <input type="password" name="customer[password]">
+          </div>
+          <div class="ca-field">
+            <label>Confirmar nova senha</label>
+            <input type="password" name="customer[password_confirmation]">
+          </div>
+          <button type="submit" class="ca-btn">Atualizar senha</button>
+        {% endform %}
+        <hr class="ca-divider">
+        <a href="{{ routes.account_logout_url }}" class="ca-btn ca-btn--outline">Sair da conta</a>
+      </div>
+    </section>
+  </main>
+</div>
+
+{% stylesheet %}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+  .ca-wrap {
+    display: flex;
+    min-height: 100vh;
+    background: #f9f7f5;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* SIDEBAR */
+  .ca-sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 1px solid #f0ece8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1.5rem 2rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .ca-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #c9a87c, #7d5a44);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em;
+  }
+
+  .ca-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    text-align: center;
+    margin-bottom: 0.25rem;
+  }
+
+  .ca-email {
+    font-size: 0.75rem;
+    color: #888;
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .ca-nav {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .ca-nav__item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.75rem 1.125rem;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 450;
+    color: #555;
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: left;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .ca-nav__item:hover { background: #f5f0eb; color: #1a1a1a; }
+  .ca-nav__item.is-active { background: #f5f0eb; color: #7d5a44; font-weight: 600; }
+  .ca-nav__item--logout { color: #c0392b; margin-top: 1rem; }
+  .ca-nav__item--logout:hover { background: #fff5f5; color: #c0392b; }
+
+  /* MAIN */
+  .ca-main {
+    flex: 1;
+    padding: 3rem 3.5rem;
+    overflow-y: auto;
+  }
+
+  .ca-section { display: none; }
+  .ca-section.is-active { display: block; animation: caFadeIn 0.3s ease; }
+
+  @keyframes caFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .ca-heading {
+    font-size: 1.625rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+  }
+
+  .ca-subheading {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 1.25rem;
+  }
+
+  /* CARD */
+  .ca-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03);
+  }
+
+  .ca-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.75rem;
+  }
+
+  .ca-info-item { display: flex; flex-direction: column; gap: 0.375rem; }
+  .ca-info-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #aaa; }
+  .ca-info-value { font-size: 0.9375rem; font-weight: 500; color: #1a1a1a; }
+
+  .ca-divider { border: none; border-top: 1px solid #f0ece8; margin: 2rem 0; }
+
+  /* ORDERS */
+  .ca-orders-list { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  .ca-order-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  .ca-order-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); transform: translateY(-1px); }
+
+  .ca-order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .ca-order-num { font-weight: 600; color: #1a1a1a; font-size: 0.9375rem; display: block; }
+  .ca-order-date { font-size: 0.75rem; color: #888; margin-top: 0.2rem; }
+
+  .ca-order-items { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; }
+
+  .ca-order-item { display: flex; align-items: center; gap: 1rem; }
+  .ca-order-img { width: 52px; height: 52px; border-radius: 8px; object-fit: cover; background: #f5f0eb; }
+  .ca-order-item-title { font-size: 0.875rem; font-weight: 500; color: #1a1a1a; }
+  .ca-order-item-qty { font-size: 0.75rem; color: #888; margin-top: 0.15rem; }
+
+  .ca-order-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid #f5f0eb; }
+  .ca-order-total { font-size: 1rem; font-weight: 600; color: #1a1a1a; }
+
+  /* BADGE */
+  .ca-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: #f5f0eb;
+    color: #7d5a44;
+  }
+
+  .ca-badge--paid { background: #f0faf5; color: #27ae60; }
+  .ca-badge--pending { background: #fffbf0; color: #f39c12; }
+  .ca-badge--refunded { background: #fff5f5; color: #c0392b; }
+  .ca-badge--default { background: #f5f0eb; color: #7d5a44; margin-bottom: 0.75rem; }
+
+  /* ADDRESSES */
+  .ca-addresses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.25rem; }
+
+  .ca-address-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .ca-address-card--default { border: 1.5px solid #c9a87c; }
+  .ca-address-name { font-weight: 600; color: #1a1a1a; font-size: 0.9375rem; }
+  .ca-address-line { font-size: 0.875rem; color: #555; }
+  .ca-address-actions { margin-top: 1rem; }
+
+  .ca-address-add {
+    border: 1.5px dashed #ddd;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 2rem;
+    color: #aaa;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+    cursor: pointer;
+  }
+
+  .ca-address-add:hover { border-color: #7d5a44; color: #7d5a44; }
+  .ca-address-add span:first-child { font-size: 2rem; font-weight: 300; line-height: 1; }
+
+  /* SETTINGS / FORM */
+  .ca-field { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem; }
+
+  .ca-field label { font-size: 0.8125rem; font-weight: 500; color: #1a1a1a; letter-spacing: 0.01em; }
+
+  .ca-field input {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9375rem;
+    padding: 0.875rem 1.25rem;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    outline: none;
+    color: #1a1a1a;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .ca-field input:focus { border-color: #7d5a44; box-shadow: 0 0 0 3px rgba(125,90,68,0.08); }
+
+  /* BUTTONS */
+  .ca-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 2rem;
+    background: #7d5a44;
+    color: #fff;
+    border: 1px solid #7d5a44;
+    border-radius: 9999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    margin-top: 0.5rem;
+  }
+
+  .ca-btn:hover { background: #5e4233; border-color: #5e4233; transform: translateY(-1px); }
+  .ca-btn--outline { background: transparent; color: #7d5a44; }
+  .ca-btn--outline:hover { background: #f5f0eb; }
+  .ca-btn--sm { padding: 0.5rem 1.25rem; font-size: 0.8125rem; }
+
+  /* EMPTY */
+  .ca-empty {
+    background: #fff;
+    border-radius: 16px;
+    padding: 4rem 2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    color: #888;
+    font-size: 0.9375rem;
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    .ca-sidebar {
+      position: fixed;
+      left: 0; top: 0;
+      height: 100%;
+      z-index: 200;
+      transform: translateX(-100%);
+      transition: transform 0.4s cubic-bezier(0.25,1,0.5,1);
+      width: 80%;
+      max-width: 300px;
+    }
+
+    .ca-sidebar.is-open { transform: translateX(0); }
+
+    .ca-main { padding: 1.5rem 1.25rem; }
+    .ca-info-grid { grid-template-columns: 1fr 1fr; }
+    .ca-addresses-grid { grid-template-columns: 1fr; }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    // Navegação SPA-like
+    const navItems = document.querySelectorAll('.ca-nav__item[data-section]');
+    const sections = document.querySelectorAll('.ca-section');
+
+    function showSection(id) {
+      sections.forEach(s => s.classList.remove('is-active'));
+      navItems.forEach(n => n.classList.remove('is-active'));
+      const target = document.getElementById('ca-' + id);
+      if (target) target.classList.add('is-active');
+      navItems.forEach(n => { if (n.dataset.section === id) n.classList.add('is-active'); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    navItems.forEach(btn => {
+      btn.addEventListener('click', () => showSection(btn.dataset.section));
+    });
+
+    // Mobile sidebar toggle
+    const sidebar = document.getElementById('ca-sidebar');
+
+    const toggleBtn = document.createElement('button');
+    toggleBtn.className = 'ca-mobile-toggle';
+    toggleBtn.innerHTML = '&#9776;';
+    toggleBtn.setAttribute('aria-label', 'Menu');
+    document.querySelector('.ca-main').prepend(toggleBtn);
+
+    const overlay = document.createElement('div');
+    overlay.className = 'ca-mobile-overlay';
+    document.body.appendChild(overlay);
+
+    function openSidebar() {
+      sidebar.classList.add('is-open');
+      overlay.classList.add('is-visible');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+      sidebar.classList.remove('is-open');
+      overlay.classList.remove('is-visible');
+      document.body.style.overflow = '';
+    }
+
+    toggleBtn.addEventListener('click', openSidebar);
+    overlay.addEventListener('click', closeSidebar);
+
+    navItems.forEach(item => {
+      item.addEventListener('click', closeSidebar);
+    });
+
+    // Estilo inline do mobile toggle e overlay (para não depender do stylesheet que só processa uma vez)
+    const style = document.createElement('style');
+    style.textContent = `
+      .ca-mobile-toggle {
+        display: none;
+        background: none;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+        font-size: 1.25rem;
+        cursor: pointer;
+        color: #1a1a1a;
+        margin-bottom: 1.5rem;
+      }
+      .ca-mobile-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.3);
+        backdrop-filter: blur(4px);
+        z-index: 199;
+      }
+      .ca-mobile-overlay.is-visible { display: block; }
+      @media (max-width: 768px) {
+        .ca-mobile-toggle { display: flex; }
+      }
+    `;
+    document.head.appendChild(style);
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Customer Account",
+  "settings": []
+}
+{% endschema %}
