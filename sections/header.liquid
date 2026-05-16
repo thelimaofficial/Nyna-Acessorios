@@ -76,6 +76,7 @@
             href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
             class="site-header__icon-btn"
             aria-label="{{ 'accessibility.account' | t }}"
+            {% unless customer %}data-login-open{% endunless %}
           >
             {{ 'icon-user.svg' | inline_asset_content }}
           </a>
@@ -129,7 +130,7 @@
   #shopify-section-{{ section.id }} {
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1001;
   }
 </style>
 
@@ -381,6 +382,14 @@
   .search-bar__input::placeholder {
     color: rgba(44, 36, 32, 0.35);
     font-weight: 300;
+  }
+
+  .search-bar__input::-webkit-search-decoration,
+  .search-bar__input::-webkit-search-cancel-button,
+  .search-bar__input::-webkit-search-results-button,
+  .search-bar__input::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    appearance: none;
   }
 
   /* ── Mobile ── */
