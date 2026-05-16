@@ -1,4 +1,13 @@
-<header class="site-header full-width" role="banner">
+<header class="site-header full-width" role="banner" style="
+  --header-bg: {{ section.settings.header_bg_color }};
+  --header-text: {{ section.settings.header_text_color }};
+  --header-border: {{ section.settings.header_border_color }};
+  --cart-badge-bg: {{ section.settings.cart_badge_bg }};
+  --cart-badge-text: {{ section.settings.cart_badge_text }};
+  --search-width: {{ section.settings.search_bar_width }}%;
+  --icon-size: {{ section.settings.icon_size }}px;
+  --font-size: {{ section.settings.font_size }}px;
+">
   <div class="site-header__inner">
     {%- comment -%} ── Left navigation ── {%- endcomment -%}
     <nav class="site-header__nav site-header__nav--left" aria-label="{{ 'accessibility.nav_left' | t }}">
@@ -76,6 +85,7 @@
           href="{{ routes.cart_url }}"
           class="site-header__icon-btn site-header__cart"
           aria-label="{{ 'accessibility.cart' | t: count: cart.item_count }}"
+          data-cart-open
         >
           {%- if cart.item_count > 0 -%}
             <span class="site-header__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
@@ -94,7 +104,7 @@
             type="search"
             name="q"
             class="search-bar__input"
-            placeholder="O que você está procurando?"
+            placeholder="{{ section.settings.search_placeholder }}"
             autocomplete="off"
             autocorrect="off"
             autocapitalize="off"
@@ -115,13 +125,20 @@
   </div>
 </header>
 
+<style>
+  #shopify-section-{{ section.id }} {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+</style>
+
 {% stylesheet %}
   /* ── Header shell ── */
   .site-header {
     background-color: var(--header-bg, #faf8f5);
-    border-bottom: 1px solid rgba(44, 36, 32, 0.08);
-    position: sticky;
-    top: 0;
+    border-bottom: 1px solid var(--header-border, rgba(44, 36, 32, 0.08));
+    position: relative;
     z-index: 100;
   }
 
@@ -150,12 +167,12 @@
 
   .site-header__nav-link {
     font-family: 'Inter', sans-serif;
-    font-size: 0.875rem;
+    font-size: var(--font-size, 0.875rem);
     font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--header-link-color, #2c2420);
+    color: var(--header-text, #2c2420);
     position: relative;
     padding-bottom: 2px;
     transition: opacity 0.2s ease;
@@ -209,7 +226,7 @@
     font-weight: 300;
     letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: #2c2420;
+    color: var(--header-text, #2c2420);
   }
 
   .site-header__logo-tagline {
@@ -233,7 +250,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    color: #2c2420;
+    color: var(--header-text, #2c2420);
     text-decoration: none;
     padding: 0.25rem;
     transition: opacity 0.2s ease;
@@ -248,8 +265,8 @@
   }
 
   .site-header__icon-btn svg {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: var(--icon-size, 1.5rem);
+    height: var(--icon-size, 1.5rem);
     display: block;
     margin: 0 auto;
   }
@@ -258,8 +275,8 @@
     position: absolute;
     top: -0.35rem;
     right: -0.45rem;
-    background-color: #8b7355;
-    color: #fff;
+    background-color: var(--cart-badge-bg, #8b7355);
+    color: var(--cart-badge-text, #fff);
     font-size: 0.55rem;
     font-weight: 700;
     width: 1rem;
@@ -280,7 +297,7 @@
     left: auto;
     right: 0;
     bottom: 0;
-    width: 60%;
+    width: var(--search-width, 60%);
     display: flex;
     align-items: center;
     background-color: var(--header-bg, #faf8f5);
@@ -320,7 +337,7 @@
     justify-content: center;
     background: none;
     border: none;
-    color: #2c2420;
+    color: var(--header-text, #2c2420);
     cursor: pointer;
     padding: 0.25rem;
     flex-shrink: 0;
@@ -332,8 +349,8 @@
   }
 
   .search-bar__icon svg {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: var(--icon-size, 1.5rem);
+    height: var(--icon-size, 1.5rem);
     display: block;
   }
 
@@ -354,9 +371,9 @@
     border: none;
     outline: none;
     font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
+    font-size: var(--font-size, 0.8rem);
     font-weight: 400;
-    color: #2c2420;
+    color: var(--header-text, #2c2420);
     padding: 0.3rem 0;
     letter-spacing: 0.02em;
   }
@@ -446,6 +463,10 @@
   "name": "t:general.header",
   "settings": [
     {
+      "type": "header",
+      "content": "Logotipo"
+    },
+    {
       "type": "image_picker",
       "id": "logo",
       "label": "Logo image"
@@ -461,6 +482,10 @@
       "default": 160
     },
     {
+      "type": "header",
+      "content": "Menus"
+    },
+    {
       "type": "link_list",
       "id": "menu",
       "label": "t:labels.menu",
@@ -471,6 +496,84 @@
       "id": "customer_account_menu",
       "label": "t:labels.customer_account_menu",
       "default": "customer-account-main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Cores e Estilos"
+    },
+    {
+      "type": "color",
+      "id": "header_bg_color",
+      "label": "Cor de fundo",
+      "default": "#faf8f5"
+    },
+    {
+      "type": "color",
+      "id": "header_text_color",
+      "label": "Cor dos textos e ícones",
+      "default": "#2c2420"
+    },
+    {
+      "type": "color",
+      "id": "header_border_color",
+      "label": "Cor da linha inferior",
+      "default": "#e6e1db"
+    },
+    {
+      "type": "color",
+      "id": "cart_badge_bg",
+      "label": "Cor de fundo do contador do carrinho",
+      "default": "#8b7355"
+    },
+    {
+      "type": "color",
+      "id": "cart_badge_text",
+      "label": "Cor do texto do contador do carrinho",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Barra de Pesquisa"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Texto de placeholder da busca",
+      "default": "O que você está procurando?"
+    },
+    {
+      "type": "range",
+      "id": "search_bar_width",
+      "min": 30,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Largura da barra de pesquisa",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Tamanhos"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamanho da fonte do menu",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 16,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamanho dos ícones",
+      "default": 24
     }
   ]
 }
