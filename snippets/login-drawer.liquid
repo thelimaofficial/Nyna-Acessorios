@@ -76,8 +76,8 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(10, 10, 10, 0.15);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
@@ -96,16 +96,17 @@
     top: 0;
     right: 0;
     width: 100%;
-    max-width: 440px;
+    max-width: 480px;
     height: 100vh;
     height: 100dvh;
     background-color: #ffffff;
     z-index: 1002;
     transform: translateX(100%);
-    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
     display: flex;
     flex-direction: column;
+    border-top-left-radius: 32px;
     box-shadow: -15px 0 40px rgba(0, 0, 0, 0.08);
   }
 
@@ -117,7 +118,7 @@
   .login-drawer__header {
     display: flex;
     justify-content: flex-end;
-    padding: 2rem 2rem 0;
+    padding: 2.5rem 2.5rem 1rem 2.5rem;
     flex-shrink: 0;
   }
 
@@ -136,7 +137,7 @@
   .login-drawer__close svg {
     width: 1.25rem;
     height: 1.25rem;
-    stroke-width: 1.5px;
+    stroke-width: 1px;
   }
 
   .login-drawer__close:hover {
@@ -316,7 +317,8 @@
 
   @media (max-width: 768px) {
     .login-drawer {
-      max-width: 100%;
+      max-width: 90%;
+      border-top-left-radius: 24px;
     }
     .login-drawer__content {
       padding: 2rem 1.75rem 2.5rem;
