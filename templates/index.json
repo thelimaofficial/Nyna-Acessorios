@@ -1,8 +1,16 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero-banner": {
       "type": "hero-banner",
-      "settings": {},
       "blocks": {
         "slide-1": {
           "type": "slide",
@@ -39,36 +47,37 @@
         "slide-1",
         "slide-2",
         "slide-3"
-      ]
+      ],
+      "settings": {}
     },
     "featured-collections": {
       "type": "featured-collections",
-      "settings": {
-        "heading": "Shop by Category",
-        "subheading": "Encontre o acessório perfeito"
-      },
       "blocks": {
         "rings": {
           "type": "collection",
           "settings": {
+            "collection": "",
             "title": "Anéis"
           }
         },
         "earrings": {
           "type": "collection",
           "settings": {
+            "collection": "",
             "title": "Brincos"
           }
         },
         "necklaces": {
           "type": "collection",
           "settings": {
+            "collection": "",
             "title": "Colares"
           }
         },
         "bracelets": {
           "type": "collection",
           "settings": {
+            "collection": "",
             "title": "Pulseiras"
           }
         }
@@ -78,7 +87,11 @@
         "earrings",
         "necklaces",
         "bracelets"
-      ]
+      ],
+      "settings": {
+        "heading": "Shop by Category",
+        "subheading": "Encontre o acessório perfeito"
+      }
     },
     "image-with-text": {
       "type": "image-with-text",
@@ -96,6 +109,7 @@
       "settings": {
         "subheading": "Seleção Exclusiva",
         "heading": "Mais Vendidos",
+        "collection": "aneis",
         "products_to_show": 4,
         "show_view_all": true
       }
