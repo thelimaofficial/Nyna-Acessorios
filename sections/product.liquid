@@ -18,7 +18,7 @@
 </div>
 
 <div class="product-form">
-  {% form 'product', product %}
+  {% form 'product', product, id: 'product-form-main', data-product-form: '' %}
     {% assign current_variant = product.selected_or_first_available_variant %}
 
     <select name="id">
@@ -34,12 +34,100 @@
       {% endfor %}
     </select>
 
-    <input type="text" name="quantity" min="1" value="1">
+    <input type="number" name="quantity" min="1" value="1">
 
-    <input type="submit" value="Add to cart">
+    <button type="submit" name="add" id="product-add-to-cart-btn">Adicionar à sacola</button>
     {{ form | payment_button }}
   {% endform %}
 </div>
+
+<script>
+  (function () {
+    var form = document.querySelector('[data-product-form]');
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var submitBtn = form.querySelector('[name="add"]');
+      if (submitBtn) {
+        submitBtn.setAttribute('disabled', 'disabled');
+        submitBtn.textContent = 'Adicionando...';
+      }
+
+      var formData = new FormData(form);
+      var body = {
+        id: formData.get('id'),
+        quantity: parseInt(formData.get('quantity'), 10) || 1,
+        sections: [],
+        sections_url: window.location.pathname
+      };
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(body)
+      })
+      .then(function (res) {
+        if (!res.ok) throw new Error('Erro ao adicionar ao carrinho');
+        return res.json();
+      })
+      .then(function () {
+        // Busca o HTML atualizado da página atual para extrair o novo drawer e badge
+        return fetch(window.location.href);
+      })
+      .then(function (res) { return res.text(); })
+      .then(function (html) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+
+        // Atualiza o drawer
+        var newDrawer = doc.querySelector('[data-cart-drawer]');
+        var currentDrawer = document.querySelector('[data-cart-drawer]');
+        if (newDrawer && currentDrawer) {
+          currentDrawer.innerHTML = newDrawer.innerHTML;
+
+          // Reanexa o listener do botão fechar
+          var closeBtn = currentDrawer.querySelector('[data-cart-close]');
+          if (closeBtn) {
+            closeBtn.addEventListener('click', function (ev) {
+              ev.preventDefault();
+              if (window.closeCart) window.closeCart();
+            });
+          }
+        }
+
+        // Atualiza o badge do carrinho no header
+        var newBubble = doc.querySelector('.site-header__cart-count');
+        var currentCart = document.querySelector('.site-header__cart');
+        if (currentCart) {
+          var currentBubble = currentCart.querySelector('.site-header__cart-count');
+          if (newBubble) {
+            if (currentBubble) {
+              currentBubble.outerHTML = newBubble.outerHTML;
+            } else {
+              currentCart.insertAdjacentHTML('afterbegin', newBubble.outerHTML);
+            }
+          } else if (currentBubble) {
+            currentBubble.remove();
+          }
+        }
+
+        // Abre o drawer
+        if (window.openCart) window.openCart();
+      })
+      .catch(function (err) {
+        console.error('Erro ao adicionar ao carrinho:', err);
+      })
+      .finally(function () {
+        if (submitBtn) {
+          submitBtn.removeAttribute('disabled');
+          submitBtn.textContent = 'Adicionar à sacola';
+        }
+      });
+    });
+  })();
+</script>
 
 {% schema %}
 {
