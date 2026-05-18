@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "header",
   "name": "t:general.header",
@@ -12,7 +21,18 @@
     "header": {
       "type": "header",
       "settings": {
-        "menu": "main-menu"
+        "logo_width": 160,
+        "menu": "main-menu",
+        "customer_account_menu": "customer-account-main-menu",
+        "header_bg_color": "#faf8f5",
+        "header_text_color": "#2c2420",
+        "header_border_color": "#e6e1db",
+        "cart_badge_bg": "#8b7355",
+        "cart_badge_text": "#ffffff",
+        "search_placeholder": "O que você está procurando?",
+        "search_bar_width": 60,
+        "font_size": 14,
+        "icon_size": 24
       }
     }
   },
