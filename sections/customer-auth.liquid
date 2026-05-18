@@ -1,0 +1,533 @@
+{%- assign is_register = false -%}
+{%- if template.name == 'register' -%}
+  {%- assign is_register = true -%}
+{%- endif -%}
+
+<section
+  class="customer-auth"
+  style="
+    --auth-accent: {{ section.settings.accent_color }};
+    --auth-image-bg: {{ section.settings.image_background }};
+  "
+>
+  <div class="customer-auth__media" aria-label="{{ section.settings.banner_alt | escape }}">
+    {%- if section.settings.banner_image != blank -%}
+      {{
+        section.settings.banner_image
+        | image_url: width: 1200
+        | image_tag:
+          widths: '480, 720, 960, 1200',
+          sizes: '(min-width: 750px) 50vw, 100vw',
+          loading: 'eager',
+          class: 'customer-auth__image',
+          alt: section.settings.banner_alt
+      }}
+    {%- else -%}
+      <div class="customer-auth__placeholder">
+        <span>banner</span>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="customer-auth__panel">
+    <div class="customer-auth__inner">
+      {%- if is_register -%}
+        <h1 class="customer-auth__title">Criar sua conta</h1>
+        <p class="customer-auth__subtitle">Cadastre-se para acompanhar pedidos,<br>salvar favoritos e viver uma experiencia exclusiva.</p>
+
+        {%- form 'create_customer', class: 'customer-auth__form customer-auth__form--register', novalidate: 'novalidate' -%}
+          {%- if form.errors -%}
+            <div class="customer-auth__errors" role="alert">
+              {{ form.errors | default_errors }}
+            </div>
+          {%- endif -%}
+
+          <div class="customer-auth__row">
+            <input
+              type="text"
+              name="customer[first_name]"
+              id="RegisterFirstName"
+              autocomplete="given-name"
+              placeholder="Nome"
+              value="{{ form.first_name }}"
+              required
+            >
+            <input
+              type="text"
+              name="customer[last_name]"
+              id="RegisterLastName"
+              autocomplete="family-name"
+              placeholder="Sobrenome"
+              value="{{ form.last_name }}"
+              required
+            >
+          </div>
+
+          <input
+            type="email"
+            name="customer[email]"
+            id="RegisterEmail"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            placeholder="Email"
+            value="{{ form.email }}"
+            required
+          >
+
+          <div class="customer-auth__password-field">
+            <input
+              type="password"
+              name="customer[password]"
+              id="RegisterPassword"
+              autocomplete="new-password"
+              placeholder="Senha"
+              required
+              data-password-input
+            >
+            <button type="button" class="customer-auth__password-toggle" aria-label="Mostrar senha" data-password-toggle>
+              <span class="customer-auth__eye customer-auth__eye--show" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.5"/>
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </span>
+              <span class="customer-auth__eye customer-auth__eye--hide" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M3 3l18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M10.6 5.2A10.8 10.8 0 0 1 12 5c6 0 9.5 7 9.5 7a17.4 17.4 0 0 1-3.1 4.1M6.5 6.7C3.9 8.5 2.5 12 2.5 12s3.5 7 9.5 7c1.7 0 3.2-.5 4.5-1.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+          </div>
+
+          <div class="customer-auth__password-field">
+            <input
+              type="password"
+              id="RegisterPasswordConfirmation"
+              autocomplete="new-password"
+              placeholder="Confirmar senha"
+              required
+              data-password-confirmation
+              data-password-input
+            >
+            <button type="button" class="customer-auth__password-toggle" aria-label="Mostrar senha" data-password-toggle>
+              <span class="customer-auth__eye customer-auth__eye--show" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.5"/>
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </span>
+              <span class="customer-auth__eye customer-auth__eye--hide" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M3 3l18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M10.6 5.2A10.8 10.8 0 0 1 12 5c6 0 9.5 7 9.5 7a17.4 17.4 0 0 1-3.1 4.1M6.5 6.7C3.9 8.5 2.5 12 2.5 12s3.5 7 9.5 7c1.7 0 3.2-.5 4.5-1.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+          </div>
+
+          <p class="customer-auth__match-error" data-password-match-error role="alert">As senhas precisam ser iguais.</p>
+
+          <button type="submit" class="customer-auth__submit">Criar conta</button>
+        {%- endform -%}
+
+        <p class="customer-auth__switch">Ja possui conta? <a href="{{ routes.account_login_url }}">Entrar</a></p>
+      {%- else -%}
+        <h1 class="customer-auth__title">Entrar na sua conta</h1>
+        <p class="customer-auth__subtitle">Acesse seus pedidos, favoritos<br>e uma experiencia exclusiva.</p>
+
+        {%- form 'customer_login', class: 'customer-auth__form', novalidate: 'novalidate' -%}
+          {%- if form.errors -%}
+            <div class="customer-auth__errors" role="alert">
+              {{ form.errors | default_errors }}
+            </div>
+          {%- endif -%}
+
+          <input
+            type="email"
+            name="customer[email]"
+            id="CustomerEmail"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            placeholder="Email"
+            value="{{ form.email }}"
+            required
+          >
+
+          <div class="customer-auth__password-field">
+            <input
+              type="password"
+              name="customer[password]"
+              id="CustomerPassword"
+              autocomplete="current-password"
+              placeholder="Senha"
+              required
+              data-password-input
+            >
+            <button type="button" class="customer-auth__password-toggle" aria-label="Mostrar senha" data-password-toggle>
+              <span class="customer-auth__eye customer-auth__eye--show" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.5"/>
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </span>
+              <span class="customer-auth__eye customer-auth__eye--hide" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M3 3l18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M10.6 5.2A10.8 10.8 0 0 1 12 5c6 0 9.5 7 9.5 7a17.4 17.4 0 0 1-3.1 4.1M6.5 6.7C3.9 8.5 2.5 12 2.5 12s3.5 7 9.5 7c1.7 0 3.2-.5 4.5-1.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+          </div>
+
+          <a href="{{ routes.account_recover_url }}" class="customer-auth__forgot">Esqueceu sua senha?</a>
+
+          <button type="submit" class="customer-auth__submit">Entrar</button>
+        {%- endform -%}
+
+        <p class="customer-auth__switch">Nao possui conta? <a href="{{ routes.account_register_url }}">Criar conta</a></p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .customer-auth {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: calc(100vh - var(--header-height, 4.5rem));
+    background: #fff;
+    color: #0e0e0e;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .customer-auth__media {
+    min-height: 34rem;
+    background: var(--auth-image-bg, #d8b69f);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .customer-auth__image,
+  .customer-auth__placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    display: block;
+    object-fit: cover;
+  }
+
+  .customer-auth__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      linear-gradient(128deg, rgba(132, 92, 68, 0.28) 0 38%, transparent 38% 100%),
+      linear-gradient(112deg, #c49a7e 0%, #ddb79c 58%, #f3d2be 100%);
+  }
+
+  .customer-auth__placeholder span {
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .customer-auth__panel {
+    min-height: 34rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4.5rem 2rem;
+  }
+
+  .customer-auth__inner {
+    width: min(100%, 25.5rem);
+    text-align: center;
+    margin-top: -1.5rem;
+  }
+
+  .customer-auth__title {
+    margin: 0 0 0.625rem;
+    font-size: 1.625rem;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: 0;
+  }
+
+  .customer-auth__subtitle {
+    margin: 0 0 2.25rem;
+    font-size: 0.875rem;
+    line-height: 1.25;
+    font-weight: 400;
+  }
+
+  .customer-auth__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    align-items: center;
+  }
+
+  .customer-auth__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.625rem;
+    width: 100%;
+  }
+
+  .customer-auth input {
+    width: 100%;
+    height: 2.5rem;
+    border: 1px solid #d8d3cf;
+    border-radius: 999px;
+    background: #fff;
+    color: #1c1c1c;
+    font: inherit;
+    font-size: 0.75rem;
+    outline: none;
+    padding: 0 1.5rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .customer-auth input::placeholder {
+    color: #a7a19d;
+    opacity: 1;
+  }
+
+  .customer-auth input:focus {
+    border-color: var(--auth-accent, #805d4a);
+    box-shadow: 0 0 0 3px rgba(128, 93, 74, 0.1);
+  }
+
+  .customer-auth__password-field {
+    position: relative;
+    width: 100%;
+  }
+
+  .customer-auth__password-field input {
+    padding-right: 3rem;
+  }
+
+  .customer-auth__password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 0.85rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #7b746f;
+    cursor: pointer;
+    transform: translateY(-50%);
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+
+  .customer-auth__password-toggle:hover {
+    color: #1c1c1c;
+    background: #f5f1ee;
+  }
+
+  .customer-auth__eye {
+    width: 1.05rem;
+    height: 1.05rem;
+    display: block;
+  }
+
+  .customer-auth__eye svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .customer-auth__eye--hide,
+  .customer-auth__password-toggle.is-visible .customer-auth__eye--show {
+    display: none;
+  }
+
+  .customer-auth__password-toggle.is-visible .customer-auth__eye--hide {
+    display: block;
+  }
+
+  .customer-auth__submit {
+    min-width: 9.75rem;
+    height: 2.25rem;
+    margin-top: 0.75rem;
+    border: 1px solid var(--auth-accent, #805d4a);
+    border-radius: 999px;
+    background: var(--auth-accent, #805d4a);
+    color: #fff;
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .customer-auth__submit:hover {
+    background: #674837;
+    border-color: #674837;
+    transform: translateY(-1px);
+  }
+
+  .customer-auth__switch {
+    margin: 7rem 0 0;
+    font-size: 0.8125rem;
+    line-height: 1.3;
+  }
+
+  .customer-auth__switch a,
+  .customer-auth__forgot {
+    color: #0e0e0e;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity 0.2s ease;
+  }
+
+  .customer-auth__switch a:hover,
+  .customer-auth__forgot:hover {
+    opacity: 0.6;
+  }
+
+  .customer-auth__forgot {
+    align-self: flex-end;
+    margin: 0.125rem 0 0.375rem;
+    font-size: 0.75rem;
+  }
+
+  .customer-auth__errors,
+  .customer-auth__match-error {
+    width: 100%;
+    margin: 0 0 0.5rem;
+    border-radius: 8px;
+    background: #fff4f2;
+    color: #9a2f21;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  .customer-auth__errors {
+    padding: 0.75rem 1rem;
+    border: 1px solid #f1c7bf;
+  }
+
+  .customer-auth__errors ul {
+    margin: 0;
+    padding-left: 1rem;
+  }
+
+  .customer-auth__match-error {
+    display: none;
+    padding: 0.625rem 0.875rem;
+  }
+
+  .customer-auth__match-error.is-visible {
+    display: block;
+  }
+
+  @media (max-width: 749px) {
+    .customer-auth {
+      grid-template-columns: 1fr;
+    }
+
+    .customer-auth__media {
+      min-height: 16rem;
+    }
+
+    .customer-auth__panel {
+      min-height: auto;
+      padding: 3rem 1.25rem 4rem;
+    }
+
+    .customer-auth__inner {
+      margin-top: 0;
+    }
+
+    .customer-auth__row {
+      grid-template-columns: 1fr;
+    }
+
+    .customer-auth__switch {
+      margin-top: 4rem;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    var toggles = document.querySelectorAll('[data-password-toggle]');
+
+    toggles.forEach(function (toggle) {
+      var field = toggle.closest('.customer-auth__password-field');
+      var input = field ? field.querySelector('[data-password-input]') : null;
+
+      if (!input) return;
+
+      toggle.addEventListener('click', function () {
+        var shouldShow = input.type === 'password';
+        input.type = shouldShow ? 'text' : 'password';
+        toggle.classList.toggle('is-visible', shouldShow);
+        toggle.setAttribute('aria-label', shouldShow ? 'Ocultar senha' : 'Mostrar senha');
+      });
+    });
+
+    var registerForm = document.querySelector('.customer-auth__form--register');
+
+    if (registerForm) {
+      registerForm.addEventListener('submit', function (event) {
+        var password = registerForm.querySelector('#RegisterPassword');
+        var confirmation = registerForm.querySelector('[data-password-confirmation]');
+        var error = registerForm.querySelector('[data-password-match-error]');
+
+        if (!password || !confirmation || !error) return;
+
+        if (password.value !== confirmation.value) {
+          event.preventDefault();
+          error.classList.add('is-visible');
+          confirmation.setAttribute('aria-invalid', 'true');
+          confirmation.focus();
+        } else {
+          error.classList.remove('is-visible');
+          confirmation.removeAttribute('aria-invalid');
+        }
+      });
+    }
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Customer auth",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Banner image"
+    },
+    {
+      "type": "text",
+      "id": "banner_alt",
+      "label": "Banner alt text",
+      "default": "Banner"
+    },
+    {
+      "type": "color",
+      "id": "image_background",
+      "label": "Banner placeholder color",
+      "default": "#d8b69f"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#805d4a"
+    }
+  ]
+}
+{% endschema %}

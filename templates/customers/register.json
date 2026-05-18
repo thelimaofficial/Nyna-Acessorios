@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "customer-auth",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}
