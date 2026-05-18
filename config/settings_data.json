@@ -8,5 +8,14 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "current": {
+    "content_for_index": [],
+    "blocks": {
+      "286197278318599166": {
+        "type": "shopify://apps/bitlogin-social-login/blocks/app-block/9099a221-3716-4376-9c77-be195a34de99",
+        "disabled": false,
+        "settings": {}
+      }
+    }
+  }
 }
