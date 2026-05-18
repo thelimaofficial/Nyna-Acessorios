@@ -550,7 +550,6 @@
 <script>
   window.updateCartItem = function(line, quantity) {
     const drawer = document.querySelector('[data-cart-drawer]');
-    if (drawer) drawer.style.opacity = '0.5';
 
     fetch('/cart/change.js', {
       method: 'POST',
@@ -566,7 +565,6 @@
       const newDrawer = doc.querySelector('[data-cart-drawer]');
       if (newDrawer && drawer) {
         drawer.innerHTML = newDrawer.innerHTML;
-        drawer.style.opacity = '1';
         
         const closeBtn = drawer.querySelector('[data-cart-close]');
         if (closeBtn) {
@@ -591,7 +589,6 @@
     })
     .catch(error => {
       console.error('Error:', error);
-      if (drawer) drawer.style.opacity = '1';
     });
   };
 
