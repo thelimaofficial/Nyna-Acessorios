@@ -1,13 +1,17 @@
-<header class="site-header full-width" role="banner" style="
-  --header-bg: {{ section.settings.header_bg_color }};
-  --header-text: {{ section.settings.header_text_color }};
-  --header-border: {{ section.settings.header_border_color }};
-  --cart-badge-bg: {{ section.settings.cart_badge_bg }};
-  --cart-badge-text: {{ section.settings.cart_badge_text }};
-  --search-width: {{ section.settings.search_bar_width }}%;
-  --icon-size: {{ section.settings.icon_size }}px;
-  --font-size: {{ section.settings.font_size }}px;
-">
+<header
+  class="site-header full-width"
+  role="banner"
+  style="
+    --header-bg: {{ section.settings.header_bg_color }};
+    --header-text: {{ section.settings.header_text_color }};
+    --header-border: {{ section.settings.header_border_color }};
+    --cart-badge-bg: {{ section.settings.cart_badge_bg }};
+    --cart-badge-text: {{ section.settings.cart_badge_text }};
+    --search-width: {{ section.settings.search_bar_width }}%;
+    --icon-size: {{ section.settings.icon_size }}px;
+    --font-size: {{ section.settings.font_size }}px;
+  "
+>
   <div class="site-header__inner">
     {%- comment -%} ── Left navigation ── {%- endcomment -%}
     <nav class="site-header__nav site-header__nav--left" aria-label="{{ 'accessibility.nav_left' | t }}">
@@ -19,7 +23,12 @@
             {%- assign is_mega_menu = true -%}
           {%- endif -%}
 
-          <div class="site-header__nav-item" {% if is_mega_menu %}data-mega-menu-trigger{% endif %}>
+          <div
+            class="site-header__nav-item"
+            {% if is_mega_menu %}
+              data-mega-menu-trigger
+            {% endif %}
+          >
             <a
               class="site-header__nav-link"
               href="{{ link.url }}"
@@ -101,7 +110,9 @@
             href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
             class="site-header__icon-btn"
             aria-label="{{ 'accessibility.account' | t }}"
-            {% unless customer %}data-login-open{% endunless %}
+            {% unless customer %}
+              data-login-open
+            {% endunless %}
           >
             {{ 'icon-user.svg' | inline_asset_content }}
           </a>
@@ -207,14 +218,12 @@
     border-bottom-right-radius: 20px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
     z-index: -1;
-    
+
     /* Animation initial state */
     opacity: 0;
     visibility: hidden;
     transform: translateY(-15px);
-    transition:
-      opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-      transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+    transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
       visibility 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     pointer-events: none;
   }
@@ -403,10 +412,7 @@
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition:
-      clip-path 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-      opacity 0.35s ease,
-      visibility 0s 0.45s;
+    transition: clip-path 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease, visibility 0s 0.45s;
   }
 
   .search-bar.is-active {
@@ -414,10 +420,7 @@
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    transition:
-      clip-path 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-      opacity 0.3s ease,
-      visibility 0s 0s;
+    transition: clip-path 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, visibility 0s 0s;
   }
 
   .search-bar__form {
@@ -540,7 +543,9 @@
     function openSearch() {
       overlay.classList.add('is-active');
       overlay.setAttribute('aria-hidden', 'false');
-      requestAnimationFrame(function () { input.focus(); });
+      requestAnimationFrame(function () {
+        input.focus();
+      });
     }
 
     function closeSearch() {
@@ -568,12 +573,12 @@
 
     // ── Mega Menu Logic ──
     var megaTriggers = document.querySelectorAll('[data-mega-menu-trigger]');
-    
-    megaTriggers.forEach(function(trigger) {
+
+    megaTriggers.forEach(function (trigger) {
       var menu = trigger.querySelector('[data-mega-menu]');
       var link = trigger.querySelector('.site-header__nav-link');
       var timeoutId;
-      
+
       if (!menu) return;
 
       function openMenu() {
@@ -584,7 +589,7 @@
       }
 
       function closeMenu() {
-        timeoutId = setTimeout(function() {
+        timeoutId = setTimeout(function () {
           menu.classList.remove('is-active');
           menu.setAttribute('aria-hidden', 'true');
           if (link) link.setAttribute('aria-expanded', 'false');
@@ -593,19 +598,19 @@
 
       trigger.addEventListener('mouseenter', openMenu);
       trigger.addEventListener('mouseleave', closeMenu);
-      
+
       if (link) {
         link.addEventListener('focus', openMenu);
       }
-      
-      menu.addEventListener('keydown', function(e) {
+
+      menu.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
           closeMenu();
           if (link) link.focus();
         }
       });
-      
-      trigger.addEventListener('focusout', function(e) {
+
+      trigger.addEventListener('focusout', function (e) {
         if (!trigger.contains(e.relatedTarget)) {
           closeMenu();
         }
@@ -661,7 +666,7 @@
       "type": "color",
       "id": "header_bg_color",
       "label": "Cor de fundo",
-      "default": "#faf8f5"
+      "default": "#ffffffff"
     },
     {
       "type": "color",
