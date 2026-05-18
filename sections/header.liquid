@@ -520,6 +520,12 @@
       font-size: 0.75rem;
     }
   }
+
+  /* Esconde os ícones quando a busca está aberta */
+  .site-header__nav--right:has(.search-bar.is-active) .site-header__icons {
+    visibility: hidden;
+    pointer-events: none;
+  }
 {% endstylesheet %}
 
 {% javascript %}
