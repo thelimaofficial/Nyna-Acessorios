@@ -547,6 +547,19 @@
       font-size: 1.5rem;
     }
   }
+
+  body.cart-drawer-open {
+    overflow: hidden !important;
+  }
+  
+  body.cart-drawer-open .site-header {
+    filter: blur(6px);
+    pointer-events: none;
+  }
+  
+  .site-header {
+    transition: filter 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
 </style>
 
 <script>
@@ -610,11 +623,13 @@
     function lockScroll() {
       window.addEventListener('wheel', preventScroll, { passive: false });
       window.addEventListener('touchmove', preventScroll, { passive: false });
+      document.body.classList.add('cart-drawer-open');
     }
 
     function unlockScroll() {
       window.removeEventListener('wheel', preventScroll);
       window.removeEventListener('touchmove', preventScroll);
+      document.body.classList.remove('cart-drawer-open');
     }
 
     window.openCart = function() {
