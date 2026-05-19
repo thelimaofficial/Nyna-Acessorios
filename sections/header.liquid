@@ -112,9 +112,6 @@
             href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
             class="site-header__icon-btn"
             aria-label="{{ 'accessibility.account' | t }}"
-            {% unless customer %}
-              data-login-open
-            {% endunless %}
           >
             {{ 'icon-user.svg' | inline_asset_content }}
           </a>
