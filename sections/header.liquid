@@ -108,13 +108,18 @@
         </button>
 
         {%- if shop.customer_accounts_enabled -%}
-          <a
-            href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
-            class="site-header__icon-btn"
-            aria-label="{{ 'accessibility.account' | t }}"
+          <shopify-account
+            class="site-header__icon-btn site-header__account"
+            menu="{{ section.settings.customer_account_menu }}"
           >
-            {{ 'icon-user.svg' | inline_asset_content }}
-          </a>
+            <span
+              slot="signed-out-avatar"
+              class="site-header__account-avatar"
+              aria-label="{{ 'accessibility.account' | t }}"
+            >
+              {{ 'icon-user.svg' | inline_asset_content }}
+            </span>
+          </shopify-account>
         {%- endif -%}
 
         <a
@@ -373,6 +378,19 @@
     height: var(--icon-size, 1.5rem);
     display: block;
     margin: 0 auto;
+  }
+
+  .site-header__account {
+    --shopify-account-signed-in-avatar-size: var(--icon-size, 1.5rem);
+    --shopify-account-signed-in-avatar-color-background: transparent;
+    --shopify-account-signed-in-avatar-color-text: var(--header-text, #2c2420);
+  }
+
+  .site-header__account-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
   }
 
   .site-header__cart-count {
