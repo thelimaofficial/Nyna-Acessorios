@@ -358,7 +358,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 0 0 2rem;
     position: relative;
+    width: 2rem;
+    height: 2rem;
     color: var(--header-text, #2c2420);
     text-decoration: none;
     padding: 0.25rem;
@@ -381,6 +384,7 @@
   }
 
   .site-header__account {
+    transform: translateX(-0.2rem);
     --shopify-account-signed-in-avatar-size: var(--icon-size, 1.5rem);
     --shopify-account-signed-in-avatar-color-background: transparent;
     --shopify-account-signed-in-avatar-color-text: var(--header-text, #2c2420);
@@ -391,6 +395,10 @@
     align-items: center;
     justify-content: center;
     color: inherit;
+  }
+
+  .site-header__cart {
+    margin-left: 0.25rem;
   }
 
   .site-header__cart-count {
