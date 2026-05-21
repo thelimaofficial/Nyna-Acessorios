@@ -79,5 +79,242 @@
         "default": 4
       }
     ]
+  },
+  {
+    "name": "Sacola",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Textos"
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_title",
+        "label": "Titulo",
+        "default": "Sacola"
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_item_singular",
+        "label": "Item no singular",
+        "default": "item"
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_item_plural",
+        "label": "Item no plural",
+        "default": "itens"
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_empty_title",
+        "label": "Titulo da sacola vazia",
+        "default": "Sua sacola esta vazia"
+      },
+      {
+        "type": "textarea",
+        "id": "cart_drawer_empty_text",
+        "label": "Texto da sacola vazia",
+        "default": "Tem uma conta? Faca login para finalizar a compra mais rapido."
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_empty_button_label",
+        "label": "Botao da sacola vazia",
+        "default": "Continuar comprando"
+      },
+      {
+        "type": "url",
+        "id": "cart_drawer_empty_button_url",
+        "label": "Link do botao da sacola vazia"
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_subtotal_label",
+        "label": "Rotulo do subtotal",
+        "default": "Subtotal"
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_shipping_label",
+        "label": "Rotulo do frete",
+        "default": "Frete"
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_shipping_helper",
+        "label": "Texto ao lado do frete",
+        "default": "Calcule pelo CEP"
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_checkout_label",
+        "label": "Botao de checkout",
+        "default": "Finalizar compra"
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_view_cart_label",
+        "label": "Botao ver sacola",
+        "default": "Ver sacola"
+      },
+      {
+        "type": "header",
+        "content": "Frete gratis"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_drawer_show_free_shipping",
+        "label": "Mostrar barra de frete gratis",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "cart_drawer_free_shipping_threshold",
+        "min": 0,
+        "max": 1000,
+        "step": 10,
+        "unit": "R$",
+        "label": "Valor para frete gratis",
+        "default": 400
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_free_shipping_remaining_text",
+        "label": "Mensagem antes de ganhar frete gratis",
+        "default": "Faltam [amount] para voce ganhar frete gratis!"
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_free_shipping_success_text",
+        "label": "Mensagem de frete gratis",
+        "default": "Parabens! Voce ganhou frete gratis!"
+      },
+      {
+        "type": "header",
+        "content": "Calculadora de frete"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_drawer_show_shipping_calculator",
+        "label": "Mostrar calculadora de CEP",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_shipping_calculator_label",
+        "label": "Titulo da calculadora",
+        "default": "Calcular frete"
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_shipping_placeholder",
+        "label": "Placeholder do CEP",
+        "default": "00000000"
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_shipping_button_label",
+        "label": "Botao da calculadora",
+        "default": "OK"
+      },
+      {
+        "type": "header",
+        "content": "Selo de seguranca"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_drawer_show_secure_badge",
+        "label": "Mostrar selo de seguranca",
+        "default": true
+      },
+      {
+        "type": "image_picker",
+        "id": "cart_drawer_secure_icon",
+        "label": "Icone de seguranca"
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_secure_text",
+        "label": "Texto do selo",
+        "default": "Ambiente 100% seguro"
+      },
+      {
+        "type": "header",
+        "content": "Estilo"
+      },
+      {
+        "type": "range",
+        "id": "cart_drawer_width",
+        "min": 360,
+        "max": 620,
+        "step": 10,
+        "unit": "px",
+        "label": "Largura maxima",
+        "default": 480
+      },
+      {
+        "type": "range",
+        "id": "cart_drawer_radius",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "Raio das bordas",
+        "default": 32
+      },
+      {
+        "type": "range",
+        "id": "cart_drawer_overlay_opacity",
+        "min": 0,
+        "max": 60,
+        "step": 5,
+        "unit": "%",
+        "label": "Escurecimento do fundo",
+        "default": 15
+      },
+      {
+        "type": "color",
+        "id": "cart_drawer_background",
+        "label": "Fundo da sacola",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "cart_drawer_footer_background",
+        "label": "Fundo do rodape",
+        "default": "#faf8f5"
+      },
+      {
+        "type": "color",
+        "id": "cart_drawer_text_color",
+        "label": "Cor do texto",
+        "default": "#1a1a1a"
+      },
+      {
+        "type": "color",
+        "id": "cart_drawer_subdued_text_color",
+        "label": "Cor do texto secundario",
+        "default": "#6b6661"
+      },
+      {
+        "type": "color",
+        "id": "cart_drawer_accent_color",
+        "label": "Cor principal",
+        "default": "#6d5848"
+      },
+      {
+        "type": "color",
+        "id": "cart_drawer_free_shipping_background",
+        "label": "Fundo da barra de frete gratis",
+        "default": "#f9f7f5"
+      },
+      {
+        "type": "color",
+        "id": "cart_drawer_free_shipping_track",
+        "label": "Trilho da barra de frete gratis",
+        "default": "#e5dfd8"
+      }
+    ]
   }
 ]

@@ -9,10 +9,13 @@
 {% enddoc %}
 
 {% assign calculator_id = id | default: 'cart' %}
+{% assign calculator_label = settings.cart_drawer_shipping_calculator_label | default: 'Calcular frete' %}
+{% assign calculator_placeholder = settings.cart_drawer_shipping_placeholder | default: '00000000' %}
+{% assign calculator_button_label = settings.cart_drawer_shipping_button_label | default: 'OK' %}
 
 <div class="shipping-calculator {{ class }}" data-shipping-calculator id="ShippingCalculator-{{ calculator_id }}">
   <form class="shipping-calculator__form" data-shipping-form>
-    <label class="shipping-calculator__label" for="ShippingCalculatorZip-{{ calculator_id }}">Calcular frete</label>
+    <label class="shipping-calculator__label" for="ShippingCalculatorZip-{{ calculator_id }}">{{ calculator_label }}</label>
     <div class="shipping-calculator__row">
       <input
         class="shipping-calculator__input"
@@ -21,10 +24,10 @@
         inputmode="numeric"
         name="shipping_address[zip]"
         pattern="[0-9]{5}-?[0-9]{3}"
-        placeholder="00000000"
+        placeholder="{{ calculator_placeholder }}"
         type="text"
       >
-      <button class="shipping-calculator__button" type="submit">OK</button>
+      <button class="shipping-calculator__button" type="submit">{{ calculator_button_label }}</button>
     </div>
     <p class="shipping-calculator__message" data-shipping-message aria-live="polite"></p>
     <ul class="shipping-calculator__rates" data-shipping-rates></ul>

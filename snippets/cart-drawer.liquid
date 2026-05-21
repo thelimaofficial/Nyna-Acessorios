@@ -3,21 +3,51 @@
   Responsável por exibir o carrinho lateral (drawer) com foco em design luxury/minimalista.
 {% endcomment %}
 
-{%- assign free_shipping_threshold = 40000 -%}
+{%- assign free_shipping_threshold = settings.cart_drawer_free_shipping_threshold | times: 100 -%}
 {%- assign cart_total = cart.total_price -%}
 {%- assign amount_left = free_shipping_threshold | minus: cart_total -%}
 {%- if amount_left < 0 -%}{%- assign amount_left = 0 -%}{%- endif -%}
-{%- assign progress_percentage = cart_total | times: 100.0 | divided_by: free_shipping_threshold -%}
+{%- if free_shipping_threshold > 0 -%}
+  {%- assign progress_percentage = cart_total | times: 100.0 | divided_by: free_shipping_threshold -%}
+{%- else -%}
+  {%- assign progress_percentage = 100 -%}
+{%- endif -%}
 {%- if progress_percentage > 100 -%}{%- assign progress_percentage = 100 -%}{%- endif -%}
+{%- assign amount_left_money = amount_left | money -%}
+{%- assign free_shipping_remaining_text = settings.cart_drawer_free_shipping_remaining_text | replace: '[amount]', amount_left_money -%}
+{%- assign overlay_opacity = settings.cart_drawer_overlay_opacity | times: 0.01 -%}
+{%- assign empty_button_url = settings.cart_drawer_empty_button_url | default: routes.all_products_collection_url -%}
 
-<div class="cart-drawer-overlay" data-cart-overlay aria-hidden="true"></div>
+<div class="cart-drawer-overlay" data-cart-overlay aria-hidden="true" style="--cart-drawer-overlay-opacity: {{ overlay_opacity }};"></div>
 
-<div class="cart-drawer" data-cart-drawer aria-hidden="true">
+<div
+  class="cart-drawer"
+  data-cart-drawer
+  aria-hidden="true"
+  style="
+    --cart-drawer-width: {{ settings.cart_drawer_width }}px;
+    --cart-drawer-radius: {{ settings.cart_drawer_radius }}px;
+    --cart-drawer-bg: {{ settings.cart_drawer_background }};
+    --cart-drawer-footer-bg: {{ settings.cart_drawer_footer_background }};
+    --cart-drawer-text: {{ settings.cart_drawer_text_color }};
+    --cart-drawer-subdued: {{ settings.cart_drawer_subdued_text_color }};
+    --cart-drawer-accent: {{ settings.cart_drawer_accent_color }};
+    --cart-drawer-free-shipping-bg: {{ settings.cart_drawer_free_shipping_background }};
+    --cart-drawer-free-shipping-track: {{ settings.cart_drawer_free_shipping_track }};
+  "
+>
   <div class="cart-drawer__header" {% if cart.item_count > 0 %}style="justify-content: space-between;"{% endif %}>
     {% if cart.item_count > 0 %}
       <div class="cart-drawer__header-title">
-        <h2>Sacola</h2>
-        <span class="cart-drawer__count">{{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}itens{% endif %}</span>
+        <h2>{{ settings.cart_drawer_title }}</h2>
+        <span class="cart-drawer__count">
+          {{ cart.item_count }}
+          {% if cart.item_count == 1 %}
+            {{ settings.cart_drawer_item_singular }}
+          {% else %}
+            {{ settings.cart_drawer_item_plural }}
+          {% endif %}
+        </span>
       </div>
     {% endif %}
     <button type="button" class="cart-drawer__close" data-cart-close aria-label="Fechar carrinho">
@@ -28,28 +58,28 @@
   <div class="cart-drawer__content">
     {% if cart.item_count == 0 %}
       <div class="cart-drawer__empty">
-        <h2 class="cart-drawer__empty-title">Sua sacola está vazia</h2>
+        <h2 class="cart-drawer__empty-title">{{ settings.cart_drawer_empty_title }}</h2>
         <p class="cart-drawer__empty-text">
-          Tem uma conta? <a href="{{ routes.account_login_url }}">Faça login</a> para finalizar a<br>
-          compra mais rápido.
+          {{ settings.cart_drawer_empty_text | newline_to_br }}
         </p>
-        <a href="{{ routes.all_products_collection_url }}" class="cart-drawer__btn">Continuar comprando</a>
+        <a href="{{ empty_button_url }}" class="cart-drawer__btn">{{ settings.cart_drawer_empty_button_label }}</a>
       </div>
     {% else %}
-      {% comment %} Free shipping bar {% endcomment %}
-      <div class="cart-drawer__shipping">
-        <div class="cart-drawer__shipping-msg">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-          {% if amount_left > 0 %}
-            <span>Faltam <strong>{{ amount_left | money }}</strong> para você ganhar frete grátis!</span>
-          {% else %}
-            <span>Parabéns! Você ganhou <strong>frete grátis</strong>!</span>
-          {% endif %}
+      {% if settings.cart_drawer_show_free_shipping %}
+        <div class="cart-drawer__shipping">
+          <div class="cart-drawer__shipping-msg">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+            {% if amount_left > 0 %}
+              <span>{{ free_shipping_remaining_text }}</span>
+            {% else %}
+              <span>{{ settings.cart_drawer_free_shipping_success_text }}</span>
+            {% endif %}
+          </div>
+          <div class="cart-drawer__shipping-bar">
+            <div class="cart-drawer__shipping-progress" style="width: {{ progress_percentage }}%;"></div>
+          </div>
         </div>
-        <div class="cart-drawer__shipping-bar">
-          <div class="cart-drawer__shipping-progress" style="width: {{ progress_percentage }}%;"></div>
-        </div>
-      </div>
+      {% endif %}
 
       {% comment %} Items list {% endcomment %}
       <div class="cart-drawer__items">
@@ -92,26 +122,34 @@
     <div class="cart-drawer__footer">
       <div class="cart-drawer__totals">
         <div class="cart-drawer__totals-row">
-          <span>Subtotal</span>
+          <span>{{ settings.cart_drawer_subtotal_label }}</span>
           <span>{{ cart.total_price | money }}</span>
         </div>
         <div class="cart-drawer__totals-row cart-drawer__totals-row--small">
-          <span>Frete</span>
-          <span>Calcule pelo CEP</span>
+          <span>{{ settings.cart_drawer_shipping_label }}</span>
+          <span>{{ settings.cart_drawer_shipping_helper }}</span>
         </div>
       </div>
 
-      {% render 'shipping-calculator', id: 'cart-drawer', class: 'cart-drawer__shipping-calculator' %}
+      {% if settings.cart_drawer_show_shipping_calculator %}
+        {% render 'shipping-calculator', id: 'cart-drawer', class: 'cart-drawer__shipping-calculator' %}
+      {% endif %}
       
       <div class="cart-drawer__buttons">
-        <button type="submit" name="checkout" form="cart-drawer-form" class="cart-drawer__btn cart-drawer__btn--checkout">Finalizar compra</button>
-        <a href="{{ routes.cart_url }}" class="cart-drawer__btn cart-drawer__btn--outline">Ver sacola</a>
+        <button type="submit" name="checkout" form="cart-drawer-form" class="cart-drawer__btn cart-drawer__btn--checkout">{{ settings.cart_drawer_checkout_label }}</button>
+        <a href="{{ routes.cart_url }}" class="cart-drawer__btn cart-drawer__btn--outline">{{ settings.cart_drawer_view_cart_label }}</a>
       </div>
       
-      <div class="cart-drawer__secure">
-        {{ 'seguranca.svg' | inline_asset_content }}
-        <span>Ambiente 100% seguro</span>
-      </div>
+      {% if settings.cart_drawer_show_secure_badge %}
+        <div class="cart-drawer__secure">
+          {% if settings.cart_drawer_secure_icon %}
+            {{ settings.cart_drawer_secure_icon | image_url: width: 28 | image_tag: width: 14, height: 14, loading: 'lazy' }}
+          {% else %}
+            {{ 'seguranca.svg' | inline_asset_content }}
+          {% endif %}
+          <span>{{ settings.cart_drawer_secure_text }}</span>
+        </div>
+      {% endif %}
     </div>
   {% endif %}
 </div>
@@ -124,7 +162,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(10, 10, 10, 0.15);
+    background-color: rgba(10, 10, 10, var(--cart-drawer-overlay-opacity));
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
@@ -144,10 +182,11 @@
     top: 0;
     right: 0;
     width: 100%;
-    max-width: 480px; /* Largura elegante estilo luxury e-commerce */
+    max-width: var(--cart-drawer-width); /* Largura elegante estilo luxury e-commerce */
     height: 100vh;
     height: 100dvh;
-    background-color: #ffffff;
+    background-color: var(--cart-drawer-bg);
+    color: var(--cart-drawer-text);
     z-index: 1002;
     transform: translateX(100%);
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); /* Animação moderna e fluida */
@@ -155,8 +194,8 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border-top-left-radius: 32px;
-    border-bottom-left-radius: 32px;
+    border-top-left-radius: var(--cart-drawer-radius);
+    border-bottom-left-radius: var(--cart-drawer-radius);
     box-shadow: -15px 0 40px rgba(0, 0, 0, 0.08);
   }
 
@@ -177,7 +216,7 @@
     border: none;
     padding: 0.5rem;
     cursor: pointer;
-    color: #1a1a1a;
+    color: var(--cart-drawer-text);
     transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     align-items: center;
@@ -218,7 +257,7 @@
     font-family: 'Inter', sans-serif;
     font-size: 1.75rem;
     font-weight: 600;
-    color: #000;
+    color: var(--cart-drawer-text);
     margin-bottom: 1.25rem;
     letter-spacing: -0.01em;
   }
@@ -227,14 +266,14 @@
     font-family: 'Inter', sans-serif;
     font-size: 0.9375rem;
     font-weight: 400;
-    color: #2a2a2a;
+    color: var(--cart-drawer-subdued);
     line-height: 1.6;
     margin-bottom: 2.5rem;
     max-width: 340px;
   }
 
   .cart-drawer__empty-text a {
-    color: #000;
+    color: var(--cart-drawer-text);
     text-decoration: underline;
     text-underline-offset: 4px;
     font-weight: 500;
@@ -250,7 +289,7 @@
     align-items: center;
     justify-content: center;
     padding: 1.125rem 2.5rem;
-    background-color: #6d5848; /* Tom de marrom sofisticado, inspirado em joias/acessórios */
+    background-color: var(--cart-drawer-accent); /* Tom de marrom sofisticado, inspirado em joias/acessórios */
     color: #ffffff;
     text-decoration: none;
     font-family: 'Inter', sans-serif;
@@ -277,7 +316,7 @@
     font-family: 'Inter', sans-serif;
     font-size: 1.5rem;
     font-weight: 600;
-    color: #1a1a1a;
+    color: var(--cart-drawer-text);
     margin: 0 0 0.5rem 0;
     letter-spacing: -0.01em;
   }
@@ -285,7 +324,7 @@
   .cart-drawer__count {
     font-family: 'Inter', sans-serif;
     font-size: 0.875rem;
-    color: #555;
+    color: var(--cart-drawer-subdued);
     font-weight: 400;
   }
 
@@ -299,7 +338,7 @@
 
   /* Shipping bar */
   .cart-drawer__shipping {
-    background-color: #f9f7f5;
+    background-color: var(--cart-drawer-free-shipping-bg);
     padding: 1.25rem;
     border-radius: 4px;
     margin-bottom: 2rem;
@@ -311,21 +350,21 @@
     gap: 0.75rem;
     font-family: 'Inter', sans-serif;
     font-size: 0.75rem;
-    color: #333;
+    color: var(--cart-drawer-text);
     margin-bottom: 0.75rem;
   }
 
   .cart-drawer__shipping-bar {
     width: 100%;
     height: 3px;
-    background-color: #e5dfd8;
+    background-color: var(--cart-drawer-free-shipping-track);
     border-radius: 2px;
     overflow: hidden;
   }
 
   .cart-drawer__shipping-progress {
     height: 100%;
-    background-color: #7d5a44;
+    background-color: var(--cart-drawer-accent);
     border-radius: 2px;
     transition: width 0.5s ease;
   }
@@ -370,7 +409,7 @@
     font-family: 'Inter', sans-serif;
     font-size: 0.9375rem;
     font-weight: 500;
-    color: #1a1a1a;
+    color: var(--cart-drawer-text);
     text-decoration: none;
     margin-bottom: 0.25rem;
   }
@@ -378,7 +417,7 @@
   .cart-drawer__item-variant {
     font-family: 'Inter', sans-serif;
     font-size: 0.75rem;
-    color: #777;
+    color: var(--cart-drawer-subdued);
     margin-bottom: 0.75rem;
   }
 
@@ -386,7 +425,7 @@
     font-family: 'Inter', sans-serif;
     font-size: 0.9375rem;
     font-weight: 500;
-    color: #1a1a1a;
+    color: var(--cart-drawer-text);
     margin-bottom: 1rem;
   }
 
@@ -414,7 +453,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: #1a1a1a;
+    color: var(--cart-drawer-text);
     font-size: 1.1rem;
     transition: background-color 0.2s;
   }
@@ -430,12 +469,12 @@
     text-align: center;
     font-family: 'Inter', sans-serif;
     font-size: 0.8125rem;
-    color: #1a1a1a;
+    color: var(--cart-drawer-text);
     padding: 0;
   }
 
   .cart-drawer__remove {
-    color: #1a1a1a;
+    color: var(--cart-drawer-text);
     background: none;
     border: none;
     padding: 0.25rem;
@@ -449,7 +488,7 @@
 
   /* Footer */
   .cart-drawer__footer {
-    background-color: #faf8f5;
+    background-color: var(--cart-drawer-footer-bg);
     padding: 1.5rem 2.5rem 2.5rem;
     border-top: 1px solid #f2f2f2;
     flex-shrink: 0;
@@ -465,19 +504,19 @@
     font-family: 'Inter', sans-serif;
     font-size: 0.9375rem;
     font-weight: 500;
-    color: #1a1a1a;
+    color: var(--cart-drawer-text);
     margin-bottom: 0.5rem;
   }
 
   .cart-drawer__totals-row--small {
     font-size: 0.8125rem;
     font-weight: 400;
-    color: #555;
+    color: var(--cart-drawer-subdued);
     margin-bottom: 0;
   }
 
   .cart-drawer__totals-row--small a {
-    color: #1a1a1a;
+    color: var(--cart-drawer-text);
     text-decoration: underline;
     text-underline-offset: 2px;
   }
@@ -492,7 +531,7 @@
 
   .cart-drawer__shipping-calculator .shipping-calculator__label {
     margin-bottom: 0.45rem;
-    color: #6b6661;
+    color: var(--cart-drawer-subdued);
     font-size: 0.875rem;
     font-weight: 400;
   }
@@ -508,7 +547,7 @@
     border-radius: 999px;
     background: transparent;
     padding: 0 1.75rem;
-    color: #6b6661;
+    color: var(--cart-drawer-subdued);
     font-size: 1rem;
   }
 
@@ -518,10 +557,10 @@
 
   .cart-drawer__shipping-calculator .shipping-calculator__button {
     min-height: 54px;
-    border-color: #6d5848;
+    border-color: var(--cart-drawer-accent);
     border-radius: 999px;
     padding: 0 1rem;
-    background: #6d5848;
+    background: var(--cart-drawer-accent);
     font-size: 1rem;
     font-weight: 700;
     letter-spacing: 0;
@@ -529,7 +568,7 @@
 
   .cart-drawer__shipping-calculator .shipping-calculator__message {
     margin-top: 0.45rem;
-    color: #6b6661;
+    color: var(--cart-drawer-subdued);
     font-size: 0.875rem;
   }
 
@@ -551,26 +590,26 @@
   }
 
   .cart-drawer__btn--checkout {
-    background-color: #6d5848;
+    background-color: var(--cart-drawer-accent);
     color: #ffffff;
-    border: 1px solid #6d5848;
+    border: 1px solid var(--cart-drawer-accent);
   }
 
   .cart-drawer__btn--checkout:hover {
-    background-color: #554437;
-    border-color: #554437;
+    background-color: var(--cart-drawer-accent);
+    border-color: var(--cart-drawer-accent);
   }
 
   .cart-drawer__btn--outline {
     background-color: transparent;
-    color: #6d5848;
-    border: 1px solid #6d5848;
+    color: var(--cart-drawer-accent);
+    border: 1px solid var(--cart-drawer-accent);
   }
 
   .cart-drawer__btn--outline:hover {
-    background-color: #ffffff;
-    color: #554437;
-    border-color: #554437;
+    background-color: var(--cart-drawer-bg);
+    color: var(--cart-drawer-accent);
+    border-color: var(--cart-drawer-accent);
   }
 
   .cart-drawer__secure {
@@ -580,7 +619,7 @@
     gap: 0.5rem;
     font-family: 'Inter', sans-serif;
     font-size: 0.6875rem;
-    color: #777;
+    color: var(--cart-drawer-subdued);
   }
 
   .cart-drawer__secure svg {
@@ -743,3 +782,4 @@
     });
   })();
 </script>
+
