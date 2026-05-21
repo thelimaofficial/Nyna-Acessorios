@@ -1,0 +1,478 @@
+<section class="contact-page section-{{ section.id }}" aria-label="{{ section.settings.heading | escape }}">
+  <div class="contact-page__inner">
+    <div class="contact-page__form-side">
+      <div class="contact-page__header">
+        {%- if section.settings.heading != blank -%}
+          <h1 class="contact-page__heading">{{ section.settings.heading }}</h1>
+        {%- endif -%}
+
+        {%- if section.settings.text != blank -%}
+          <div class="contact-page__text">{{ section.settings.text }}</div>
+        {%- endif -%}
+      </div>
+
+      {%- form 'contact', class: 'contact-page__form' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="contact-page__success" role="status" tabindex="-1">
+            {{ section.settings.success_message }}
+          </p>
+        {%- endif -%}
+
+        {%- if form.errors -%}
+          <div class="contact-page__errors" role="alert">
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        <div class="contact-page__row">
+          <input
+            type="text"
+            name="contact[first_name]"
+            value="{{ form.first_name }}"
+            autocomplete="given-name"
+            placeholder="{{ section.settings.first_name_placeholder }}"
+            aria-label="{{ section.settings.first_name_placeholder | escape }}"
+          >
+          <input
+            type="text"
+            name="contact[last_name]"
+            value="{{ form.last_name }}"
+            autocomplete="family-name"
+            placeholder="{{ section.settings.last_name_placeholder }}"
+            aria-label="{{ section.settings.last_name_placeholder | escape }}"
+          >
+        </div>
+
+        <input
+          type="email"
+          name="contact[email]"
+          value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+          autocomplete="email"
+          autocorrect="off"
+          autocapitalize="off"
+          placeholder="{{ section.settings.email_placeholder }}"
+          aria-label="{{ section.settings.email_placeholder | escape }}"
+          required
+        >
+
+        <input
+          type="text"
+          name="contact[subject]"
+          value="{{ form.subject }}"
+          placeholder="{{ section.settings.subject_placeholder }}"
+          aria-label="{{ section.settings.subject_placeholder | escape }}"
+        >
+
+        <textarea
+          name="contact[body]"
+          rows="5"
+          placeholder="{{ section.settings.message_placeholder }}"
+          aria-label="{{ section.settings.message_placeholder | escape }}"
+          required
+        >{{ form.body }}</textarea>
+
+        <button type="submit" class="contact-page__submit">
+          {{ section.settings.button_label }}
+        </button>
+      {%- endform -%}
+    </div>
+
+    <aside class="contact-page__info-side" aria-label="{{ section.settings.info_aria_label | escape }}">
+      {%- if section.settings.email != blank -%}
+        <div class="contact-page__info-item">
+          <span class="contact-page__icon" aria-hidden="true">
+            {{ 'email.svg' | inline_asset_content }}
+          </span>
+          <div class="contact-page__info-content">
+            <h2>{{ section.settings.email_title }}</h2>
+            <a href="mailto:{{ section.settings.email | escape }}" target="_blank" rel="noopener noreferrer">{{ section.settings.email }}</a>
+            {%- if section.settings.email_note != blank -%}
+              <p>{{ section.settings.email_note }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.phone != blank -%}
+        <div class="contact-page__info-item">
+          <span class="contact-page__icon" aria-hidden="true">
+            {{ 'whatsapp.svg' | inline_asset_content }}
+          </span>
+          <div class="contact-page__info-content">
+            <h2>{{ section.settings.phone_title }}</h2>
+            <a href="{{ section.settings.phone_link | default: 'https://wa.me/5511989310950' | escape }}" target="_blank" rel="noopener noreferrer">{{ section.settings.phone }}</a>
+            {%- if section.settings.phone_note != blank -%}
+              <p>{{ section.settings.phone_note }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.hours_title != blank -%}
+        <div class="contact-page__info-item contact-page__info-item--hours">
+          <span class="contact-page__icon" aria-hidden="true">
+            {{ 'clock.svg' | inline_asset_content }}
+          </span>
+          <div class="contact-page__info-content">
+            <h2>{{ section.settings.hours_title }}</h2>
+            {%- if section.settings.hours_text != blank -%}
+              <div class="contact-page__hours">{{ section.settings.hours_text }}</div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </aside>
+  </div>
+</section>
+
+{% stylesheet %}
+  .contact-page {
+    padding-block: clamp(5.25rem, 9vw, 7.35rem) clamp(4.5rem, 8vw, 6.35rem);
+    background-color: var(--color-background);
+  }
+
+  .contact-page__inner {
+    display: grid;
+    grid-template-columns: minmax(24rem, 30.5rem) minmax(18rem, 26rem);
+    justify-content: center;
+    align-items: start;
+    column-gap: clamp(5.25rem, 9vw, 8.2rem);
+    max-width: 78rem;
+    margin-inline: auto;
+  }
+
+  .contact-page__header {
+    max-width: 24rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .contact-page__heading {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.45rem, 2.2vw, 1.7rem);
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: 0;
+    color: #050505;
+  }
+
+  .contact-page__text {
+    margin-top: 0.7rem;
+    color: #050505;
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+
+  .contact-page__form {
+    display: grid;
+    gap: 0.45rem;
+    margin-top: 3rem;
+  }
+
+  .contact-page__row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .contact-page__form input,
+  .contact-page__form textarea {
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    border-radius: 18px;
+    background-color: #fff;
+    color: #050505;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    padding: 0.72rem 1.18rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .contact-page__form textarea {
+    min-height: 7.1rem;
+    resize: vertical;
+    border-radius: 18px;
+  }
+
+  .contact-page__form input:focus,
+  .contact-page__form textarea:focus {
+    outline: none;
+    border-color: rgba(125, 90, 69, 0.55);
+    box-shadow: 0 0 0 3px rgba(125, 90, 69, 0.1);
+  }
+
+  .contact-page__form input::placeholder,
+  .contact-page__form textarea::placeholder {
+    color: rgba(5, 5, 5, 0.42);
+  }
+
+  .contact-page__submit {
+    justify-self: center;
+    min-width: 14.15rem;
+    margin-top: 1.65rem;
+    padding: 0.85rem 2.2rem;
+    border: 0;
+    border-radius: 999px;
+    background-color: #7b5a45;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .contact-page__submit:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+  }
+
+  .contact-page__info-side {
+    display: grid;
+    gap: 4.35rem;
+    padding-top: 2.2rem;
+  }
+
+  .contact-page__info-item {
+    display: grid;
+    grid-template-columns: 2.65rem minmax(0, 1fr);
+    gap: 0.85rem;
+    align-items: start;
+  }
+
+  .contact-page__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.65rem;
+    height: 2.65rem;
+    border-radius: 50%;
+    color: #050505;
+    background-color: #f0ece9;
+  }
+
+  .contact-page__icon svg {
+    width: 1.45rem;
+    height: 1.45rem;
+  }
+
+  .contact-page__info-content h2 {
+    margin-bottom: 0.36rem;
+    color: #050505;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.06rem;
+    font-weight: 400;
+    line-height: 1.2;
+  }
+
+  .contact-page__info-content a {
+    display: inline-block;
+    color: #050505;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+
+  .contact-page__info-content a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  .contact-page__info-content p,
+  .contact-page__hours {
+    margin-top: 0.35rem;
+    color: #050505;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .contact-page__info-item--hours .contact-page__info-content h2 {
+    margin-bottom: 0.28rem;
+  }
+
+  .contact-page__hours {
+    margin-top: 0.25rem;
+    line-height: 1.62;
+  }
+
+  .contact-page__hours p {
+    margin: 0;
+  }
+
+  .contact-page__success,
+  .contact-page__errors {
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
+  .contact-page__success {
+    background-color: rgba(123, 90, 69, 0.1);
+    color: #050505;
+  }
+
+  .contact-page__errors {
+    background-color: rgba(120, 42, 32, 0.08);
+    color: #782a20;
+  }
+
+  @media (max-width: 900px) {
+    .contact-page {
+      padding-block: 4rem;
+    }
+
+    .contact-page__inner {
+      grid-template-columns: minmax(0, 30.5rem);
+      row-gap: 3.5rem;
+    }
+
+    .contact-page__info-side {
+      gap: 2.25rem;
+      padding-top: 0;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .contact-page__row {
+      grid-template-columns: 1fr;
+      gap: 0.45rem;
+    }
+
+    .contact-page__submit {
+      width: 100%;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Contato",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Precisando de ajuda?"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texto",
+      "default": "<p>Estamos disponíveis para ajudar você em cada<br>etapa da sua experiencia</p>"
+    },
+    {
+      "type": "text",
+      "id": "first_name_placeholder",
+      "label": "Placeholder do nome",
+      "default": "Nome"
+    },
+    {
+      "type": "text",
+      "id": "last_name_placeholder",
+      "label": "Placeholder do sobrenome",
+      "default": "Sobrenome"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Placeholder do email",
+      "default": "Email"
+    },
+    {
+      "type": "text",
+      "id": "subject_placeholder",
+      "label": "Placeholder do assunto",
+      "default": "Assunto"
+    },
+    {
+      "type": "text",
+      "id": "message_placeholder",
+      "label": "Placeholder da mensagem",
+      "default": "Mensagem"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto do botão",
+      "default": "Enviar mensagem"
+    },
+    {
+      "type": "text",
+      "id": "info_aria_label",
+      "label": "Rótulo de acessibilidade dos contatos",
+      "default": "Informações de contato"
+    },
+    {
+      "type": "text",
+      "id": "email_title",
+      "label": "Título do email",
+      "default": "Email"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "sacbynyna@gmail.com"
+    },
+    {
+      "type": "text",
+      "id": "email_note",
+      "label": "Texto abaixo do email",
+      "default": "Respondemos em até 24h úteis"
+    },
+    {
+      "type": "text",
+      "id": "phone_title",
+      "label": "Título do telefone",
+      "default": "WhatsApp"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Telefone exibido",
+      "default": "(11) 98931-0950"
+    },
+    {
+      "type": "text",
+      "id": "phone_link",
+      "label": "Link do telefone ou WhatsApp",
+      "default": "https://wa.me/5511989310950"
+    },
+    {
+      "type": "text",
+      "id": "phone_note",
+      "label": "Texto abaixo do telefone",
+      "default": "Segunda a sexta, das 09h às 18h."
+    },
+    {
+      "type": "text",
+      "id": "hours_title",
+      "label": "Título do horário",
+      "default": "Horário de atendimento"
+    },
+    {
+      "type": "richtext",
+      "id": "hours_text",
+      "label": "Texto do horário",
+      "default": "<p>Segunda a sexta-feira<br>09h às 18h.</p>"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Mensagem de sucesso",
+      "default": "Obrigada pelo contato. Retornaremos em breve."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contato"
+    }
+  ]
+}
+{% endschema %}
