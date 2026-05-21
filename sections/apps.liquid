@@ -1,0 +1,28 @@
+<div class="apps-section">
+  {% for block in section.blocks %}
+    {% render block %}
+  {% endfor %}
+</div>
+
+{% stylesheet %}
+  .apps-section {
+    width: 100%;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Apps",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Apps"
+    }
+  ]
+}
+{% endschema %}

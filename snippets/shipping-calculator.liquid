@@ -1,0 +1,253 @@
+{% doc %}
+  Renders a cart shipping estimator that requests Shopify cart shipping rates.
+
+  @param {string} id - Unique id suffix for this calculator instance
+  @param {string} [class] - Optional extra class for the wrapper
+
+  @example
+  {% render 'shipping-calculator', id: 'cart-page' %}
+{% enddoc %}
+
+{% assign calculator_id = id | default: 'cart' %}
+
+<div class="shipping-calculator {{ class }}" data-shipping-calculator id="ShippingCalculator-{{ calculator_id }}">
+  <form class="shipping-calculator__form" data-shipping-form>
+    <label class="shipping-calculator__label" for="ShippingCalculatorZip-{{ calculator_id }}">Calcular frete</label>
+    <div class="shipping-calculator__row">
+      <input
+        class="shipping-calculator__input"
+        id="ShippingCalculatorZip-{{ calculator_id }}"
+        data-shipping-zip
+        inputmode="numeric"
+        name="shipping_address[zip]"
+        pattern="[0-9]{5}-?[0-9]{3}"
+        placeholder="00000000"
+        type="text"
+      >
+      <button class="shipping-calculator__button" type="submit">OK</button>
+    </div>
+    <p class="shipping-calculator__message" data-shipping-message aria-live="polite"></p>
+    <ul class="shipping-calculator__rates" data-shipping-rates></ul>
+  </form>
+</div>
+
+{% stylesheet %}
+  .shipping-calculator {
+    border: 1px solid #eee7df;
+    border-radius: 4px;
+    padding: 1rem;
+    background: #fff;
+  }
+
+  .shipping-calculator__form {
+    margin: 0;
+  }
+
+  .shipping-calculator__label {
+    display: block;
+    margin-bottom: 0.625rem;
+    color: #1a1a1a;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .shipping-calculator__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem;
+  }
+
+  .shipping-calculator__input {
+    min-width: 0;
+    min-height: 44px;
+    border: 1px solid #e0d8d0;
+    border-radius: 4px;
+    padding: 0 0.875rem;
+    color: #1a1a1a;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+  }
+
+  .shipping-calculator__button {
+    min-height: 44px;
+    border: 1px solid #6d5848;
+    border-radius: 4px;
+    padding: 0 1rem;
+    background: #6d5848;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .shipping-calculator__button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
+
+  .shipping-calculator__message {
+    margin: 0.625rem 0 0;
+    color: #666;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .shipping-calculator__rates {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0.875rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .shipping-calculator__rate {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    border-top: 1px solid #f0ece8;
+    padding-top: 0.5rem;
+    color: #1a1a1a;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  .shipping-calculator__price {
+    white-space: nowrap;
+    font-weight: 600;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    function getCartEndpoint(path, params) {
+      var root = window.Shopify && Shopify.routes && Shopify.routes.root ? Shopify.routes.root : '/';
+      var url = root.replace(/\/$/, '/') + 'cart/' + path;
+
+      if (params) {
+        url += '?' + params.toString();
+      }
+
+      return url;
+    }
+
+    function normalizeZip(zip) {
+      return zip.replace(/\D/g, '').slice(0, 8);
+    }
+
+    function formatZip(zip) {
+      if (zip.length <= 5) return zip;
+      return zip.slice(0, 5) + '-' + zip.slice(5);
+    }
+
+    function buildShippingParams(zip) {
+      var params = new URLSearchParams();
+      params.set('shipping_address[zip]', formatZip(zip));
+      params.set('shipping_address[country]', 'Brazil');
+      return params;
+    }
+
+    function formatRatePrice(rate) {
+      if (rate.price === '0.00' || rate.price === 0) return 'Grátis';
+      return Number(rate.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function renderRates(list, rates) {
+      list.innerHTML = '';
+
+      rates.forEach(function (rate) {
+        var item = document.createElement('li');
+        var name = document.createElement('span');
+        var price = document.createElement('span');
+
+        item.className = 'shipping-calculator__rate';
+        name.textContent = rate.presentment_name || rate.name || rate.code || 'Frete';
+        price.className = 'shipping-calculator__price';
+        price.textContent = formatRatePrice(rate);
+
+        item.appendChild(name);
+        item.appendChild(price);
+        list.appendChild(item);
+      });
+    }
+
+    function pollRates(params, attempt) {
+      return fetch(getCartEndpoint('async_shipping_rates.json', params), {
+        headers: { Accept: 'application/json' }
+      })
+        .then(function (response) {
+          if (!response.ok) throw new Error('Nao foi possivel calcular o frete.');
+          return response.json();
+        })
+        .then(function (data) {
+          if (data && data.shipping_rates) return data.shipping_rates;
+          if (attempt >= 8) throw new Error('O cálculo demorou mais que o esperado. Tente novamente.');
+
+          return new Promise(function (resolve) {
+            window.setTimeout(resolve, 700);
+          }).then(function () {
+            return pollRates(params, attempt + 1);
+          });
+        });
+    }
+
+    if (window.shippingCalculatorReady) return;
+    window.shippingCalculatorReady = true;
+
+    document.addEventListener('submit', function (event) {
+      var form = event.target.closest('[data-shipping-form]');
+      if (!form) return;
+
+      event.preventDefault();
+
+      var calculator = form.closest('[data-shipping-calculator]');
+      if (!calculator) return;
+
+      var input = calculator.querySelector('[data-shipping-zip]');
+      var message = calculator.querySelector('[data-shipping-message]');
+      var ratesList = calculator.querySelector('[data-shipping-rates]');
+      var button = calculator.querySelector('button[type="submit"]');
+
+      if (!input || !message || !ratesList || !button) return;
+
+      var zip = normalizeZip(input.value);
+      ratesList.innerHTML = '';
+
+      if (zip.length !== 8) {
+        message.textContent = 'Informe um CEP válido com 8 números.';
+        return;
+      }
+
+      var params = buildShippingParams(zip);
+      button.disabled = true;
+      message.textContent = 'Calculando frete...';
+
+      fetch(getCartEndpoint('prepare_shipping_rates.json', params), {
+        method: 'POST',
+        headers: { Accept: 'application/json' }
+      })
+        .then(function (response) {
+          if (!response.ok && response.status !== 202) throw new Error('Nao foi possivel iniciar o calculo.');
+          return pollRates(params, 0);
+        })
+        .then(function (rates) {
+          if (!rates.length) {
+            message.textContent = 'Nenhuma opção de frete foi encontrada para este CEP.';
+            return;
+          }
+
+          message.textContent = 'Opções disponíveis:';
+          renderRates(ratesList, rates);
+        })
+        .catch(function () {
+          message.textContent = 'Não foi possível calcular o frete agora. Confira o CEP ou tente no checkout.';
+        })
+        .finally(function () {
+          button.disabled = false;
+        });
+    });
+  })();
+{% endjavascript %}

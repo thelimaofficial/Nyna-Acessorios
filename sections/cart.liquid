@@ -29,9 +29,24 @@
   <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
 </form>
 
+{% render 'shipping-calculator', id: 'cart-page' %}
+
+{% if section.blocks.size > 0 %}
+  <div class="cart-app-blocks">
+    {% for block in section.blocks %}
+      {% render block %}
+    {% endfor %}
+  </div>
+{% endif %}
+
 {% schema %}
 {
   "name": "t:general.cart",
-  "settings": []
+  "settings": [],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ]
 }
 {% endschema %}

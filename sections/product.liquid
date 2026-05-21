@@ -41,6 +41,14 @@
   {% endform %}
 </div>
 
+{% if section.blocks.size > 0 %}
+  <div class="product-app-blocks">
+    {% for block in section.blocks %}
+      {% render block %}
+    {% endfor %}
+  </div>
+{% endif %}
+
 <script>
   (function () {
     var form = document.querySelector('[data-product-form]');
@@ -133,6 +141,11 @@
 {
   "name": "t:general.product",
   "settings": [],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
   "disabled_on": {
     "groups": ["header", "footer"]
   }
