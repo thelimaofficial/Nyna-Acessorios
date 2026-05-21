@@ -22,6 +22,7 @@
         id="ShippingCalculatorZip-{{ calculator_id }}"
         data-shipping-zip
         inputmode="numeric"
+        maxlength="8"
         name="shipping_address[zip]"
         pattern="[0-9]{5}-?[0-9]{3}"
         placeholder="{{ calculator_placeholder }}"
@@ -146,10 +147,70 @@
       return zip.slice(0, 5) + '-' + zip.slice(5);
     }
 
-    function buildShippingParams(zip) {
+    function getBrazilProvinceName(uf) {
+      var provinces = {
+        AC: 'Acre',
+        AL: 'Alagoas',
+        AP: 'Amapa',
+        AM: 'Amazonas',
+        BA: 'Bahia',
+        CE: 'Ceara',
+        DF: 'Distrito Federal',
+        ES: 'Espirito Santo',
+        GO: 'Goias',
+        MA: 'Maranhao',
+        MT: 'Mato Grosso',
+        MS: 'Mato Grosso do Sul',
+        MG: 'Minas Gerais',
+        PA: 'Para',
+        PB: 'Paraiba',
+        PR: 'Parana',
+        PE: 'Pernambuco',
+        PI: 'Piaui',
+        RJ: 'Rio de Janeiro',
+        RN: 'Rio Grande do Norte',
+        RS: 'Rio Grande do Sul',
+        RO: 'Rondonia',
+        RR: 'Roraima',
+        SC: 'Santa Catarina',
+        SP: 'Sao Paulo',
+        SE: 'Sergipe',
+        TO: 'Tocantins'
+      };
+
+      return provinces[uf] || '';
+    }
+
+    function fetchAddress(zip) {
+      return fetch('https://viacep.com.br/ws/' + zip + '/json/', {
+        headers: { Accept: 'application/json' }
+      })
+        .then(function (response) {
+          if (!response.ok) throw new Error('Nao foi possivel consultar o CEP.');
+          return response.json();
+        })
+        .then(function (address) {
+          if (address.erro) throw new Error('CEP nao encontrado.');
+          return address;
+        })
+        .catch(function () {
+          return null;
+        });
+    }
+
+    function buildShippingParams(zip, address) {
       var params = new URLSearchParams();
       params.set('shipping_address[zip]', formatZip(zip));
       params.set('shipping_address[country]', 'Brazil');
+
+      if (address && address.uf) {
+        params.set('shipping_address[province]', getBrazilProvinceName(address.uf));
+      }
+
+      if (address && address.localidade) {
+        params.set('shipping_address[city]', address.localidade);
+      }
+
       return params;
     }
 
@@ -197,6 +258,19 @@
         });
     }
 
+    function getRatesDirectly(params) {
+      return fetch(getCartEndpoint('shipping_rates.json', params), {
+        headers: { Accept: 'application/json' }
+      })
+        .then(function (response) {
+          if (!response.ok) throw new Error('Nao foi possivel calcular o frete.');
+          return response.json();
+        })
+        .then(function (data) {
+          return data && data.shipping_rates ? data.shipping_rates : [];
+        });
+    }
+
     if (window.shippingCalculatorReady) return;
     window.shippingCalculatorReady = true;
 
@@ -224,33 +298,46 @@
         return;
       }
 
-      var params = buildShippingParams(zip);
       button.disabled = true;
       message.textContent = 'Calculando frete...';
 
-      fetch(getCartEndpoint('prepare_shipping_rates.json', params), {
-        method: 'POST',
-        headers: { Accept: 'application/json' }
-      })
-        .then(function (response) {
-          if (!response.ok && response.status !== 202) throw new Error('Nao foi possivel iniciar o calculo.');
-          return pollRates(params, 0);
+      fetchAddress(zip)
+        .then(function (address) {
+          var params = buildShippingParams(zip, address);
+
+          return fetch(getCartEndpoint('prepare_shipping_rates.json', params), {
+            method: 'POST',
+            headers: { Accept: 'application/json' }
+          })
+            .then(function (response) {
+              if (!response.ok && response.status !== 202) throw new Error('Nao foi possivel iniciar o calculo.');
+              return pollRates(params, 0);
+            })
+            .catch(function () {
+              return getRatesDirectly(params);
+            });
         })
         .then(function (rates) {
           if (!rates.length) {
-            message.textContent = 'Nenhuma opção de frete foi encontrada para este CEP.';
+            message.textContent = 'Nenhuma opcao de frete foi encontrada para este CEP.';
             return;
           }
 
-          message.textContent = 'Opções disponíveis:';
+          message.textContent = 'Opcoes disponiveis:';
           renderRates(ratesList, rates);
         })
-        .catch(function () {
-          message.textContent = 'Não foi possível calcular o frete agora. Confira o CEP ou tente no checkout.';
+        .catch(function (error) {
+          console.warn('Shipping calculator error:', error);
+          message.textContent = 'Nao foi possivel calcular o frete agora. Confira o CEP ou tente no checkout.';
         })
         .finally(function () {
           button.disabled = false;
         });
+    });
+
+    document.addEventListener('input', function (event) {
+      if (!event.target.matches('[data-shipping-zip]')) return;
+      event.target.value = normalizeZip(event.target.value);
     });
   })();
 {% endjavascript %}
