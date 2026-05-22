@@ -64,7 +64,7 @@
 
   .featured-collections__grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 1.5rem;
   }
 
@@ -78,9 +78,11 @@
 
   .featured-collections__media {
     position: relative;
-    border-radius: 999px; /* Arched/pill look or full circle */
-    border-radius: 4px; /* Using rounded corners instead for a more timeless look */
-    aspect-ratio: 3 / 4;
+    border-radius: 8px;
+    border: 1px solid #e0dcd9;
+    padding: 0.5rem;
+    background-color: #fff;
+    aspect-ratio: 1 / 1;
     overflow: hidden;
   }
 
@@ -88,6 +90,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 4px;
     transition: transform 0.7s ease;
   }
 
@@ -157,7 +160,7 @@
     {
       "type": "collection",
       "name": "Collection",
-      "limit": 4,
+      "limit": 10,
       "settings": [
         {
           "type": "collection",
@@ -183,6 +186,7 @@
     {
       "name": "Featured Collections",
       "blocks": [
+        { "type": "collection" },
         { "type": "collection" },
         { "type": "collection" },
         { "type": "collection" },

@@ -30,10 +30,13 @@
         {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg product-card__img' }}
       {%- endif -%}
 
-      {%- if product.available == false -%}
-        <div class="product-card__badge product-card__badge--soldout">Esgotado</div>
-      {%- elsif product.compare_at_price > product.price -%}
-        <div class="product-card__badge product-card__badge--sale">Sale</div>
+      {%- if product != blank -%}
+        {%- if product.available == false -%}
+          <div class="product-card__badge product-card__badge--soldout">Esgotado</div>
+        {%- elsif product.compare_at_price > product.price -%}
+          {%- assign percent = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
+          <div class="product-card__badge product-card__badge--sale">{{ percent }}% OFF</div>
+        {%- endif -%}
       {%- endif -%}
     </div>
   </a>
@@ -46,12 +49,13 @@
     <div class="product-card__price">
       {%- if product != blank -%}
         {%- if product.compare_at_price > product.price -%}
-          <s class="product-card__price-compare">{{ product.compare_at_price | money }}</s>
+          <span class="product-card__price-compare">de <s>{{ product.compare_at_price | money }}</s></span>
           <span class="product-card__price-current">{{ product.price | money }}</span>
         {%- else -%}
           <span class="product-card__price-current">{{ product.price | money }}</span>
         {%- endif -%}
       {%- else -%}
+        <span class="product-card__price-compare">de <s>{{ 24900 | money }}</s></span>
         <span class="product-card__price-current">{{ 19900 | money }}</span>
       {%- endif -%}
     </div>
@@ -76,7 +80,7 @@
     aspect-ratio: 3 / 4;
     overflow: hidden;
     border-radius: 4px;
-    background-color: #faf8f5;
+    background-color: transparent;
   }
 
   .product-card__img {
@@ -107,15 +111,15 @@
   .product-card__badge {
     position: absolute;
     top: 0.5rem;
-    left: 0.5rem;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.625rem;
+    right: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.6875rem;
     font-weight: 500;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    background-color: #fff;
-    color: #2c2420;
-    border-radius: 2px;
+    background-color: #a88d7b;
+    color: #fff;
+    border-radius: 4px;
   }
 
   .product-card__info {
@@ -127,9 +131,9 @@
   }
 
   .product-card__title {
-    font-size: 0.8125rem;
+    font-size: 0.9375rem;
     font-weight: 500;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.02em;
     line-height: 1.3;
   }
 
@@ -144,14 +148,18 @@
   }
 
   .product-card__price {
-    font-size: 0.8125rem;
-    color: #8b7355;
+    font-size: 0.9375rem;
+    color: #2c2420;
+    font-weight: 500;
     display: flex;
-    gap: 0.5rem;
+    flex-direction: column;
+    gap: 0.25rem;
     justify-content: center;
   }
 
   .product-card__price-compare {
-    color: #a39b98;
+    color: #111;
+    font-weight: 400;
+    font-size: 0.8125rem;
   }
 {% endstylesheet %}

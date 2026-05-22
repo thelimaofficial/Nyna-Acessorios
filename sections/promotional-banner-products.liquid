@@ -1,0 +1,162 @@
+<section class="promo-banner-products section-{{ section.id }}">
+  {%- style -%}
+    .section-{{ section.id }} {
+      padding-block: clamp(4rem, 8vw, 6rem);
+    }
+    .section-{{ section.id }} .promo-banner-products__left {
+      background-color: {{ section.settings.banner_bg_color }};
+      {% if section.settings.banner_image != blank %}
+        background-image: url('{{ section.settings.banner_image | image_url: width: 1000 }}');
+        background-size: cover;
+        background-position: center;
+      {% endif %}
+    }
+    .section-{{ section.id }} .promo-banner-products__text {
+      color: {{ section.settings.banner_text_color }};
+    }
+  {%- endstyle -%}
+
+  <div class="promo-banner-products__container">
+    <div class="promo-banner-products__left">
+      <div class="promo-banner-products__content">
+        <h2 class="promo-banner-products__text">{{ section.settings.banner_text }}</h2>
+      </div>
+    </div>
+    
+    <div class="promo-banner-products__right">
+      <div class="promo-banner-products__box">
+        {%- if section.settings.right_heading != blank -%}
+          <h3 class="promo-banner-products__heading">{{ section.settings.right_heading }}</h3>
+        {%- endif -%}
+        
+        <div class="promo-banner-products__grid">
+          {%- assign collection = section.settings.right_collection -%}
+          {%- if collection != blank -%}
+            {%- for product in collection.products limit: 2 -%}
+              {% render 'product-card', product: product %}
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..2) -%}
+              {% render 'product-card' %}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .promo-banner-products__container {
+    display: flex;
+    max-width: var(--page-width, 90rem);
+    margin-inline: auto;
+    padding-inline: var(--page-margin, 1.25rem);
+    min-height: 400px;
+  }
+
+  .promo-banner-products__left {
+    flex: 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .promo-banner-products__text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .promo-banner-products__right {
+    flex: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+  }
+
+  .promo-banner-products__box {
+    background-color: #fff;
+    padding: 2rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Adicionando um leve espaçamento para parecer descolado caso necessário */
+  }
+
+  .promo-banner-products__heading {
+    text-align: center;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #2c2420;
+    margin-bottom: 2rem;
+  }
+
+  .promo-banner-products__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .promo-banner-products__container {
+      flex-direction: column;
+    }
+    .promo-banner-products__left {
+      min-height: 250px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Promotional Banner",
+  "settings": [
+    {
+      "type": "color",
+      "id": "banner_bg_color",
+      "label": "Banner Background Color",
+      "default": "#c5a491"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Banner Image (Optional)"
+    },
+    {
+      "type": "text",
+      "id": "banner_text",
+      "label": "Banner Text",
+      "default": "banner"
+    },
+    {
+      "type": "color",
+      "id": "banner_text_color",
+      "label": "Banner Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "right_heading",
+      "label": "Products Heading",
+      "default": "Custom text"
+    },
+    {
+      "type": "collection",
+      "id": "right_collection",
+      "label": "Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promotional Banner"
+    }
+  ]
+}
+{% endschema %}
