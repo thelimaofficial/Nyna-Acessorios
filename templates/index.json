@@ -110,12 +110,17 @@
         "products_to_show": 5,
         "show_view_all": false
       }
+    },
+    "instagram-feed": {
+      "type": "instagram-feed",
+      "settings": {}
     }
   },
   "order": [
     "hero-banner",
     "featured-collections",
     "promotional-banner",
-    "featured-products"
+    "featured-products",
+    "instagram-feed"
   ]
 }
