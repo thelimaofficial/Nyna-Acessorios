@@ -1,0 +1,274 @@
+<section class="product-editorial section-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="product-editorial__container">
+    
+    <div class="product-editorial__col product-editorial__col--desc">
+      <h2 class="product-editorial__heading">Descrição</h2>
+      <div class="product-editorial__text">
+        {%- if product.description != blank -%}
+          {{ product.description }}
+        {%- else -%}
+          <p>A descrição deste produto não está disponível no momento.</p>
+        {%- endif -%}
+      </div>
+    </div>
+    
+    <div class="product-editorial__col product-editorial__col--details">
+      <h2 class="product-editorial__heading">Detalhes</h2>
+      <div class="product-editorial__accordion">
+        {%- for block in section.blocks -%}
+          <div class="accordion-item" {{ block.shopify_attributes }}>
+            <button class="accordion-btn" aria-expanded="false" data-accordion-btn>
+              <span class="accordion-title">{{ block.settings.title }}</span>
+              <span class="accordion-icon"></span>
+            </button>
+            <div class="accordion-content">
+              <div class="accordion-inner">
+                {{ block.settings.content }}
+              </div>
+            </div>
+          </div>
+        {%- else -%}
+          <!-- Default blocks if none added -->
+          <div class="accordion-item">
+            <button class="accordion-btn" aria-expanded="false" data-accordion-btn>
+              <span class="accordion-title">Qual o material?</span>
+              <span class="accordion-icon"></span>
+            </button>
+            <div class="accordion-content"><div class="accordion-inner"><p>Informações sobre o material.</p></div></div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-editorial {
+    padding-block: clamp(5rem, 8vw, 8rem);
+    background-color: transparent;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .product-editorial__container {
+    max-width: var(--page-width, 1100px);
+    margin: 0 auto;
+    padding-inline: var(--page-margin, 1.25rem);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+
+  @media (min-width: 768px) {
+    .product-editorial__container {
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(4rem, 8vw, 8rem);
+    }
+  }
+
+  .product-editorial__heading {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8b7355; /* Subtle sophisticated brown/gold from other sections */
+    margin: 0 0 2rem 0;
+  }
+
+  .product-editorial__text {
+    font-size: 0.9375rem;
+    line-height: 1.8;
+    color: #4a4a4a;
+    font-weight: 300;
+  }
+
+  .product-editorial__text p {
+    margin-bottom: 1.25rem;
+  }
+
+  .product-editorial__text p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Accordion Styles */
+  .product-editorial__accordion {
+    border-top: 1px solid #e0d8d0;
+  }
+
+  .accordion-item {
+    border-bottom: 1px solid #e0d8d0;
+  }
+
+  .accordion-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1.5rem 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: opacity 0.3s ease;
+  }
+
+  .accordion-btn:hover {
+    opacity: 0.7;
+  }
+
+  .accordion-title {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #2c2420;
+    letter-spacing: 0.02em;
+  }
+
+  .accordion-icon {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .accordion-icon::before,
+  .accordion-icon::after {
+    content: '';
+    position: absolute;
+    background-color: #2c2420;
+    transition: transform 0.3s ease;
+  }
+
+  .accordion-icon::before {
+    width: 12px;
+    height: 1px;
+  }
+
+  .accordion-icon::after {
+    width: 1px;
+    height: 12px;
+  }
+
+  .accordion-btn[aria-expanded="true"] .accordion-icon::after {
+    transform: rotate(90deg) scaleY(0);
+  }
+
+  .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .accordion-inner {
+    padding-bottom: 1.5rem;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: #666;
+    font-weight: 300;
+  }
+  
+  .accordion-inner p {
+    margin: 0;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function() {
+    const accordions = document.querySelectorAll('[data-accordion-btn]');
+    
+    accordions.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const isExpanded = this.getAttribute('aria-expanded') === 'true';
+        const content = this.nextElementSibling;
+        
+        // Close all others
+        accordions.forEach(otherBtn => {
+          if (otherBtn !== this) {
+            otherBtn.setAttribute('aria-expanded', 'false');
+            otherBtn.nextElementSibling.style.maxHeight = null;
+          }
+        });
+        
+        // Toggle current
+        this.setAttribute('aria-expanded', !isExpanded);
+        
+        if (!isExpanded) {
+          content.style.maxHeight = content.scrollHeight + "px";
+        } else {
+          content.style.maxHeight = null;
+        }
+      });
+    });
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Description & Details",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "detail",
+      "name": "Accordion Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Qual o material?"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Detalhes sobre este tópico.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Description & Details",
+      "blocks": [
+        {
+          "type": "detail",
+          "settings": {
+            "title": "Qual o material?",
+            "content": "<p>Nossas peças são cuidadosamente desenvolvidas em metais nobres, garantindo sofisticação e durabilidade em cada detalhe.</p>"
+          }
+        },
+        {
+          "type": "detail",
+          "settings": {
+            "title": "Como funciona a garantia?",
+            "content": "<p>Oferecemos garantia contra defeitos de fabricação, refletindo nosso compromisso com a excelência.</p>"
+          }
+        },
+        {
+          "type": "detail",
+          "settings": {
+            "title": "Cuidados com a peça",
+            "content": "<p>Para manter o brilho original, evite contato com produtos químicos, perfumes e água do mar ou piscina.</p>"
+          }
+        },
+        {
+          "type": "detail",
+          "settings": {
+            "title": "Entrega e prazo",
+            "content": "<p>Seu pedido será preparado com o máximo de cuidado e enviado de forma rápida e segura.</p>"
+          }
+        },
+        {
+          "type": "detail",
+          "settings": {
+            "title": "Trocas e devoluções",
+            "content": "<p>Caso a peça não atenda às suas expectativas, facilitamos o processo de troca para sua total conveniência.</p>"
+          }
+        }
+      ]
+    }
+  ],
+  "templates": ["product"]
+}
+{% endschema %}
