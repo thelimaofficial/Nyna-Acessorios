@@ -17,11 +17,34 @@
     },
     "main": {
       "type": "collection",
+      "blocks": {
+        "category_menu_3az6QG": {
+          "type": "category_menu",
+          "settings": {
+            "collection": "",
+            "menu": ""
+          }
+        },
+        "category_menu_EWPTHd": {
+          "type": "category_menu",
+          "settings": {
+            "collection": "aneis",
+            "menu": "menu-joias"
+          }
+        }
+      },
+      "block_order": [
+        "category_menu_3az6QG",
+        "category_menu_EWPTHd"
+      ],
       "settings": {}
     },
     "instagram": {
       "type": "instagram-feed",
-      "settings": {}
+      "settings": {
+        "heading": "@bynyna",
+        "custom_html": "<div id=\"insta-feed\"></div>"
+      }
     }
   },
   "order": [
