@@ -18,6 +18,27 @@
     "main": {
       "type": "collection",
       "blocks": {
+        "category_menu_xhLPdb": {
+          "type": "category_menu",
+          "settings": {
+            "collection": "brincos",
+            "menu": "menu-produtos"
+          }
+        },
+        "category_menu_RF7yzA": {
+          "type": "category_menu",
+          "settings": {
+            "collection": "colares",
+            "menu": "menu-produtos"
+          }
+        },
+        "category_menu_P6paaC": {
+          "type": "category_menu",
+          "settings": {
+            "collection": "brincos-1",
+            "menu": "menu-produtos"
+          }
+        },
         "category_menu_3az6QG": {
           "type": "category_menu",
           "settings": {
@@ -29,11 +50,14 @@
           "type": "category_menu",
           "settings": {
             "collection": "aneis",
-            "menu": "menu-joias"
+            "menu": "menu-produtos"
           }
         }
       },
       "block_order": [
+        "category_menu_xhLPdb",
+        "category_menu_RF7yzA",
+        "category_menu_P6paaC",
         "category_menu_3az6QG",
         "category_menu_EWPTHd"
       ],
