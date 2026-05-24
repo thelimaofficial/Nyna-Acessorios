@@ -9,12 +9,24 @@
  */
 {
   "sections": {
+    "banner": {
+      "type": "collection-banner",
+      "settings": {
+        "title": "Joias"
+      }
+    },
     "main": {
       "type": "collection",
+      "settings": {}
+    },
+    "instagram": {
+      "type": "instagram-feed",
       "settings": {}
     }
   },
   "order": [
-    "main"
+    "banner",
+    "main",
+    "instagram"
   ]
 }

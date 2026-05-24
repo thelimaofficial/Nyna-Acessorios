@@ -52,17 +52,6 @@
     <!-- Right Column: Info -->
     <div class="product-info">
       
-      <!-- Breadcrumbs -->
-      <nav class="product-breadcrumbs" aria-label="breadcrumbs">
-        <a href="{{ routes.root_url }}">Início</a>
-        {% if collection %}
-          <span>/</span> <a href="{{ collection.url }}">{{ collection.title }}</a>
-        {% else %}
-          <span>/</span> <a href="{{ routes.all_products_collection_url }}">Categoria</a>
-        {% endif %}
-        <span>/</span> {{ product.title }}
-      </nav>
-
       <h1 class="product-title">{{ product.title }}</h1>
       
       <div class="product-sku">
@@ -300,17 +289,9 @@
     padding-top: clamp(0.75rem, 2vw, 1.5rem);
   }
 
-  .product-breadcrumbs {
-    font-size: 0.625rem;
-    font-weight: 500;
-    color: #111;
-    letter-spacing: 0;
-    margin-bottom: 1.15rem;
-  }
-
-  .product-breadcrumbs a {
-    color: inherit;
-    text-decoration: none;
+  .product-info .product-breadcrumbs,
+  .product-info nav[aria-label="breadcrumbs"] {
+    display: none !important;
   }
 
   .product-title {

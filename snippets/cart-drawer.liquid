@@ -101,10 +101,10 @@
                 <span class="cart-drawer__item-price">{{ item.final_line_price | money }}</span>
 
                 <div class="cart-drawer__item-actions">
-                  <div class="cart-drawer__quantity">
-                    <button type="button" class="cart-drawer__qty-btn" aria-label="Diminuir" onclick="updateCartItem({{ item.index | plus: 1 }}, {{ item.quantity | minus: 1 }})">−</button>
-                    <input class="cart-drawer__qty-input" type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Quantidade" readonly>
-                    <button type="button" class="cart-drawer__qty-btn" aria-label="Aumentar" onclick="updateCartItem({{ item.index | plus: 1 }}, {{ item.quantity | plus: 1 }})">+</button>
+                  <div class="cart-drawer__quantity" style="width: 92px; min-width: 92px; height: 42px; border-radius: 999px;">
+                    <button type="button" class="cart-drawer__qty-btn" style="width: 28px; font-size: 16px;" aria-label="Diminuir" onclick="updateCartItem({{ item.index | plus: 1 }}, {{ item.quantity | minus: 1 }})">-</button>
+                    <input class="cart-drawer__qty-input" style="width: 34px; font-size: 15px;" type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Quantidade" readonly>
+                    <button type="button" class="cart-drawer__qty-btn" style="width: 28px; font-size: 16px;" aria-label="Aumentar" onclick="updateCartItem({{ item.index | plus: 1 }}, {{ item.quantity | plus: 1 }})">+</button>
                   </div>
                   <a href="{{ item.url_to_remove }}" class="cart-drawer__remove" aria-label="Remover" onclick="event.preventDefault(); updateCartItem({{ item.index | plus: 1 }}, 0)">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
@@ -438,9 +438,15 @@
   .cart-drawer__quantity {
     display: flex;
     align-items: center;
-    border: 1px solid #e5e5e5;
-    border-radius: 4px;
-    height: 32px;
+    justify-content: center;
+    width: 92px;
+    min-width: 92px;
+    height: 42px;
+    border: 1px solid #ddd;
+    border-radius: 999px;
+    background: #fff;
+    flex-shrink: 0;
+    overflow: hidden;
   }
 
   .cart-drawer__qty-btn {
@@ -452,24 +458,37 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: var(--cart-drawer-text);
-    font-size: 1.1rem;
-    transition: background-color 0.2s;
+    color: #111;
+    font-size: 16px;
+    line-height: 1;
+    font-weight: 500;
+    padding: 0;
+    transition: color 0.2s;
   }
 
   .cart-drawer__qty-btn:hover {
-    background-color: #f5f5f5;
+    color: var(--cart-drawer-accent);
   }
 
   .cart-drawer__qty-input {
-    width: 28px;
+    width: 34px;
     height: 100%;
     border: none;
     text-align: center;
     font-family: 'Inter', sans-serif;
-    font-size: 0.8125rem;
-    color: var(--cart-drawer-text);
+    font-size: 15px;
+    line-height: 1;
+    font-weight: 600;
+    color: #111;
+    background: transparent;
     padding: 0;
+    -moz-appearance: textfield;
+  }
+
+  .cart-drawer__qty-input::-webkit-outer-spin-button,
+  .cart-drawer__qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 
   .cart-drawer__remove {
