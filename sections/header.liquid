@@ -31,7 +31,7 @@
           >
             <a
               class="site-header__nav-link"
-              href="{{ link.url }}"
+              href="{% if handle_check == 'joias' %}/collections/joias{% else %}{{ link.url }}{% endif %}"
               {% if link.active %}
                 aria-current="page"
               {% endif %}
