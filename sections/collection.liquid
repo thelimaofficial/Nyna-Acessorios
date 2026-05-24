@@ -9,13 +9,19 @@
   <h1 class="collection-main__title">{{ collection.title | default: 'Joias' }}</h1>
   
   <div class="collection-toolbar">
-    {%- if section.settings.show_category_menu -%}
+    {%- assign active_menu = blank -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'category_menu' and block.settings.collection.handle == collection.handle -%}
+        {%- assign active_menu = block.settings.menu -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if active_menu != blank -%}
       <div class="collection-toolbar__chips">
-        {%- if section.settings.filter_menu != blank -%}
-          {%- for link in linklists[section.settings.filter_menu].links -%}
-            <a href="{{ link.url }}" class="collection-toolbar__chip {% if link.active %}is-active{% endif %}">{{ link.title }}</a>
-          {%- endfor -%}
-        {%- endif -%}
+        {%- for link in linklists[active_menu].links -%}
+          <a href="{{ link.url }}" class="collection-toolbar__chip {% if link.active %}is-active{% endif %}">{{ link.title }}</a>
+        {%- endfor -%}
       </div>
     {%- endif -%}
     
@@ -226,18 +232,23 @@
 {% schema %}
 {
   "name": "Collection Grid",
-  "settings": [
+  "settings": [],
+  "blocks": [
     {
-      "type": "checkbox",
-      "id": "show_category_menu",
-      "label": "Habilitar menu de categorias",
-      "default": true
-    },
-    {
-      "type": "link_list",
-      "id": "filter_menu",
-      "label": "Menu de categorias (Filtro)",
-      "info": "Selecione o menu que deseja exibir como chips. Para ter um menu diferente por coleção, use 'Origens Dinâmicas' (ícone de cilindro) e vincule a um Metafield de Coleção."
+      "type": "category_menu",
+      "name": "Menu de Coleção",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Qual coleção exibirá este menu?"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu de categorias (Filtro)"
+        }
+      ]
     }
   ],
   "presets": [
