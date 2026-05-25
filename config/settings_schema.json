@@ -59,14 +59,68 @@
       {
         "type": "color",
         "id": "background_color",
-        "default": "#FFFFFF",
-        "label": "t:labels.background"
+        "default": "#ffffff",
+        "label": "Fundo Principal"
+      },
+      {
+        "type": "color",
+        "id": "background_secondary",
+        "default": "#faf8f5",
+        "label": "Fundo Secundário"
       },
       {
         "type": "color",
         "id": "foreground_color",
-        "default": "#333333",
-        "label": "t:labels.foreground"
+        "default": "#1a1a1a",
+        "label": "Texto Principal"
+      },
+      {
+        "type": "color",
+        "id": "text_secondary",
+        "default": "#6b6661",
+        "label": "Texto Secundário"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "default": "#6d5848",
+        "label": "Cor Principal (Botões/Links)"
+      },
+      {
+        "type": "color",
+        "id": "accent_hover",
+        "default": "#5e4233",
+        "label": "Cor Principal (Ao passar o mouse)"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "default": "#e5dfd8",
+        "label": "Bordas e Linhas"
+      },
+      {
+        "type": "color",
+        "id": "error_color",
+        "default": "#c0392b",
+        "label": "Texto de Erro"
+      },
+      {
+        "type": "color",
+        "id": "error_bg",
+        "default": "#fff5f5",
+        "label": "Fundo de Erro"
+      },
+      {
+        "type": "color",
+        "id": "success_color",
+        "default": "#27ae60",
+        "label": "Texto de Sucesso"
+      },
+      {
+        "type": "color",
+        "id": "success_bg",
+        "default": "#f0faf5",
+        "label": "Fundo de Sucesso"
       },
       {
         "type": "range",

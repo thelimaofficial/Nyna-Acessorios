@@ -74,8 +74,8 @@
   }
 
   .placeholder-svg {
-    background-color: rgba(44, 36, 32, 0.05);
-    color: rgba(44, 36, 32, 0.2);
+    background-color: color-mix(in srgb, var(--color-foreground) 5%, transparent);
+    color: color-mix(in srgb, var(--color-foreground) 20%, transparent);
     width: 100%;
     height: 100%;
     fill: currentColor;
@@ -97,7 +97,7 @@
     font-weight: 500;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #8b7355;
+    color: var(--color-accent);
     margin-bottom: 1rem;
   }
 
@@ -106,14 +106,14 @@
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 400;
     line-height: 1.1;
-    color: #2c2420;
+    color: var(--color-foreground);
     margin-bottom: 1.5rem;
   }
 
   .image-with-text__text {
     font-size: 0.9375rem;
     line-height: 1.7;
-    color: rgba(44, 36, 32, 0.8);
+    color: color-mix(in srgb, var(--color-foreground) 80%, transparent);
     margin-bottom: 2rem;
   }
 
@@ -127,16 +127,16 @@
     letter-spacing: 0.14em;
     text-transform: uppercase;
     text-decoration: none;
-    color: #faf8f5;
-    background-color: #2c2420;
-    border: 1px solid #2c2420;
+    color: var(--color-background);
+    background-color: var(--color-foreground);
+    border: 1px solid var(--color-foreground);
     border-radius: 2px;
     transition: all 0.3s ease;
   }
 
   .image-with-text__btn:hover {
     background-color: transparent;
-    color: #2c2420;
+    color: var(--color-foreground);
   }
 
   @media (max-width: 768px) {

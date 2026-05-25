@@ -133,7 +133,7 @@
     min-height: var(--hero-height, 88svh);
     display: flex;
     align-items: center;
-    background-color: #b08f7a;
+    background-color: var(--color-background-secondary);
   }
 
   .hero-slide {
@@ -180,9 +180,9 @@
     z-index: 1;
     background: linear-gradient(
       to right,
-      rgba(30, 22, 18, 0.62) 0%,
-      rgba(30, 22, 18, 0.28) 50%,
-      rgba(30, 22, 18, 0.04) 80%
+      color-mix(in srgb, var(--color-foreground) 62%, transparent) 0%,
+      color-mix(in srgb, var(--color-foreground) 28%, transparent) 50%,
+      color-mix(in srgb, var(--color-foreground) 4%, transparent) 80%
     );
   }
 
@@ -213,7 +213,7 @@
     font-size: 0.6875rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: rgba(232, 213, 176, 0.9);
+    color: color-mix(in srgb, var(--color-accent) 90%, transparent);
     font-weight: 500;
   }
 
@@ -221,7 +221,7 @@
     font-size: clamp(2rem, 5vw, 3.25rem);
     font-weight: 300;
     line-height: 1.15;
-    color: #faf5ee;
+    color: var(--color-background);
     letter-spacing: 0.01em;
     font-family: 'Inter', sans-serif;
   }
@@ -229,7 +229,7 @@
   .hero-slide__description {
     font-size: clamp(0.875rem, 1.5vw, 1rem);
     line-height: 1.65;
-    color: rgba(250, 245, 238, 0.8);
+    color: color-mix(in srgb, var(--color-background) 80%, transparent);
     max-width: 32ch;
     font-weight: 300;
   }
@@ -245,8 +245,8 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     text-decoration: none;
-    color: #fff;
-    background-color: #7d5a44;
+    color: var(--color-background);
+    background-color: var(--color-accent);
     border: none;
     border-radius: 9999px;
     transition: background-color 0.25s ease, transform 0.2s ease;
@@ -254,7 +254,7 @@
   }
 
   .hero-slide__btn:hover {
-    background-color: #5e4233;
+    background-color: var(--color-accent-hover);
     transform: translateY(-1px);
   }
 
@@ -273,7 +273,7 @@
   .hero-carousel__dot {
     width: 2rem;
     height: 2px;
-    background-color: rgba(250, 245, 238, 0.4);
+    background-color: color-mix(in srgb, var(--color-background) 40%, transparent);
     border: none;
     padding: 0;
     cursor: pointer;
@@ -281,7 +281,7 @@
   }
 
   .hero-carousel__dot.is-active {
-    background-color: #faf5ee;
+    background-color: var(--color-background);
   }
 
   /* ── Mobile ── */
@@ -296,7 +296,7 @@
     }
 
     .hero-slide__overlay {
-      background: linear-gradient(to top, rgba(30, 22, 18, 0.72) 0%, rgba(30, 22, 18, 0.1) 60%);
+      background: linear-gradient(to top, color-mix(in srgb, var(--color-foreground) 72%, transparent) 0%, color-mix(in srgb, var(--color-foreground) 10%, transparent) 60%);
     }
 
     .hero-slide__content {

@@ -20,7 +20,7 @@ html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
 /* Custom Scrollbar */
 html {
   scrollbar-width: thin;
-  scrollbar-color: #6d5848 transparent; /* Firefox */
+  scrollbar-color: var(--color-accent) transparent; /* Firefox */
 }
 
 ::-webkit-scrollbar {
@@ -33,7 +33,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #6d5848;
+  background-color: var(--color-accent);
   border-radius: 0;
 }
 

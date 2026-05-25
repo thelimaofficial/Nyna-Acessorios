@@ -117,8 +117,8 @@
     font-weight: 500;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    background-color: #a88d7b;
-    color: #fff;
+    background-color: var(--color-accent);
+    color: var(--color-background);
     border-radius: 4px;
   }
 
@@ -139,17 +139,17 @@
 
   .product-card__title a {
     text-decoration: none;
-    color: #2c2420;
+    color: var(--color-foreground);
     transition: color 0.2s ease;
   }
 
   .product-card__title a:hover {
-    color: #8b7355;
+    color: var(--color-accent);
   }
 
   .product-card__price {
     font-size: 0.9375rem;
-    color: #2c2420;
+    color: var(--color-foreground);
     font-weight: 500;
     display: flex;
     flex-direction: column;
@@ -158,7 +158,7 @@
   }
 
   .product-card__price-compare {
-    color: #111;
+    color: var(--color-text-secondary);
     font-weight: 400;
     font-size: 0.8125rem;
   }

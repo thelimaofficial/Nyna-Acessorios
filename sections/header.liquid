@@ -177,8 +177,8 @@
 {% stylesheet %}
   /* ── Header shell ── */
   .site-header {
-    background-color: var(--header-bg, #faf8f5);
-    border-bottom: 1px solid var(--header-border, rgba(44, 36, 32, 0.08));
+    background-color: var(--header-bg, var(--color-background));
+    border-bottom: 1px solid var(--header-border, var(--color-border));
     position: relative;
     z-index: 100;
   }
@@ -216,8 +216,8 @@
     top: 100%;
     left: 0;
     width: 100%;
-    background-color: var(--header-bg, #faf8f5);
-    border-bottom: 1px solid var(--header-border, rgba(44, 36, 32, 0.08));
+    background-color: var(--header-bg, var(--color-background));
+    border-bottom: 1px solid var(--header-border, var(--color-border));
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
@@ -259,7 +259,7 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--header-text, #2c2420);
+    color: var(--header-text, var(--color-foreground));
     transition: opacity 0.2s ease, transform 0.2s ease;
     display: inline-block;
   }
@@ -281,7 +281,7 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--header-text, #2c2420);
+    color: var(--header-text, var(--color-foreground));
     position: relative;
     padding-bottom: 2px;
     transition: opacity 0.2s ease;
@@ -335,14 +335,14 @@
     font-weight: 300;
     letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: var(--header-text, #2c2420);
+    color: var(--header-text, var(--color-foreground));
   }
 
   .site-header__logo-tagline {
     font-size: 0.5rem;
     letter-spacing: 0.35em;
     text-transform: uppercase;
-    color: #8b7355;
+    color: var(--color-accent);
     margin-top: 2px;
   }
 
@@ -362,7 +362,7 @@
     position: relative;
     width: 2rem;
     height: 2rem;
-    color: var(--header-text, #2c2420);
+    color: var(--header-text, var(--color-foreground));
     text-decoration: none;
     padding: 0.25rem;
     transition: opacity 0.2s ease;
@@ -387,7 +387,7 @@
     transform: translateX(-0.2rem);
     --shopify-account-signed-in-avatar-size: var(--icon-size, 1.5rem);
     --shopify-account-signed-in-avatar-color-background: transparent;
-    --shopify-account-signed-in-avatar-color-text: var(--header-text, #2c2420);
+    --shopify-account-signed-in-avatar-color-text: var(--header-text, var(--color-foreground));
   }
 
   .site-header__account-avatar {
@@ -405,8 +405,8 @@
     position: absolute;
     top: -0.35rem;
     right: -0.45rem;
-    background-color: var(--cart-badge-bg, #8b7355);
-    color: var(--cart-badge-text, #fff);
+    background-color: var(--cart-badge-bg, var(--color-accent));
+    color: var(--cart-badge-text, var(--color-background));
     font-size: 0.55rem;
     font-weight: 700;
     width: 1rem;
@@ -430,7 +430,7 @@
     width: var(--search-width, 60%);
     display: flex;
     align-items: center;
-    background-color: var(--header-bg, #faf8f5);
+    background-color: var(--header-bg, var(--color-background));
     z-index: 10;
     padding-inline: 0.25rem;
     clip-path: inset(0 0 0 100%);
@@ -461,7 +461,7 @@
     justify-content: center;
     background: none;
     border: none;
-    color: var(--header-text, #2c2420);
+    color: var(--header-text, var(--color-foreground));
     cursor: pointer;
     padding: 0.25rem;
     flex-shrink: 0;
@@ -497,13 +497,13 @@
     font-family: 'Inter', sans-serif;
     font-size: var(--font-size, 0.8rem);
     font-weight: 400;
-    color: var(--header-text, #2c2420);
+    color: var(--header-text, var(--color-foreground));
     padding: 0.3rem 0;
     letter-spacing: 0.02em;
   }
 
   .search-bar__input::placeholder {
-    color: rgba(44, 36, 32, 0.35);
+    color: color-mix(in srgb, var(--color-foreground) 35%, transparent);
     font-weight: 300;
   }
 

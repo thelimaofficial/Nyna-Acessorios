@@ -50,7 +50,7 @@
     font-family: 'Inter', sans-serif;
     font-size: clamp(2rem, 4vw, 2.75rem);
     font-weight: 400;
-    color: #2c2420;
+    color: var(--color-foreground);
     margin-bottom: 0.5rem;
   }
 
@@ -59,7 +59,7 @@
     font-weight: 500;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #8b7355;
+    color: var(--color-accent);
   }
 
   .featured-collections__grid {
@@ -79,9 +79,9 @@
   .featured-collections__media {
     position: relative;
     border-radius: 8px;
-    border: 1px solid #e0dcd9;
+    border: 1px solid var(--color-border);
     padding: 0.5rem;
-    background-color: #fff;
+    background-color: var(--color-background);
     aspect-ratio: 1 / 1;
     overflow: hidden;
   }
@@ -107,12 +107,12 @@
     font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #2c2420;
+    color: var(--color-foreground);
     transition: color 0.3s ease;
   }
 
   .featured-collections__item:hover .featured-collections__title {
-    color: #8b7355;
+    color: var(--color-accent);
   }
 
   @media (max-width: 990px) {
