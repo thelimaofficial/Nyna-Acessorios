@@ -83,13 +83,13 @@
       {
         "type": "color",
         "id": "accent_color",
-        "default": "#6d5848",
+        "default": "#b69f8c",
         "label": "Cor Principal (Botões/Links)"
       },
       {
         "type": "color",
         "id": "accent_hover",
-        "default": "#5e4233",
+        "default": "#a38a77",
         "label": "Cor Principal (Ao passar o mouse)"
       },
       {

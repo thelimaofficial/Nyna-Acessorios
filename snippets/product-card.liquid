@@ -41,6 +41,17 @@
     </div>
   </a>
 
+  {%- assign size_option = nil -%}
+  {%- if product != blank -%}
+    {%- for option in product.options_with_values -%}
+      {%- assign downcased_option_name = option.name | downcase -%}
+      {%- if downcased_option_name == 'tamanho' or downcased_option_name == 'tamanhos' or downcased_option_name == 'size' or downcased_option_name == 'sizes' -%}
+        {%- assign size_option = option -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+
   <div class="product-card__info">
     <h3 class="product-card__title">
       <a href="{{ product.url | default: '#' }}">{{ product.title | default: 'Exemplo de Joia NYNA' }}</a>
@@ -59,6 +70,47 @@
         <span class="product-card__price-current">{{ 19900 | money }}</span>
       {%- endif -%}
     </div>
+
+    {%- if size_option != blank -%}
+      {%- assign size_option_index = size_option.position | minus: 1 -%}
+      {%- assign current_size = product.selected_or_first_available_variant.options[size_option_index] -%}
+      <div class="product-card__sizes-wrapper">
+        <span class="product-card__sizes-label">Tamanho</span>
+        <div class="product-card__sizes-list">
+          {%- for value in size_option.values -%}
+            <button 
+              type="button" 
+              class="product-card__size-btn{% if value == current_size %} is-active{% endif %}" 
+              data-value="{{ value | escape }}"
+              data-option-index="{{ size_option_index }}"
+            >
+              {{ value }}
+            </button>
+          {%- endfor -%}
+        </div>
+      </div>
+      <script type="application/json" class="product-card-variants-json">
+        {{ product.variants | json }}
+      </script>
+    {%- endif -%}
+
+    {%- if product != blank and product.available -%}
+      <button 
+        type="button" 
+        class="product-card__add-to-cart" 
+        data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+      >
+        ADICIONAR A SACOLA
+      </button>
+    {%- elsif product != blank -%}
+      <button type="button" class="product-card__add-to-cart" disabled>
+        ESGOTADO
+      </button>
+    {%- else -%}
+      <button type="button" class="product-card__add-to-cart">
+        ADICIONAR A SACOLA
+      </button>
+    {%- endif -%}
   </div>
 </div>
 
@@ -66,8 +118,9 @@
   .product-card {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.25rem;
     position: relative;
+    font-family: 'Inter', sans-serif;
   }
 
   .product-card__link {
@@ -110,15 +163,21 @@
 
   .product-card__badge {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    padding: 0.3rem 0.6rem;
-    font-size: 0.6875rem;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
     font-weight: 500;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     background-color: var(--color-accent);
     color: var(--color-background);
+    border-radius: 15px 0 15px 0;
+    z-index: 2;
+  }
+
+  .product-card__badge--soldout {
+    background-color: #6b6661;
     border-radius: 4px;
   }
 
@@ -131,10 +190,11 @@
   }
 
   .product-card__title {
-    font-size: 0.9375rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 400;
     letter-spacing: 0.02em;
-    line-height: 1.3;
+    line-height: 1.35;
+    margin: 0;
   }
 
   .product-card__title a {
@@ -148,18 +208,235 @@
   }
 
   .product-card__price {
-    font-size: 0.9375rem;
+    font-size: 0.95rem;
     color: var(--color-foreground);
-    font-weight: 500;
+    font-weight: 600;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.2rem;
     justify-content: center;
   }
 
   .product-card__price-compare {
     color: var(--color-text-secondary);
     font-weight: 400;
-    font-size: 0.8125rem;
+    font-size: 0.8rem;
+  }
+  
+  .product-card__price-current {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .product-card__sizes-wrapper {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, margin-top 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    width: 100%;
+  }
+
+  .product-card:hover .product-card__sizes-wrapper {
+    max-height: 80px;
+    opacity: 1;
+    margin-top: 0.25rem;
+  }
+
+  .product-card__sizes-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-foreground);
+    margin-bottom: 0.1rem;
+  }
+
+  .product-card__sizes-list {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .product-card__size-btn {
+    background: transparent;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-foreground);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+  }
+
+  .product-card__size-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .product-card__size-btn.is-active {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+    color: #fff;
+  }
+
+  .product-card__add-to-cart {
+    background-color: var(--color-accent);
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    padding: 0.6rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    width: 100%;
+    max-width: 240px;
+    margin: 0.25rem auto 0;
+    display: block;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .product-card__add-to-cart:hover {
+    background-color: var(--color-accent-hover);
+    transform: translateY(-1px);
+  }
+
+  .product-card__add-to-cart:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 {% endstylesheet %}
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function() {
+    // Event delegation for Add to Cart buttons
+    document.body.addEventListener('click', function(e) {
+      const btn = e.target.closest('.product-card__add-to-cart');
+      if (!btn) return;
+      
+      const variantId = btn.dataset.variantId;
+      if (!variantId) return;
+
+      e.preventDefault();
+      
+      btn.setAttribute('disabled', 'disabled');
+      const originalText = btn.textContent;
+      btn.textContent = 'ADICIONANDO...';
+
+      const body = {
+        id: variantId,
+        quantity: 1,
+        sections: [],
+        sections_url: window.location.pathname
+      };
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(body)
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Erro ao adicionar');
+        return res.json();
+      })
+      .then(() => {
+        return fetch(window.location.href);
+      })
+      .then(res => res.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        // Update Cart Drawer
+        const newDrawer = doc.querySelector('[data-cart-drawer]');
+        const currentDrawer = document.querySelector('[data-cart-drawer]');
+        if (newDrawer && currentDrawer) {
+          currentDrawer.innerHTML = newDrawer.innerHTML;
+          // Re-bind close event
+          const closeBtn = currentDrawer.querySelector('[data-cart-close]');
+          if (closeBtn) {
+            closeBtn.addEventListener('click', function(ev) {
+              ev.preventDefault();
+              if (window.closeCart) window.closeCart();
+            });
+          }
+        }
+
+        // Update Cart Count Bubble
+        const newBubble = doc.querySelector('.site-header__cart-count');
+        const currentCart = document.querySelector('.site-header__cart');
+        if (currentCart) {
+          const currentBubble = currentCart.querySelector('.site-header__cart-count');
+          if (newBubble) {
+            if (currentBubble) {
+              currentBubble.outerHTML = newBubble.outerHTML;
+            } else {
+              currentCart.insertAdjacentHTML('afterbegin', newBubble.outerHTML);
+            }
+          } else if (currentBubble) {
+            currentBubble.remove();
+          }
+        }
+
+        // Open Cart Drawer
+        if (window.openCart) window.openCart();
+      })
+      .catch(err => {
+        console.error('Erro ao adicionar ao carrinho:', err);
+        alert('Não foi possível adicionar este produto à sacola.');
+      })
+      .finally(() => {
+        btn.removeAttribute('disabled');
+        btn.textContent = originalText;
+      });
+    });
+
+    // Handle interactive size selection in product card
+    document.body.addEventListener('click', function(e) {
+      const sizeBtn = e.target.closest('.product-card__size-btn');
+      if (!sizeBtn) return;
+      
+      const card = sizeBtn.closest('.product-card');
+      if (!card) return;
+      
+      const buttons = card.querySelectorAll('.product-card__size-btn');
+      buttons.forEach(b => b.classList.remove('is-active'));
+      sizeBtn.classList.add('is-active');
+      
+      const selectedSize = sizeBtn.dataset.value;
+      const jsonEl = card.querySelector('.product-card-variants-json');
+      if (!jsonEl) return;
+      
+      try {
+        const variants = JSON.parse(jsonEl.textContent);
+        const optionIndex = parseInt(sizeBtn.dataset.optionIndex, 10);
+        
+        // Find variant that matches the selected size and is available
+        const matchedVariant = variants.find(v => v.options[optionIndex] === selectedSize && v.available);
+        
+        const addToCartBtn = card.querySelector('.product-card__add-to-cart');
+        if (matchedVariant && addToCartBtn) {
+          addToCartBtn.dataset.variantId = matchedVariant.id;
+          addToCartBtn.removeAttribute('disabled');
+          addToCartBtn.textContent = 'ADICIONAR A SACOLA';
+        } else if (addToCartBtn) {
+          addToCartBtn.setAttribute('disabled', 'disabled');
+          addToCartBtn.textContent = 'ESGOTADO';
+        }
+      } catch (err) {
+        console.error('Error parsing variants in card:', err);
+      }
+    });
+  });
+{% endjavascript %}

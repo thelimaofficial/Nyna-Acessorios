@@ -432,7 +432,7 @@
   }
 
   .product-btn--submit {
-    background-color: #6d5848;
+    background-color: var(--color-accent);
     color: #fff;
     border: none;
     border-radius: 40px;
@@ -447,7 +447,7 @@
   }
 
   .product-btn--submit:hover {
-    background-color: #554336;
+    background-color: var(--color-accent-hover);
   }
 
   .product-btn--submit:disabled {
@@ -491,11 +491,15 @@
     width: 4rem;
     border: none;
     border-radius: 40px;
-    background-color: #6d5848;
+    background-color: var(--color-accent);
     color: #fff;
     font-size: 0.875rem;
     font-weight: 600;
     padding: 0;
+    transition: background-color 0.3s ease;
+  }
+  .product-shipping .shipping-calculator__button:hover {
+    background-color: var(--color-accent-hover);
   }
   .product-shipping .shipping-calculator__message,
   .product-shipping .shipping-calculator__rate {

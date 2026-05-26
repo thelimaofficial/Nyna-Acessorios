@@ -31,7 +31,8 @@
     --cart-drawer-footer-bg: {{ settings.cart_drawer_footer_background }};
     --cart-drawer-text: {{ settings.cart_drawer_text_color }};
     --cart-drawer-subdued: {{ settings.cart_drawer_subdued_text_color }};
-    --cart-drawer-accent: {{ settings.cart_drawer_accent_color }};
+    --cart-drawer-accent: var(--color-accent);
+    --cart-drawer-accent-hover: var(--color-accent-hover);
     --cart-drawer-free-shipping-bg: {{ settings.cart_drawer_free_shipping_background }};
     --cart-drawer-free-shipping-track: {{ settings.cart_drawer_free_shipping_track }};
   "
@@ -300,7 +301,7 @@
   }
 
   .cart-drawer__btn:hover {
-    background-color: #554437;
+    background-color: var(--cart-drawer-accent-hover);
     transform: translateY(-2px);
   }
 
@@ -614,8 +615,8 @@
   }
 
   .cart-drawer__btn--checkout:hover {
-    background-color: var(--cart-drawer-accent);
-    border-color: var(--cart-drawer-accent);
+    background-color: var(--cart-drawer-accent-hover);
+    border-color: var(--cart-drawer-accent-hover);
   }
 
   .cart-drawer__btn--outline {
@@ -626,8 +627,8 @@
 
   .cart-drawer__btn--outline:hover {
     background-color: var(--cart-drawer-bg);
-    color: var(--cart-drawer-accent);
-    border-color: var(--cart-drawer-accent);
+    color: var(--cart-drawer-accent-hover);
+    border-color: var(--cart-drawer-accent-hover);
   }
 
   .cart-drawer__secure {
