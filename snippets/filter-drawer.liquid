@@ -1,7 +1,7 @@
-{% comment %}
+{% doc %}
   Filter Drawer Snippet
   Responsável por exibir o painel lateral de filtros.
-{% endcomment %}
+{% enddoc %}
 
 <div class="filter-drawer-overlay" data-filter-overlay aria-hidden="true" style="--cart-drawer-overlay-opacity: {{ settings.cart_drawer_overlay_opacity | times: 0.01 }};"></div>
 
@@ -13,7 +13,8 @@
     --cart-drawer-footer-bg: {{ settings.cart_drawer_footer_background }};
     --cart-drawer-text: {{ settings.cart_drawer_text_color }};
     --cart-drawer-subdued: {{ settings.cart_drawer_subdued_text_color }};
-    --cart-drawer-accent: {{ settings.cart_drawer_accent_color }};
+    --cart-drawer-accent: var(--color-accent);
+    --cart-drawer-accent-hover: var(--color-accent-hover);
   "
 >
   <div class="filter-drawer__header" style="justify-content: space-between;">
@@ -265,8 +266,8 @@
   }
 
   .filter-drawer__checkbox input:checked + .filter-drawer__checkbox-indicator {
-    background-color: #111;
-    border-color: #111;
+    background-color: var(--cart-drawer-accent);
+    border-color: var(--cart-drawer-accent);
   }
 
   .filter-drawer__checkbox input:checked + .filter-drawer__checkbox-indicator::after {
@@ -355,7 +356,8 @@
   }
 
   .filter-drawer__btn--apply:hover {
-    background-color: #554437;
+    background-color: var(--cart-drawer-accent-hover);
+    border-color: var(--cart-drawer-accent-hover);
     transform: translateY(-2px);
   }
   
@@ -371,8 +373,8 @@
 
   .filter-drawer__btn--outline:hover {
     background-color: var(--cart-drawer-bg);
-    color: var(--cart-drawer-accent);
-    border-color: var(--cart-drawer-accent);
+    color: var(--cart-drawer-accent-hover);
+    border-color: var(--cart-drawer-accent-hover);
   }
   
   body.filter-drawer-open {
