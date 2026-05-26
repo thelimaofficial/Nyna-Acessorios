@@ -23,6 +23,19 @@
             {%- assign is_mega_menu = true -%}
           {%- endif -%}
 
+          {%- assign is_active = link.active -%}
+          {%- if is_mega_menu -%}
+            {%- if collection.handle == 'joias' -%}
+              {%- assign is_active = true -%}
+            {%- else -%}
+              {%- for child_link in linklists['menu-joias'].links -%}
+                {%- if request.path == child_link.url or collection.url == child_link.url or child_link.active -%}
+                  {%- assign is_active = true -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endif -%}
+
           <div
             class="site-header__nav-item"
             {% if is_mega_menu %}
@@ -32,7 +45,7 @@
             <a
               class="site-header__nav-link"
               href="{% if handle_check == 'joias' %}/collections/joias{% else %}{{ link.url }}{% endif %}"
-              {% if link.active %}
+              {% if is_active %}
                 aria-current="page"
               {% endif %}
               {% if is_mega_menu %}
