@@ -1,0 +1,38 @@
+{%- if predictive_search.performed -%}
+  <div id="predictive-search-results">
+    {%- if predictive_search.resources.products.size > 0 -%}
+      <div class="predictive-search__results-list" role="listbox">
+        {%- for product in predictive_search.resources.products -%}
+          <a href="{{ product.url }}" class="predictive-search__item" role="option" tabindex="-1">
+            {%- if product.featured_media != blank -%}
+              <img class="predictive-search__image"
+                src="{{ product.featured_media | image_url: width: 150 }}"
+                alt="{{ product.featured_media.alt | escape }}"
+                width="60"
+                height="60"
+                loading="lazy"
+              >
+            {%- else -%}
+              <div class="predictive-search__image predictive-search__image--placeholder"></div>
+            {%- endif -%}
+            
+            <div class="predictive-search__item-content">
+              <span class="predictive-search__item-title">{{ product.title }}</span>
+              <span class="predictive-search__item-price">
+                {%- if product.compare_at_price > product.price -%}
+                  <s class="predictive-search__item-price-old" style="color: #999; font-size: 0.8em; margin-right: 4px;">{{ product.compare_at_price | money }}</s>
+                {%- endif -%}
+                {{ product.price | money }}
+              </span>
+            </div>
+          </a>
+        {%- endfor -%}
+      </div>
+
+    {%- else -%}
+      <div class="predictive-search__empty" style="padding: 2rem; text-align: center; color: #666; font-size: 0.875rem;">
+        <p>Nenhum resultado encontrado para "{{ predictive_search.terms }}".</p>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

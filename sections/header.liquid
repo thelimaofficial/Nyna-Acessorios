@@ -136,11 +136,11 @@
       </div>
 
       {%- comment -%} ── Expandable search ── {%- endcomment -%}
-      <div class="search-bar" data-search-overlay aria-hidden="true">
+      <predictive-search class="search-bar" data-search-overlay aria-hidden="true">
         <form action="{{ routes.search_url }}" method="get" class="search-bar__form" role="search">
-          <button type="submit" class="search-bar__icon" aria-label="{{ 'accessibility.search' | t }}">
+          <span class="search-bar__icon search-bar__icon--static" aria-hidden="true">
             {{ 'icon-busca.svg' | inline_asset_content }}
-          </button>
+          </span>
           <input
             type="search"
             name="q"
@@ -151,7 +151,14 @@
             autocapitalize="off"
             spellcheck="false"
             data-search-input
+            role="combobox"
+            aria-expanded="false"
+            aria-owns="predictive-search-results"
+            aria-controls="predictive-search-results"
+            aria-haspopup="listbox"
+            aria-autocomplete="list"
           >
+          <input type="hidden" name="options[prefix]" value="last">
           <button
             type="button"
             class="search-bar__icon search-bar__close"
@@ -161,7 +168,11 @@
             {{ 'icon-x.svg' | inline_asset_content }}
           </button>
         </form>
-      </div>
+
+        <div class="predictive-search__dropdown" tabindex="-1" data-predictive-search>
+          <!-- Results will be loaded here -->
+        </div>
+      </predictive-search>
     </div>
   </div>
 </header>
@@ -433,7 +444,7 @@
     background-color: var(--header-bg, var(--color-background));
     z-index: 10;
     padding-inline: 0.25rem;
-    clip-path: inset(0 0 0 100%);
+    clip-path: inset(-1000px -1000px -1000px 100%); /* Modificado para não cortar o popup */
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -441,7 +452,7 @@
   }
 
   .search-bar.is-active {
-    clip-path: inset(0 0 0 0);
+    clip-path: inset(-1000px -1000px -1000px -1000px); /* Modificado para não cortar o popup */
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
@@ -513,6 +524,104 @@
   .search-bar__input::-webkit-search-results-decoration {
     -webkit-appearance: none;
     appearance: none;
+  }
+
+  /* ══════════════════════════════════════════
+     Predictive Search Dropdown
+     ══════════════════════════════════════════ */
+  .predictive-search__dropdown {
+    position: absolute;
+    top: 100%; /* Removido o gap para colar no header */
+    left: 0;
+    width: 100%;
+    background-color: var(--header-bg, #fff); /* Usa a cor do header */
+    border-bottom: 1px solid var(--header-border, #e6e1db);
+    border-left: 1px solid var(--header-border, #e6e1db);
+    border-right: 1px solid var(--header-border, #e6e1db);
+    border-bottom-left-radius: 20px; /* Mesma borda do mega menu */
+    border-bottom-right-radius: 20px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05); /* Mesma sombra do mega menu */
+    z-index: -1; /* Para parecer que sai debaixo do header, se necessário */
+    overflow: hidden;
+    min-height: 60px;
+    
+    /* Animation initial state idêntico ao mega menu */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-15px);
+    transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    pointer-events: none;
+  }
+
+  /* Show dropdown only when active */
+  predictive-search[results="true"] .predictive-search__dropdown,
+  predictive-search[loading="true"] .predictive-search__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .predictive-search__results-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* Custom Scrollbar for results */
+  .predictive-search__results-list::-webkit-scrollbar {
+    width: 4px;
+  }
+  .predictive-search__results-list::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .predictive-search__results-list::-webkit-scrollbar-thumb {
+    background-color: #6c584c; /* Brown matching the image */
+    border-radius: 4px;
+  }
+
+  .predictive-search__item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: #111;
+    transition: opacity 0.2s ease;
+  }
+
+  .predictive-search__item:hover {
+    opacity: 0.7;
+  }
+
+  .predictive-search__image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+
+  .predictive-search__item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .predictive-search__item-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .predictive-search__item-price {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
   }
 
   /* ── Mobile ── */
@@ -593,8 +702,102 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && overlay.classList.contains('is-active')) {
         closeSearch();
+        var predictive = document.querySelector('predictive-search');
+        if (predictive) predictive.close();
       }
     });
+
+    class PredictiveSearch extends HTMLElement {
+      constructor() {
+        super();
+        this.input = this.querySelector('input[type="search"]');
+        this.predictiveSearchResults = this.querySelector('[data-predictive-search]');
+        this.form = this.querySelector('form');
+        this.abortController = new AbortController();
+
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        if (!this.input) return;
+
+        this.input.addEventListener('input', this.debounce((event) => {
+          this.onChange(event);
+        }, 300));
+        
+        this.input.addEventListener('focus', () => {
+          if (this.input.value.trim().length > 0) {
+            this.setAttribute('results', 'true');
+          }
+        });
+        
+        document.addEventListener('click', (event) => {
+          if (!this.contains(event.target)) {
+            this.close();
+          }
+        });
+      }
+
+      onChange() {
+        const searchTerm = this.input.value.trim();
+
+        if (!searchTerm.length) {
+          this.close();
+          return;
+        }
+
+        this.getSearchResults(searchTerm);
+      }
+
+      getSearchResults(searchTerm) {
+        this.setAttribute('loading', 'true');
+        // Previne o "piscar" dos resultados antigos limpando a caixa antes da nova busca
+        this.predictiveSearchResults.innerHTML = '<div style="padding: 1.5rem; text-align: center; color: #999; font-size: 0.875rem;">Buscando...</div>';
+
+        this.abortController.abort();
+        this.abortController = new AbortController();
+
+        fetch(`/search/suggest?q=${encodeURIComponent(searchTerm)}&resources[type]=product&section_id=predictive-search`, {
+          signal: this.abortController.signal
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(response.status);
+            }
+            return response.text();
+          })
+          .then((text) => {
+            // Insere o HTML diretamente no dropdown para garantir que não haja erros de parser
+            this.predictiveSearchResults.innerHTML = text;
+            this.setAttribute('results', 'true');
+          })
+          .catch((error) => {
+            if (error.name !== 'AbortError') {
+              this.predictiveSearchResults.innerHTML = '<div style="padding:1rem; color:red;">Erro ao buscar resultados.</div>';
+              this.setAttribute('results', 'true');
+            }
+          })
+          .finally(() => {
+            this.removeAttribute('loading');
+          });
+      }
+
+      close() {
+        this.removeAttribute('results');
+      }
+
+      debounce(fn, wait) {
+        let t;
+        return (...args) => {
+          clearTimeout(t);
+          t = setTimeout(() => fn.apply(this, args), wait);
+        };
+      }
+    }
+
+    if (!customElements.get('predictive-search')) {
+      customElements.define('predictive-search', PredictiveSearch);
+    }
 
     // ── Mega Menu Logic ──
     var megaTriggers = document.querySelectorAll('[data-mega-menu-trigger]');

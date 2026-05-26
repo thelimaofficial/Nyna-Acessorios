@@ -1,66 +1,443 @@
 {% comment %}
-  This section is used in the search template to render search results for
-  products, articles, and pages.
+  This section is used in the search template to render search results.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/search
 {% endcomment %}
 
-<h1>{{ 'search.title' | t }}</h1>
+{%- assign search_term = search.terms | strip -%}
+{%- assign sort_by = search.sort_by | default: request.params.sort_by | default: 'manual' -%}
 
-<form action="{{ routes.search_url }}" method="get" role="search">
-  <input
-    type="search"
-    size="50"
-    name="q"
-    value="{{ search.terms | escape }}"
-    placeholder="{{ 'search.placeholder' | t }}"
-  >
-  <button type="submit">{{ 'search.submit' | t }}</button>
-</form>
+<search-results class="search-page section-{{ section.id }}">
+  <div class="search-page__inner">
+    <h1 class="search-page__title">
+      {%- if search.performed and search_term != blank -%}
+        {{ search_term }}
+      {%- else -%}
+        Busca
+      {%- endif -%}
+    </h1>
 
-{% if search.performed %}
-  {% if search.results_count == 0 %}
-    <p>{{ 'search.no_results_html' | t: terms: search.terms }}</p>
-  {% else %}
-    <p>{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
+    {%- if search.performed -%}
+      <div class="search-page__toolbar">
+        <span class="search-page__count">{{ search.results_count | default: 0 }} produtos</span>
 
-    <div class="search-results">
-      {% paginate search.results by 20 %}
-        {% # Search result items may be an article, a page, or a product. %}
-        {% for result in search.results %}
-          <div class="search-result">
-            {% assign featured_image = result.featured_image | default: result.image %}
-            {% if featured_image %}
-              {% render 'image', class: 'search-result__image', image: featured_image, url: result.url, width: 400 %}
-            {% endif %}
-            <div class="search-result__content">
-              <p>
-                {{ result.title | link_to: result.url }}
-                {% if result.price %}
-                  {{ result.price | money_with_currency }}
-                {% endif %}
-              </p>
-            </div>
+        <custom-select class="search-page__dropdown" data-param="sort_by">
+          <span class="search-page__dropdown-label">Ordenar por:</span>
+          <div class="search-page__select" tabindex="0">
+            <span class="custom-select__value">
+              {%- case sort_by -%}
+                {%- when 'price-ascending' -%}MENOR PREÇO
+                {%- when 'price-descending' -%}MAIOR PREÇO
+                {%- else -%}MAIS POPULARES
+              {%- endcase -%}
+            </span>
           </div>
-        {% endfor %}
 
-        {{ paginate | default_pagination }}
+          <div class="custom-select__dropdown">
+            <button class="custom-select__option {% if sort_by == 'price-ascending' %}is-selected{% endif %}" data-value="price-ascending">MENOR PREÇO</button>
+            <button class="custom-select__option {% if sort_by == 'price-descending' %}is-selected{% endif %}" data-value="price-descending">MAIOR PREÇO</button>
+            <button class="custom-select__option {% if sort_by == 'manual' or sort_by == blank %}is-selected{% endif %}" data-value="manual">MAIS POPULARES</button>
+          </div>
+        </custom-select>
+      </div>
+
+      {% paginate search.results by 20 %}
+        {%- assign has_products = false -%}
+        <div class="search-page__grid">
+          {%- for result in search.results -%}
+            {%- if result.object_type == 'product' -%}
+              {%- assign has_products = true -%}
+              {% render 'product-card', product: result %}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- unless has_products -%}
+            <div class="search-page__empty">
+              <p>Nenhum produto encontrado para "{{ search_term }}".</p>
+            </div>
+          {%- endunless -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <div class="search-page__pagination">
+            {{ paginate | default_pagination }}
+          </div>
+        {%- endif -%}
       {% endpaginate %}
-    </div>
-  {% endif %}
-{% endif %}
+    {%- else -%}
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-page__form">
+        <input
+          type="search"
+          name="q"
+          value="{{ search.terms | escape }}"
+          placeholder="{{ 'search.placeholder' | t }}"
+        >
+        <input type="hidden" name="type" value="product">
+        <button type="submit">{{ 'search.submit' | t }}</button>
+      </form>
+    {%- endif -%}
+  </div>
+</search-results>
 
 {% stylesheet %}
-  .search-results {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  .search-page {
+    width: 100%;
+    padding-block: clamp(3.5rem, 6vw, 5rem) clamp(4rem, 8vw, 6rem);
   }
-  .search-results .prev,
-  .search-results .page,
-  .search-results .next {
+
+  .search-page__inner {
+    width: 100%;
+    max-width: var(--page-width, 90rem);
+    margin-inline: auto;
+    padding-inline: var(--page-margin, 1.25rem);
+  }
+
+  .search-page__title {
+    text-align: center;
+    margin-bottom: 1.375rem;
+  }
+
+  .search-page__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.875rem;
+    margin-bottom: 2rem;
+  }
+
+  .search-page__count {
+    min-width: 4.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #050505;
+    text-align: right;
+  }
+
+  .search-page__dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 17.5rem;
+    min-height: 2.125rem;
+    border: 1px solid #595959;
+    border-radius: 9999px;
+    padding: 0.3125rem 2.625rem 0.3125rem 1.375rem;
+    background-color: #fff;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .search-page__dropdown::after {
+    content: '';
+    position: absolute;
+    right: 1.125rem;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-left: 0.3125rem solid transparent;
+    border-right: 0.3125rem solid transparent;
+    border-top: 0.4375rem solid #222;
+    transform: translateY(-35%);
+    pointer-events: none;
+  }
+
+  .search-page__dropdown.is-open {
+    z-index: 120;
+  }
+
+  .search-page__dropdown-label {
+    font-size: 0.75rem;
+    color: #666;
+    margin-right: 0.5rem;
+    white-space: nowrap;
+  }
+
+  .search-page__select {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #333;
+    outline: none;
+  }
+
+  .custom-select__value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .custom-select__dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    width: 100%;
+    min-width: 100%;
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 2rem;
+    padding: 1.25rem 0;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  }
+
+  custom-select.is-open .custom-select__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .custom-select__option {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1.375rem;
+    border: none;
+    background: transparent;
+    color: #050505;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .custom-select__option:hover {
+    background-color: #f7f7f7;
+  }
+
+  .custom-select__option.is-selected {
+    font-weight: 600;
+  }
+
+  .search-page__grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    column-gap: clamp(1rem, 3vw, 2rem);
+    row-gap: 2.5rem;
+  }
+
+  .search-page__empty {
     grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+  }
+
+  .search-page__pagination {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .search-page.is-loading {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .search-page__form {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .search-page__form input[type='search'] {
+    width: min(100%, 28rem);
+    border: 1px solid #d7d7d7;
+    border-radius: 9999px;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .search-page__form button {
+    border: 1px solid var(--color-foreground);
+    border-radius: 9999px;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+  }
+
+  @media (max-width: 990px) {
+    .search-page__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 768px) {
+    .search-page {
+      padding-top: 2rem;
+    }
+
+    .search-page__toolbar {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .search-page__count {
+      text-align: left;
+    }
+
+    .search-page__dropdown {
+      width: 100%;
+    }
+
+    .search-page__grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 1rem;
+      margin-inline: calc(var(--page-margin, 1.25rem) * -1);
+      padding-inline: var(--page-margin, 1.25rem);
+      gap: 1rem;
+      scrollbar-width: none;
+    }
+
+    .search-page__grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .search-page__grid > * {
+      flex: 0 0 75%;
+      scroll-snap-align: center;
+    }
+
+    .search-page__form {
+      flex-direction: column;
+    }
   }
 {% endstylesheet %}
+
+{% javascript %}
+class SearchResults extends HTMLElement {
+  constructor() {
+    super();
+    window.addEventListener('popstate', this.onPopState.bind(this));
+  }
+
+  onPopState() {
+    this.fetchPage(window.location.pathname + window.location.search, false);
+  }
+
+  async fetchPage(url, updateHistory = true) {
+    this.classList.add('is-loading');
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Network error');
+
+      const htmlText = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlText, 'text/html');
+      const newResults = doc.querySelector('search-results');
+
+      if (newResults) {
+        this.innerHTML = newResults.innerHTML;
+      }
+
+      if (doc.title) {
+        document.title = doc.title;
+      }
+
+      if (updateHistory) {
+        history.pushState({ url }, '', url);
+      }
+    } catch (error) {
+      console.error('Error fetching search page:', error);
+      window.location.href = url;
+    } finally {
+      this.classList.remove('is-loading');
+    }
+  }
+}
+
+if (!customElements.get('search-results')) {
+  customElements.define('search-results', SearchResults);
+}
+
+class CustomSelect extends HTMLElement {
+  constructor() {
+    super();
+    this.valueText = this.querySelector('.custom-select__value');
+    this.options = this.querySelectorAll('.custom-select__option');
+    this.isOpen = false;
+    this.paramName = this.dataset.param || 'sort_by';
+
+    this.toggle = this.toggle.bind(this);
+    this.close = this.close.bind(this);
+    this.onOptionClick = this.onOptionClick.bind(this);
+  }
+
+  connectedCallback() {
+    this.addEventListener('click', this.toggle);
+    this.options.forEach(option => option.addEventListener('click', this.onOptionClick));
+    document.addEventListener('click', this.close);
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener('click', this.toggle);
+    this.options.forEach(option => option.removeEventListener('click', this.onOptionClick));
+    document.removeEventListener('click', this.close);
+  }
+
+  toggle(event) {
+    if (event.target.closest('.custom-select__option')) return;
+    event.stopPropagation();
+    this.isOpen = !this.isOpen;
+    this.classList.toggle('is-open', this.isOpen);
+  }
+
+  close(event) {
+    if (this.isOpen && !this.contains(event.target)) {
+      this.isOpen = false;
+      this.classList.remove('is-open');
+    }
+  }
+
+  onOptionClick(event) {
+    event.stopPropagation();
+    const value = event.currentTarget.dataset.value;
+    const text = event.currentTarget.textContent;
+
+    this.valueText.textContent = text;
+    this.options.forEach(option => option.classList.remove('is-selected'));
+    event.currentTarget.classList.add('is-selected');
+    this.classList.remove('is-open');
+    this.isOpen = false;
+
+    if (this.paramName === 'sort_by') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('sort_by', value);
+      url.searchParams.set('type', 'product');
+
+      const results = document.querySelector('search-results');
+      if (results && typeof results.fetchPage === 'function') {
+        results.fetchPage(url.toString());
+      } else {
+        window.location.href = url.toString();
+      }
+    }
+  }
+}
+
+if (!customElements.get('custom-select')) {
+  customElements.define('custom-select', CustomSelect);
+}
+{% endjavascript %}
 
 {% schema %}
 {

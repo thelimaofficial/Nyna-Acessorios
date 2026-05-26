@@ -668,6 +668,7 @@
 
   body.cart-drawer-open {
     overflow: hidden !important;
+    padding-right: var(--scrollbar-compensate, 0px) !important;
   }
   
   body.cart-drawer-open .site-header {
@@ -738,12 +739,17 @@
     }
 
     function lockScroll() {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.setProperty('--scrollbar-compensate', `${scrollbarWidth}px`);
+      
       window.addEventListener('wheel', preventScroll, { passive: false });
       window.addEventListener('touchmove', preventScroll, { passive: false });
       document.body.classList.add('cart-drawer-open');
     }
 
     function unlockScroll() {
+      document.body.style.removeProperty('--scrollbar-compensate');
+      
       window.removeEventListener('wheel', preventScroll);
       window.removeEventListener('touchmove', preventScroll);
       document.body.classList.remove('cart-drawer-open');
