@@ -54,6 +54,12 @@ select {
   border-radius: var(--style-border-radius-inputs);
 }
 
+button,
+[class*="btn"],
+[class*="button"] {
+  text-transform: uppercase;
+}
+
 /* Hide native arrows on number inputs */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

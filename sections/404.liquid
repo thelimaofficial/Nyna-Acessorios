@@ -1,19 +1,83 @@
-{% comment %}
-  This section is used in the 404 template to render page shown when customers
-  enter an invalid store URL.
+<div class="template-404">
+  <h1 class="template-404__title">{{ '404.title' | t | default: '404' }}</h1>
+  <h2 class="template-404__heading">{{ '404.not_found_heading' | t | default: 'PAGINA NÃO ENCONTRADA' }}</h2>
+  <p class="template-404__subtext">
+    {{ '404.not_found_subtext' | t | default: 'A pagina que você procura não existe ou foi movida.' }}
+  </p>
+  <a href="{{ routes.all_products_collection_url | default: '/collections/all' }}" class="template-404__button">
+    {{ '404.back_to_shopping' | t | default: 'CONTINUAR COMPRANDO' }}
+  </a>
+</div>
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/404
-{% endcomment %}
+{% stylesheet %}
+  .template-404 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-block: clamp(6rem, 12vw, 10rem);
+    max-width: 48rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
 
-<h1>{{ '404.title' | t }}</h1>
+  .template-404__title {
+    font-family: var(--font-primary--family), sans-serif;
+    font-size: clamp(6.5rem, 15vw, 11rem);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--color-accent);
+    margin: 0;
+  }
 
-<p>
-  {{ '404.not_found' | t }}
-</p>
+  .template-404__heading {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--color-foreground);
+    margin-top: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
 
-<a href="{{ routes.all_products_collection_url }}">
-  {{ '404.back_to_shopping' | t }}
-</a>
+  .template-404__subtext {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.88rem, 1.5vw, 1rem);
+    font-weight: 400;
+    color: var(--color-text-secondary, #666);
+    margin-block-start: 0;
+    margin-block-end: 2.25rem;
+    line-height: 1.5;
+  }
+
+  .template-404__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16rem;
+    padding: 0.88rem 2.25rem;
+    border: 0;
+    border-radius: 9999px;
+    background-color: var(--color-accent);
+    color: var(--color-background, #fff);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.8rem, 1.5vw, 0.88rem);
+    font-weight: 500;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .template-404__button:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

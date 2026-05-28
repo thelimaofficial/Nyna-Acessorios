@@ -70,8 +70,12 @@
               <div class="ca-order-items">
                 {% for line_item in order.line_items limit: 3 %}
                   <div class="ca-order-item">
-                    {% if line_item.product.featured_image %}
-                      <img src="{{ line_item.product.featured_image | image_url: width: 80 }}" alt="{{ line_item.title }}" class="ca-order-img">
+                    {% if line_item.image %}
+                      {{
+                        line_item.image
+                        | image_url: width: 80
+                        | image_tag: alt: line_item.title, class: 'ca-order-img', loading: 'lazy', width: 80, height: 80
+                      }}
                     {% endif %}
                     <div>
                       <p class="ca-order-item-title">{{ line_item.title }}</p>
@@ -408,13 +412,13 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.875rem 2rem;
+    padding: 0.625rem 1.5rem;
     background: var(--color-accent);
     color: var(--color-background);
     border: 1px solid var(--color-accent);
     border-radius: 9999px;
     font-family: 'Inter', sans-serif;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     font-weight: 500;
     text-decoration: none;
     cursor: pointer;
@@ -425,7 +429,7 @@
   .ca-btn:hover { background: var(--color-accent-hover); border-color: var(--color-accent-hover); transform: translateY(-1px); }
   .ca-btn--outline { background: transparent; color: var(--color-accent); }
   .ca-btn--outline:hover { background: var(--color-background-secondary); }
-  .ca-btn--sm { padding: 0.5rem 1.25rem; font-size: 0.8125rem; }
+  .ca-btn--sm { padding: 0.4375rem 1rem; font-size: 0.6875rem; }
 
   /* EMPTY */
   .ca-empty {

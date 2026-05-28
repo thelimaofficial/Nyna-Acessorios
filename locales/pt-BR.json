@@ -1,10 +1,8 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin language editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
-{}
+{
+  "404": {
+    "title": "404",
+    "not_found_heading": "PÁGINA NÃO ENCONTRADA",
+    "not_found_subtext": "A página que você procura não existe ou foi movida.",
+    "back_to_shopping": "CONTINUAR COMPRANDO"
+  }
+}
