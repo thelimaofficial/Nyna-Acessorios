@@ -15,9 +15,9 @@
       "type": "announcement-bar",
       "settings": {
         "show_announcement": true,
-        "background_color": "#B08F7A",
-        "text_color": "#ffffff",
-        "text": "DELICADEZA • SOFISTICAÇÃO • ATEMPORALIDADE"
+        "text": "DELICADEZA • SOFISTICAÇÃO • ATEMPORALIDADE",
+        "background_color": "#b08f7a",
+        "text_color": "#ffffff"
       }
     },
     "header": {
@@ -28,8 +28,8 @@
         "customer_account_menu": "customer-account-main-menu",
         "header_bg_color": "#ffffff",
         "header_text_color": "#2c2420",
-        "header_border_color": "#fff5f5",
-        "cart_badge_bg": "#B08F7A",
+        "header_border_color": "#faf8f5",
+        "cart_badge_bg": "#b08f7a",
         "cart_badge_text": "#ffffff",
         "search_placeholder": "O que você está procurando?",
         "search_bar_width": 60,
