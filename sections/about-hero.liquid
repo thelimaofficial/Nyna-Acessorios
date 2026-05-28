@@ -1,0 +1,273 @@
+<section class="about-hero section-{{ section.id }} {% if section.settings.full_width %}full-width{% endif %}"
+         style="--overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}; --hero-height: {{ section.settings.desktop_height }}px; --hero-height-mobile: {{ section.settings.mobile_height }}px;">
+  <div class="about-hero__container">
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 2000 | image_tag: class: 'about-hero__bg-img', loading: 'eager' }}
+    {%- else -%}
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg about-hero__bg-img' }}
+    {%- endif -%}
+
+    <div class="about-hero__overlay"></div>
+
+    <div class="about-hero__content-wrapper">
+      <div class="about-hero__content about-hero__content--{{ section.settings.text_alignment }}">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="about-hero__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h1 class="about-hero__heading">{{ section.settings.heading }}</h1>
+        {%- endif -%}
+
+        {%- if section.settings.description != blank -%}
+          <div class="about-hero__description">{{ section.settings.description }}</div>
+        {%- endif -%}
+
+        {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+          <a href="{{ section.settings.button_link }}" class="about-hero__button">
+            {{ section.settings.button_label }}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .about-hero {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .about-hero__container {
+    position: relative;
+    width: 100%;
+    min-height: var(--hero-height, 600px);
+    display: flex;
+    align-items: center;
+  }
+
+  .about-hero__bg-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+  }
+
+  .about-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background-color: #000000;
+    opacity: var(--overlay-opacity, 0.3);
+    z-index: 1;
+  }
+
+  .about-hero__content-wrapper {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: var(--page-width, 100rem);
+    margin-inline: auto;
+    padding-inline: var(--page-margin, 1.25rem);
+    box-sizing: border-box;
+  }
+
+  .about-hero__content {
+    max-width: 32rem;
+    color: var(--color-background, #ffffff);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .about-hero__content--left {
+    margin-inline-end: auto;
+    text-align: left;
+  }
+
+  .about-hero__content--center {
+    margin-inline: auto;
+    text-align: center;
+    align-items: center;
+  }
+
+  .about-hero__content--right {
+    margin-inline-start: auto;
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .about-hero__eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-accent, #b69f8c);
+    margin: 0;
+  }
+
+  .about-hero__heading {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--color-background, #ffffff);
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+
+  .about-hero__description {
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+    line-height: 1.6;
+    font-weight: 300;
+    color: color-mix(in srgb, var(--color-background, #ffffff) 85%, transparent);
+    margin-bottom: 0.5rem;
+  }
+
+  .about-hero__description p {
+    margin: 0;
+  }
+
+  .about-hero__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    padding: 0.875rem 2.5rem;
+    height: 3rem;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.8125rem, 1.5vw, 0.875rem);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-background, #ffffff);
+    background-color: var(--color-accent, #b69f8c);
+    border: none;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+
+  .about-hero__content--center .about-hero__button {
+    align-self: center;
+  }
+
+  .about-hero__content--right .about-hero__button {
+    align-self: flex-end;
+  }
+
+  .about-hero__button:hover {
+    background-color: var(--color-accent-hover, #a38a77);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(182, 159, 140, 0.2);
+  }
+
+  .about-hero__button:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  @media (max-width: 768px) {
+    .about-hero__container {
+      min-height: var(--hero-height-mobile, 450px);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About Hero Banner",
+  "class": "shopify-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width layout",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "SOBRE NÓS"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Mais que acessórios. Uma extensão da sua essência."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Conheça a NYNA"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "min": 300,
+      "max": 900,
+      "step": 50,
+      "unit": "px",
+      "label": "Desktop height",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "min": 250,
+      "max": 700,
+      "step": 50,
+      "unit": "px",
+      "label": "Mobile height",
+      "default": 450
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Hero Banner"
+    }
+  ]
+}
+{% endschema %}

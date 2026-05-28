@@ -1,0 +1,215 @@
+<section class="about-values section-{{ section.id }}">
+  <div class="about-values__container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="about-values__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    <div class="about-values__grid">
+      {%- for block in section.blocks -%}
+        <div class="about-values__item" {{ block.shopify_attributes }}>
+          <div class="about-values__icon-wrapper">
+            {%- case block.settings.icon -%}
+              {%- when 'diamond' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 3h12l4 6-10 12L2 9z"/>
+                  <path d="M11 3 8 9l4 12 4-12-3-6"/>
+                  <path d="M2 9h20"/>
+                </svg>
+              {%- when 'sparkle' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275z"/>
+                </svg>
+              {%- when 'heart' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                </svg>
+              {%- when 'shield' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+            {%- endcase -%}
+          </div>
+
+          {%- if block.settings.title != blank -%}
+            <h3 class="about-values__title">{{ block.settings.title }}</h3>
+          {%- endif -%}
+
+          {%- if block.settings.text != blank -%}
+            <p class="about-values__text">{{ block.settings.text }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .about-values {
+    padding-block: clamp(3rem, 6vw, 5rem);
+    background-color: var(--color-background);
+  }
+
+  .about-values__container {
+    max-width: var(--page-width, 100rem);
+    margin-inline: auto;
+    padding-inline: var(--page-margin, 1.25rem);
+  }
+
+  .about-values__heading {
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--color-foreground);
+    margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+    letter-spacing: 0;
+  }
+
+  .about-values__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background-color: var(--color-background-secondary, #faf8f5);
+    border-radius: 4px;
+    padding: 3rem 1.5rem;
+  }
+
+  .about-values__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-inline: 1.5rem;
+    position: relative;
+  }
+
+  /* Thin divider line between columns */
+  .about-values__item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 10%;
+    right: 0;
+    bottom: 10%;
+    width: 1px;
+    background-color: var(--color-border, #e5dfd8);
+    opacity: 0.7;
+  }
+
+  .about-values__icon-wrapper {
+    width: 2.25rem;
+    height: 2.25rem;
+    color: var(--color-accent, #b69f8c);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .about-values__icon-wrapper svg {
+    width: 100%;
+    height: 100%;
+    stroke-width: 1.25;
+  }
+
+  .about-values__title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+  }
+
+  .about-values__text {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-text-secondary, #6b6661);
+    margin: 0;
+    max-width: 20ch;
+  }
+
+  @media (max-width: 990px) {
+    .about-values__grid {
+      grid-template-columns: repeat(2, 1fr);
+      row-gap: 3rem;
+      padding: 3rem 2rem;
+    }
+
+    .about-values__item:nth-child(2n)::after {
+      display: none;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .about-values__grid {
+      grid-template-columns: 1fr;
+      row-gap: 2.5rem;
+      padding: 2.5rem 1rem;
+    }
+
+    .about-values__item::after {
+      display: none !important;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Nossos Valores",
+  "class": "shopify-section",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Nossos valores"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "value",
+      "name": "Valor",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "diamond", "label": "Diamante (Qualidade)" },
+            { "value": "sparkle", "label": "Brilho (Essência)" },
+            { "value": "heart", "label": "Coração (Presença)" },
+            { "value": "shield", "label": "Escudo (Detalhes)" }
+          ],
+          "default": "diamond"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "QUALIDADE"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "Selecionamos o melhor para você."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nossos Valores",
+      "blocks": [
+        { "type": "value", "settings": { "icon": "diamond", "title": "QUALIDADE", "text": "Selecionamos o melhor para você." } },
+        { "type": "value", "settings": { "icon": "sparkle", "title": "ESSÊNCIA", "text": "Delicadeza e modernidade em cada escolha." } },
+        { "type": "value", "settings": { "icon": "heart", "title": "PRESENÇA", "text": "Acessórios que realçam sua melhor versão." } },
+        { "type": "value", "settings": { "icon": "shield", "title": "DETALHES", "text": "Feito para durar e te acompanhar sempre." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

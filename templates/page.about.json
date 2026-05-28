@@ -1,0 +1,53 @@
+{
+  "sections": {
+    "hero": {
+      "type": "about-hero",
+      "settings": {
+        "eyebrow": "SOBRE NÓS",
+        "heading": "Mais que acessórios. Uma extensão da sua essência.",
+        "text_alignment": "left",
+        "button_label": "CONHEÇA A NYNA",
+        "button_link": "shopify:\/\/collections"
+      }
+    },
+    "story": {
+      "type": "image-with-text",
+      "settings": {
+        "layout": "text_first",
+        "subheading": "",
+        "heading": "Titulo",
+        "text": "<p>Texto<\/p>",
+        "button_label": ""
+      }
+    },
+    "values": {
+      "type": "about-values",
+      "settings": {
+        "heading": "Nossos valores"
+      }
+    },
+    "banner": {
+      "type": "about-image-banner",
+      "settings": {
+        "desktop_height": 450,
+        "mobile_height": 250
+      }
+    },
+    "instagram": {
+      "type": "instagram-feed",
+      "settings": {
+        "heading": "@bynyna",
+        "show_button": true,
+        "button_label": "VER MAIS NO INSTAGRAM",
+        "button_link": "https:\/\/instagram.com\/bynyna"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "story",
+    "values",
+    "banner",
+    "instagram"
+  ]
+}
