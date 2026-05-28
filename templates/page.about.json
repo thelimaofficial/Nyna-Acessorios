@@ -1,13 +1,27 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "about-hero",
       "settings": {
+        "full_width": true,
+        "overlay_opacity": 30,
+        "text_alignment": "left",
         "eyebrow": "SOBRE NÓS",
         "heading": "Mais que acessórios. Uma extensão da sua essência.",
-        "text_alignment": "left",
+        "description": "",
         "button_label": "CONHEÇA A NYNA",
-        "button_link": "shopify:\/\/collections"
+        "button_link": "shopify://collections",
+        "desktop_height": 600,
+        "mobile_height": 450
       }
     },
     "story": {
@@ -16,12 +30,58 @@
         "layout": "text_first",
         "subheading": "",
         "heading": "Titulo",
-        "text": "<p>Texto<\/p>",
-        "button_label": ""
+        "text": "<p>Texto</p>",
+        "button_label": "",
+        "button_link": ""
       }
     },
     "values": {
       "type": "about-values",
+      "blocks": {
+        "value_KAT7CP": {
+          "type": "value",
+          "settings": {
+            "icon": "diamond",
+            "image_width": 35,
+            "title": "QUALIDADE",
+            "text": "Selecionamos o melhor para você."
+          }
+        },
+        "value_addCW3": {
+          "type": "value",
+          "settings": {
+            "icon": "diamond",
+            "image_width": 35,
+            "title": "QUALIDADE",
+            "text": "Selecionamos o melhor para você."
+          }
+        },
+        "value_z7wydM": {
+          "type": "value",
+          "settings": {
+            "icon": "diamond",
+            "image_width": 35,
+            "title": "QUALIDADE",
+            "text": "Selecionamos o melhor para você."
+          }
+        },
+        "value_VLp3WC": {
+          "type": "value",
+          "settings": {
+            "icon": "diamond",
+            "image": "shopify://shop_images/favcon.svg",
+            "image_width": 75,
+            "title": "QUALIDADE",
+            "text": "Selecionamos o melhor para você."
+          }
+        }
+      },
+      "block_order": [
+        "value_KAT7CP",
+        "value_addCW3",
+        "value_z7wydM",
+        "value_VLp3WC"
+      ],
       "settings": {
         "heading": "Nossos valores"
       }
@@ -29,6 +89,7 @@
     "banner": {
       "type": "about-image-banner",
       "settings": {
+        "full_width": true,
         "desktop_height": 450,
         "mobile_height": 250
       }
@@ -37,9 +98,10 @@
       "type": "instagram-feed",
       "settings": {
         "heading": "@bynyna",
+        "custom_html": "<div id=\"insta-feed\"></div>",
         "show_button": true,
         "button_label": "VER MAIS NO INSTAGRAM",
-        "button_link": "https:\/\/instagram.com\/bynyna"
+        "button_link": "https://instagram.com/bynyna"
       }
     }
   },
