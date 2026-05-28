@@ -83,13 +83,13 @@
       {
         "type": "color",
         "id": "accent_color",
-        "default": "#B58DAF",
+        "default": "#D9A7A7",
         "label": "Cor Principal (Botões/Links)"
       },
       {
         "type": "color",
         "id": "accent_hover",
-        "default": "#B58DAF",
+        "default": "#D9A7A7",
         "label": "Cor Principal (Ao passar o mouse)"
       },
       {
@@ -355,7 +355,7 @@
         "type": "color",
         "id": "cart_drawer_accent_color",
         "label": "Cor principal",
-        "default": "#B58DAF"
+        "default": "#D9A7A7"
       },
       {
         "type": "color",
