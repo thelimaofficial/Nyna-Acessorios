@@ -12,9 +12,21 @@
     "main": {
       "type": "search",
       "settings": {}
+    },
+    "instagram_feed_Qa8ntb": {
+      "type": "instagram-feed",
+      "name": "Instagram Feed",
+      "settings": {
+        "heading": "@bynyna",
+        "custom_html": "<div id=\"insta-feed\"></div>",
+        "show_button": true,
+        "button_label": "VER MAIS NO INSTAGRAM",
+        "button_link": "https://instagram.com/bynyna"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "instagram_feed_Qa8ntb"
   ]
 }
