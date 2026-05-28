@@ -6,7 +6,7 @@
 <section
   class="customer-auth"
   style="
-    --auth-accent: {{ section.settings.accent_color | default: '#D9A7A7' }};
+    --auth-accent: {{ section.settings.accent_color | default: settings.accent_color }};
     --auth-image-bg: {{ section.settings.image_background | default: '#f5f0eb' }};
   "
 >
@@ -327,7 +327,7 @@
     font-size: 0.875rem;
     line-height: 1.5;
     font-weight: 400;
-    color: #D9A7A7;
+    color: var(--auth-accent, var(--color-accent));
   }
 
   .customer-auth__form {
@@ -660,7 +660,7 @@
       "type": "color",
       "id": "accent_color",
       "label": "Accent color",
-      "default": "#7d5a44"
+      "default": "#8B0F0F"
     }
   ]
 }

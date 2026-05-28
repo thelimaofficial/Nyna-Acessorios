@@ -1,5 +1,13 @@
 {%- if section.settings.show_announcement -%}
-  <div class="announcement-bar full-width" role="complementary" aria-label="{{ 'accessibility.announcement_bar' | t }}">
+  <div
+    class="announcement-bar full-width"
+    role="complementary"
+    aria-label="{{ 'accessibility.announcement_bar' | t }}"
+    style="
+      --announcement-bg: {{ section.settings.background_color }};
+      --announcement-color: {{ section.settings.text_color }};
+    "
+  >
     <div class="announcement-bar__track" aria-hidden="true">
       {%- assign announcement_text = section.settings.text -%}
       {%- for i in (1..6) -%}
@@ -16,8 +24,8 @@
 
 {% stylesheet %}
   .announcement-bar {
-    background-color: var(--announcement-bg, #D9A7A7);
-    color: var(--announcement-color, #ffffffff);
+    background-color: var(--announcement-bg);
+    color: var(--announcement-color);
     overflow: hidden;
     height: 2.25rem;
     display: flex;
@@ -77,6 +85,18 @@
       "id": "text",
       "label": "Announcement text",
       "default": "DELICADEZA • SOFISTICAÇÃO • ATEMPORALIDADE"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Cor de fundo",
+      "default": "#8B0F0F"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Cor do texto",
+      "default": "#ffffff"
     }
   ]
 }
