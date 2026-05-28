@@ -60,9 +60,6 @@
     {% if cart.item_count == 0 %}
       <div class="cart-drawer__empty">
         <h2 class="cart-drawer__empty-title">{{ settings.cart_drawer_empty_title }}</h2>
-        <p class="cart-drawer__empty-text">
-          {{ settings.cart_drawer_empty_text | newline_to_br }}
-        </p>
         <a href="{{ empty_button_url }}" class="cart-drawer__btn">{{ settings.cart_drawer_empty_button_label }}</a>
       </div>
     {% else %}
@@ -258,30 +255,8 @@
     font-size: 1.75rem;
     font-weight: 600;
     color: var(--cart-drawer-text);
-    margin-bottom: 1.25rem;
+    margin-bottom: 2.25rem;
     letter-spacing: -0.01em;
-  }
-
-  .cart-drawer__empty-text {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9375rem;
-    font-weight: 400;
-    color: var(--cart-drawer-subdued);
-    line-height: 1.6;
-    margin-bottom: 2.5rem;
-    max-width: 340px;
-  }
-
-  .cart-drawer__empty-text a {
-    color: var(--cart-drawer-text);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-    font-weight: 500;
-    transition: opacity 0.2s ease;
-  }
-
-  .cart-drawer__empty-text a:hover {
-    opacity: 0.6;
   }
 
   .cart-drawer__btn {
@@ -707,6 +682,14 @@
             if (window.closeCart) window.closeCart();
           });
         }
+      }
+      
+      const newPageSection = doc.querySelector('[data-cart-page-section]');
+      const currentPageSection = document.querySelector('[data-cart-page-section]');
+      if (newPageSection && currentPageSection) {
+        currentPageSection.innerHTML = newPageSection.innerHTML;
+        // Se houver script de inicialização específico da página de carrinho, podemos chamá-lo
+        if (window.initCartPage) window.initCartPage();
       }
       
       const newBubble = doc.querySelector('.site-header__cart-count');
