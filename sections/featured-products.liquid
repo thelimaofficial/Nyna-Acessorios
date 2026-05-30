@@ -106,20 +106,22 @@
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
-      padding-bottom: 1rem;
-      margin-inline: calc(var(--page-margin, 1.25rem) * -1);
-      padding-inline: var(--page-margin, 1.25rem);
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
       gap: 1rem;
-      scrollbar-width: none; /* Firefox */
+      padding-bottom: 1rem;
+      margin-inline: calc(-1 * var(--page-margin, 1.25rem));
+      padding-inline: var(--page-margin, 1.25rem);
+      scrollbar-width: none;
     }
 
     .featured-products__grid::-webkit-scrollbar {
-      display: none; /* Chrome/Safari */
+      display: none;
     }
 
     .featured-products__grid > * {
-      flex: 0 0 75%;
-      scroll-snap-align: center;
+      flex: 0 0 70%;
+      scroll-snap-align: start;
     }
   }
 {% endstylesheet %}

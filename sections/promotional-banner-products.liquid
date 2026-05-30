@@ -113,10 +113,16 @@
   @media (max-width: 768px) {
     .promo-banner-products__container {
       flex-direction: column;
-      padding-inline: var(--page-margin, 1.25rem);
+      padding-inline: 0;
     }
     .promo-banner-products__left {
       min-height: 250px;
+    }
+    .promo-banner-products__box {
+      padding: 1.5rem var(--page-margin, 1.25rem);
+    }
+    .promo-banner-products__grid {
+      gap: 1rem;
     }
   }
 {% endstylesheet %}

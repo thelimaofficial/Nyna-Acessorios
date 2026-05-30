@@ -124,16 +124,25 @@
 
   @media (max-width: 768px) {
     .featured-collections__grid {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding-bottom: 1rem;
-      gap: 1rem;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.4rem;
     }
 
     .featured-collections__item {
-      flex: 0 0 70%;
-      scroll-snap-align: start;
+      flex: none;
+      width: 100%;
+      gap: 0.5rem;
+    }
+
+    .featured-collections__media {
+      padding: 0.25rem;
+      border-radius: 6px;
+    }
+
+    .featured-collections__title {
+      font-size: 0.5625rem;
+      letter-spacing: 0.05em;
     }
   }
 {% endstylesheet %}

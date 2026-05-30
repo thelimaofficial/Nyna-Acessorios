@@ -13,6 +13,28 @@
   "
 >
   <div class="site-header__inner">
+    {%- comment -%} ── Mobile Left controls (hamburger + search) ── {%- endcomment -%}
+    <div class="site-header__mobile-left">
+      <button
+        type="button"
+        class="site-header__hamburger"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+        data-mobile-menu-open
+      >
+        {{ 'hamburger.svg' | inline_asset_content }}
+      </button>
+
+      <button
+        type="button"
+        class="site-header__icon-btn"
+        aria-label="{{ 'accessibility.search' | t }}"
+        data-search-open
+      >
+        {{ 'icon-busca.svg' | inline_asset_content }}
+      </button>
+    </div>
+
     {%- comment -%} ── Left navigation ── {%- endcomment -%}
     <nav class="site-header__nav site-header__nav--left" aria-label="{{ 'accessibility.nav_left' | t }}">
       {%- for link in section.settings.menu.links -%}
@@ -189,6 +211,36 @@
     </div>
   </div>
 </header>
+
+{%- comment -%} ── Mobile Navigation Drawer ── {%- endcomment -%}
+<div class="mobile-drawer__overlay" data-mobile-menu-overlay aria-hidden="true"></div>
+<nav class="mobile-drawer" data-mobile-menu-drawer aria-label="Menu mobile" aria-hidden="true">
+  <div class="mobile-drawer__header">
+    <button type="button" class="mobile-drawer__close" aria-label="Fechar menu" data-mobile-menu-close>
+      {{ 'icon-x.svg' | inline_asset_content }}
+    </button>
+  </div>
+  <div class="mobile-drawer__body">
+    <ul class="mobile-drawer__menu">
+      {%- for link in section.settings.menu.links -%}
+        <li class="mobile-drawer__menu-item">
+          <a href="{{ link.url }}" class="mobile-drawer__link"{% if link.active %} aria-current="page"{% endif %}>
+            {{ link.title }}
+          </a>
+          {%- if link.links.size > 0 -%}
+            <ul class="mobile-drawer__submenu">
+              {%- for child_link in link.links -%}
+                <li>
+                  <a href="{{ child_link.url }}" class="mobile-drawer__sublink">{{ child_link.title }}</a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</nav>
 
 <style>
   #shopify-section-{{ section.id }} {
@@ -457,7 +509,7 @@
     background-color: var(--header-bg, var(--color-background));
     z-index: 10;
     padding-inline: 0.25rem;
-    clip-path: inset(-1000px -1000px -1000px 100%); /* Modificado para não cortar o popup */
+    clip-path: inset(-1000px -1000px -1000px 100%);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -465,7 +517,7 @@
   }
 
   .search-bar.is-active {
-    clip-path: inset(-1000px -1000px -1000px -1000px); /* Modificado para não cortar o popup */
+    clip-path: inset(-1000px -1000px -1000px -1000px);
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
@@ -544,23 +596,22 @@
      ══════════════════════════════════════════ */
   .predictive-search__dropdown {
     position: absolute;
-    top: 100%; /* Removido o gap para colar no header */
+    top: 100%;
     left: 0;
     width: 100%;
-    background-color: var(--header-bg, #fff); /* Usa a cor do header */
+    background-color: var(--header-bg, #fff);
     border-bottom: 1px solid var(--header-border, #e6e1db);
     border-left: 1px solid var(--header-border, #e6e1db);
     border-right: 1px solid var(--header-border, #e6e1db);
-    border-bottom-left-radius: 20px; /* Mesma borda do mega menu */
+    border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05); /* Mesma sombra do mega menu */
-    z-index: -1; /* Para parecer que sai debaixo do header, se necessário */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    z-index: -1;
     overflow: hidden;
     min-height: 60px;
     
-    /* Animation initial state idêntico ao mega menu */
     opacity: 0;
     visibility: hidden;
     transform: translateY(-15px);
@@ -568,7 +619,6 @@
     pointer-events: none;
   }
 
-  /* Show dropdown only when active */
   predictive-search[results="true"] .predictive-search__dropdown,
   predictive-search[loading="true"] .predictive-search__dropdown {
     opacity: 1;
@@ -586,7 +636,6 @@
     gap: 1.5rem;
   }
 
-  /* Custom Scrollbar for results */
   .predictive-search__results-list::-webkit-scrollbar {
     width: 4px;
   }
@@ -594,7 +643,7 @@
     background: transparent;
   }
   .predictive-search__results-list::-webkit-scrollbar-thumb {
-    background-color: #6c584c; /* Brown matching the image */
+    background-color: #6c584c;
     border-radius: 4px;
   }
 
@@ -637,8 +686,181 @@
     font-weight: 600;
   }
 
+  /* ── Mobile Left controls (hidden on desktop) ── */
+  .site-header__mobile-left {
+    display: none;
+  }
+
+  /* ── Hamburger button (hidden on desktop) ── */
+  .site-header__hamburger {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--header-text, var(--color-foreground));
+    cursor: pointer;
+    padding: 0.25rem;
+    width: 2rem;
+    height: 2rem;
+    transition: opacity 0.2s ease;
+  }
+
+  .site-header__hamburger:hover {
+    opacity: 0.6;
+  }
+
+  .site-header__hamburger svg {
+    width: var(--icon-size, 1.5rem);
+    height: var(--icon-size, 1.5rem);
+  }
+
+  /* ── Mobile Drawer ── */
+  .mobile-drawer__overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 1100;
+    visibility: hidden;
+    pointer-events: none;
+    transition: background-color 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0.5s;
+  }
+
+  .mobile-drawer__overlay.is-active {
+    background-color: rgba(0, 0, 0, 0.4);
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .mobile-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(320px, 80vw);
+    background-color: var(--color-background, #fff);
+    z-index: 1200;
+    transform: translateX(-100%);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .mobile-drawer::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-drawer.is-active {
+    transform: translateX(0);
+  }
+
+  .mobile-drawer__header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1.25rem 1.25rem 0.5rem;
+  }
+
+  .mobile-drawer__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--color-foreground);
+    cursor: pointer;
+    padding: 0.25rem;
+    width: 2rem;
+    height: 2rem;
+    transition: opacity 0.2s ease, transform 0.25s ease;
+  }
+
+  .mobile-drawer__close:hover {
+    opacity: 0.6;
+    transform: rotate(90deg);
+  }
+
+  .mobile-drawer__close svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .mobile-drawer__body {
+    padding: 1rem 1.5rem 2rem;
+    flex: 1;
+  }
+
+  .mobile-drawer__menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .mobile-drawer__menu-item {
+    border-bottom: 1px solid var(--color-border, #e6e1db);
+  }
+
+  .mobile-drawer__link {
+    display: block;
+    padding: 1rem 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-foreground);
+    transition: opacity 0.2s ease;
+  }
+
+  .mobile-drawer__link:hover {
+    opacity: 0.6;
+  }
+
+  .mobile-drawer__link[aria-current="page"] {
+    color: var(--color-accent);
+  }
+
+  .mobile-drawer__submenu {
+    list-style: none;
+    padding: 0 0 0.75rem 1rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mobile-drawer__sublink {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    color: var(--color-text-secondary, #6b6661);
+    transition: color 0.2s ease;
+  }
+
+  .mobile-drawer__sublink:hover {
+    color: var(--color-accent);
+  }
+
   /* ── Mobile ── */
   @media (max-width: 768px) {
+    .site-header__mobile-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      height: 100%;
+    }
+
+    .site-header__hamburger {
+      display: flex;
+    }
+
     .site-header__nav--left {
       display: none;
     }
@@ -648,17 +870,22 @@
     }
 
     .site-header__inner {
-      grid-template-columns: 1fr auto 1fr;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 0.5rem;
+      position: relative;
     }
 
     .site-header__logo {
       grid-column: 2;
       justify-content: center;
+      align-items: center;
+      height: 100%;
     }
 
     .site-header__nav--right {
       grid-column: 3;
       justify-content: flex-end;
+      position: static;
     }
 
     .site-header__icons {
@@ -666,15 +893,36 @@
       margin-left: 0;
     }
 
+    .site-header__account {
+      transform: none;
+    }
+
+    .site-header__cart {
+      margin-left: 0;
+    }
+
+    .site-header__icons .site-header__icon-btn[data-search-open] {
+      display: none;
+    }
+
+    .search-bar {
+      width: 100%;
+      left: 0;
+      right: 0;
+      padding-inline: var(--page-margin, 1.25rem);
+    }
+
     .search-bar__input {
       font-size: 0.75rem;
     }
-  }
 
-  /* Esconde os ícones quando a busca está aberta */
-  .site-header__nav--right:has(.search-bar.is-active) .site-header__icons {
-    visibility: hidden;
-    pointer-events: none;
+    /* Esconde outros elementos quando a busca está aberta no mobile */
+    .site-header__inner:has(.search-bar.is-active) .site-header__mobile-left,
+    .site-header__inner:has(.search-bar.is-active) .site-header__logo,
+    .site-header__inner:has(.search-bar.is-active) .site-header__icons {
+      visibility: hidden;
+      pointer-events: none;
+    }
   }
 {% endstylesheet %}
 
@@ -682,10 +930,10 @@
   (function () {
     var overlay = document.querySelector('[data-search-overlay]');
     var input = document.querySelector('[data-search-input]');
-    var openBtn = document.querySelector('[data-search-open]');
+    var openBtns = document.querySelectorAll('[data-search-open]');
     var closeBtn = document.querySelector('[data-search-close]');
 
-    if (!overlay || !input || !openBtn || !closeBtn) return;
+    if (!overlay || !input || openBtns.length === 0 || !closeBtn) return;
 
     function openSearch() {
       overlay.classList.add('is-active');
@@ -699,12 +947,19 @@
       overlay.classList.remove('is-active');
       overlay.setAttribute('aria-hidden', 'true');
       input.value = '';
-      openBtn.focus();
+      
+      // Focus on the first visible open button
+      var visibleBtn = Array.prototype.filter.call(openBtns, function(btn) {
+        return btn.offsetWidth > 0 || btn.offsetHeight > 0;
+      })[0] || openBtns[0];
+      if (visibleBtn) visibleBtn.focus();
     }
 
-    openBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      openSearch();
+    Array.prototype.forEach.call(openBtns, function(btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        openSearch();
+      });
     });
 
     closeBtn.addEventListener('click', function (e) {
@@ -857,6 +1112,50 @@
         }
       });
     });
+
+    // ── Mobile Drawer Logic ──
+    var mobileOpenBtn = document.querySelector('[data-mobile-menu-open]');
+    var mobileCloseBtn = document.querySelector('[data-mobile-menu-close]');
+    var mobileDrawer = document.querySelector('[data-mobile-menu-drawer]');
+    var mobileOverlay = document.querySelector('[data-mobile-menu-overlay]');
+
+    if (mobileOpenBtn && mobileCloseBtn && mobileDrawer && mobileOverlay) {
+      function openMobileMenu() {
+        mobileDrawer.classList.add('is-active');
+        mobileOverlay.classList.add('is-active');
+        mobileDrawer.setAttribute('aria-hidden', 'false');
+        mobileOverlay.setAttribute('aria-hidden', 'false');
+        mobileOpenBtn.setAttribute('aria-expanded', 'true');
+        document.documentElement.style.overflow = 'hidden';
+      }
+
+      function closeMobileMenu() {
+        mobileDrawer.classList.remove('is-active');
+        mobileOverlay.classList.remove('is-active');
+        mobileDrawer.setAttribute('aria-hidden', 'true');
+        mobileOverlay.setAttribute('aria-hidden', 'true');
+        mobileOpenBtn.setAttribute('aria-expanded', 'false');
+        document.documentElement.style.overflow = '';
+      }
+
+      mobileOpenBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        openMobileMenu();
+      });
+
+      mobileCloseBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        closeMobileMenu();
+      });
+
+      mobileOverlay.addEventListener('click', closeMobileMenu);
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && mobileDrawer.classList.contains('is-active')) {
+          closeMobileMenu();
+        }
+      });
+    }
   })();
 {% endjavascript %}
 
