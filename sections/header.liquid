@@ -247,6 +247,14 @@
     position: sticky;
     top: 0;
     z-index: 1001;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  @media (max-width: 768px) {
+    #shopify-section-{{ section.id }}.header--hidden-footer {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 </style>
 
@@ -1155,6 +1163,27 @@
           closeMobileMenu();
         }
       });
+    }
+
+    // Hide header on mobile when footer is in view
+    var footer = document.querySelector('footer');
+    var headerSection = document.querySelector('.site-header');
+    if (footer && headerSection) {
+      var sectionContainer = headerSection.closest('.shopify-section');
+      if (sectionContainer) {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              sectionContainer.classList.add('header--hidden-footer');
+            } else {
+              sectionContainer.classList.remove('header--hidden-footer');
+            }
+          });
+        }, {
+          threshold: 0
+        });
+        observer.observe(footer);
+      }
     }
   })();
 {% endjavascript %}
