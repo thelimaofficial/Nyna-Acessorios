@@ -14,10 +14,10 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "background_color": "#b69f8c",
+        "background_color": "#b08f7a",
         "text_color": "#ffffff",
         "logo_width": 360,
-        "menu_1": "menu-produtos",
+        "menu_1": "produtos",
         "menu_2": "customer-account-main-menu",
         "menu_3": "footer",
         "social_whatsapp_link": "https://wa.me/5511989310950",
