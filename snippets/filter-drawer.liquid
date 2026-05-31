@@ -3,6 +3,15 @@
   Responsável por exibir o painel lateral de filtros.
 {% enddoc %}
 
+{%- assign filters = collection.filters | default: search.filters -%}
+{%- assign products_count = collection.products_count | default: search.results_count | default: 0 -%}
+{%- if search.performed -%}
+  {%- assign clear_url = routes.search_url | append: '?q=' | append: search.terms | append: '&type=product' -%}
+{%- else -%}
+  {%- assign clear_url = collection.url | default: '/collections/all' -%}
+{%- endif -%}
+{%- assign current_sort_by = collection.sort_by | default: search.sort_by -%}
+
 <div class="filter-drawer-overlay" data-filter-overlay aria-hidden="true" style="--cart-drawer-overlay-opacity: {{ settings.cart_drawer_overlay_opacity | times: 0.01 }};"></div>
 
 <div class="filter-drawer" data-filter-drawer aria-hidden="true"
@@ -20,7 +29,7 @@
   <div class="filter-drawer__header" style="justify-content: space-between;">
     <div class="filter-drawer__header-title">
       <h2>Filtros</h2>
-      <span class="filter-drawer__count">{{ collection.products_count }} produtos</span>
+      <span class="filter-drawer__count">{{ products_count }} produtos</span>
     </div>
     <button type="button" class="filter-drawer__close" data-filter-close aria-label="Fechar filtros">
       {{ 'icon-x.svg' | inline_asset_content }}
@@ -29,7 +38,7 @@
 
   <div class="filter-drawer__content">
     <form id="CollectionFiltersForm" class="filter-drawer__form">
-      {%- for filter in collection.filters -%}
+      {%- for filter in filters -%}
         <div class="filter-drawer__group">
           <h3 class="filter-drawer__group-title">{{ filter.label }}</h3>
           
@@ -92,7 +101,7 @@
   <div class="filter-drawer__footer">
     <div class="filter-drawer__buttons">
       <button type="submit" form="CollectionFiltersForm" class="filter-drawer__btn filter-drawer__btn--apply">Aplicar filtros</button>
-      <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="filter-drawer__btn filter-drawer__btn--outline">Limpar tudo</a>
+      <a href="{{ clear_url }}{% if current_sort_by != blank %}&sort_by={{ current_sort_by }}{% endif %}" class="filter-drawer__btn filter-drawer__btn--outline">Limpar tudo</a>
     </div>
   </div>
 </div>
@@ -461,11 +470,17 @@
         if (currentParams.has('sort_by')) {
           searchParams.set('sort_by', currentParams.get('sort_by'));
         }
+        if (currentParams.has('q')) {
+          searchParams.set('q', currentParams.get('q'));
+        }
+        if (currentParams.has('type')) {
+          searchParams.set('type', currentParams.get('type'));
+        }
         
         const url = `${window.location.pathname}?${searchParams.toString()}`;
         
-        // Find the collection-filters element and call fetchPage
-        const filtersElement = document.querySelector('collection-filters');
+        // Find the collection-filters or search-results element and call fetchPage
+        const filtersElement = document.querySelector('collection-filters') || document.querySelector('search-results');
         if (filtersElement && typeof filtersElement.fetchPage === 'function') {
           window.closeFilter(); // Fechar o drawer após aplicar
           filtersElement.fetchPage(url);

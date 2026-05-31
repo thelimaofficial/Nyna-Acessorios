@@ -17,24 +17,42 @@ html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
   overflow: hidden;
 }
 
-/* Custom Scrollbar */
-html {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-accent) transparent; /* Firefox */
+/* Custom Scrollbar (Desktop only) */
+@media (min-width: 769px) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-accent) transparent; /* Firefox */
+  }
+
+  ::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-accent);
+    border-radius: 0;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+  }
 }
 
-::-webkit-scrollbar {
-  width: 14px;
-  height: 14px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--color-accent);
-  border-radius: 0;
+/* Hide Scrollbar (Mobile only) */
+@media (max-width: 768px) {
+  html, body {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
 }
 
 img,

@@ -45,7 +45,7 @@
       
       {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
       <custom-select class="collection-toolbar__dropdown" data-param="sort_by">
-        <span class="collection-toolbar__dropdown-label">Ordenar por:</span>
+        <span class="collection-toolbar__dropdown-label">Ordenar por<span class="collection-toolbar__colon">:</span></span>
         <div class="collection-toolbar__select" tabindex="0">
           <span class="custom-select__value">
             {%- case sort_by -%}
@@ -388,7 +388,7 @@
 
   @media (max-width: 768px) {
     .collection-main {
-      padding-inline: 0;
+      padding-inline: var(--page-margin, 1.25rem);
       padding-top: 1.5rem;
     }
 
@@ -397,40 +397,45 @@
     }
 
     .collection-products {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding-bottom: 1rem;
-      margin-inline: calc(var(--page-margin, 1.25rem) * -1);
-      padding-inline: var(--page-margin, 1.25rem);
-      gap: 1rem;
-      scrollbar-width: none;
-    }
-
-    .collection-products::-webkit-scrollbar {
-      display: none;
-    }
-
-    .collection-products > * {
-      flex: 0 0 75%;
-      scroll-snap-align: center;
-    }
-
-    .collection-products .collection-empty {
-      flex-basis: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 1rem;
+      row-gap: 2.5rem;
     }
 
     .collection-toolbar__actions {
-      flex-direction: column;
-      align-items: stretch;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
     }
     
     .collection-toolbar__dropdown {
-      width: 100%;
+      flex: 1;
+      width: auto;
+      min-width: 0;
+      padding: 0.3125rem 1.875rem 0.3125rem 1rem;
+    }
+
+    .collection-toolbar__dropdown::after {
+      right: 0.75rem;
+    }
+
+    .collection-toolbar__dropdown[data-param='sort_by'] .collection-toolbar__select {
+      display: none;
+    }
+
+    .collection-toolbar__colon {
+      display: none;
     }
 
     .collection-toolbar__count {
-      text-align: left;
+      display: none;
+    }
+
+    .collection-toolbar__dropdown-label {
+      margin-right: 0;
+      font-weight: 500;
     }
   }
 {% endstylesheet %}

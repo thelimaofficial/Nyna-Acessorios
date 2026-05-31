@@ -22,7 +22,7 @@
         <span class="search-page__count">{{ search.results_count | default: 0 }} produtos</span>
 
         <custom-select class="search-page__dropdown" data-param="sort_by">
-          <span class="search-page__dropdown-label">Ordenar por:</span>
+          <span class="search-page__dropdown-label">Ordenar por<span class="search-page__colon">:</span></span>
           <div class="search-page__select" tabindex="0">
             <span class="custom-select__value">
               {%- case sort_by -%}
@@ -39,6 +39,10 @@
             <button class="custom-select__option {% if sort_by == 'manual' or sort_by == blank %}is-selected{% endif %}" data-value="manual">MAIS POPULARES</button>
           </div>
         </custom-select>
+
+        <button type="button" class="search-page__filter-btn" data-filter-drawer-trigger>
+          <span class="search-page__dropdown-label" style="margin-right: 0; color: #050505; font-weight: 500;">Filtrar por</span>
+        </button>
       </div>
 
       {% paginate search.results by 20 %}
@@ -78,6 +82,8 @@
     {%- endif -%}
   </div>
 </search-results>
+
+{% render 'filter-drawer' %}
 
 {% stylesheet %}
   .search-page {
@@ -127,6 +133,37 @@
     cursor: pointer;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  .search-page__filter-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.125rem;
+    border: 1px solid #595959;
+    border-radius: 9999px;
+    padding: 0.3125rem 2.625rem 0.3125rem 1.375rem;
+    background-color: #fff;
+    width: 10.25rem;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    font-family: inherit;
+  }
+
+  .search-page__filter-btn::after {
+    content: '';
+    position: absolute;
+    right: 1.125rem;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-left: 0.3125rem solid transparent;
+    border-right: 0.3125rem solid transparent;
+    border-top: 0.4375rem solid #222;
+    transform: translateY(-35%);
+    pointer-events: none;
   }
 
   .search-page__dropdown::after {
@@ -284,36 +321,57 @@
     }
 
     .search-page__toolbar {
-      align-items: stretch;
-      flex-direction: column;
-    }
-
-    .search-page__count {
-      text-align: left;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+      margin-bottom: 2rem;
     }
 
     .search-page__dropdown {
-      width: 100%;
+      flex: 1;
+      width: auto;
+      min-width: 0;
+      padding: 0.3125rem 1.875rem 0.3125rem 1rem;
     }
 
-    .search-page__grid {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding-bottom: 1rem;
-      margin-inline: calc(var(--page-margin, 1.25rem) * -1);
-      padding-inline: var(--page-margin, 1.25rem);
-      gap: 1rem;
-      scrollbar-width: none;
+    .search-page__dropdown::after {
+      right: 0.75rem;
     }
 
-    .search-page__grid::-webkit-scrollbar {
+    .search-page__filter-btn {
+      flex: 1;
+      width: auto;
+      min-width: 0;
+      padding: 0.3125rem 1.875rem 0.3125rem 1rem;
+    }
+
+    .search-page__filter-btn::after {
+      right: 0.75rem;
+    }
+
+    .search-page__dropdown[data-param='sort_by'] .search-page__select {
       display: none;
     }
 
-    .search-page__grid > * {
-      flex: 0 0 75%;
-      scroll-snap-align: center;
+    .search-page__colon {
+      display: none;
+    }
+
+    .search-page__count {
+      display: none;
+    }
+
+    .search-page__dropdown-label {
+      margin-right: 0;
+      font-weight: 500;
+    }
+
+    .search-page__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 1rem;
+      row-gap: 2.5rem;
     }
 
     .search-page__form {
