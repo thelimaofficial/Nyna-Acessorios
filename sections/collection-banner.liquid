@@ -1,14 +1,18 @@
-<section class="collection-banner section-{{ section.id }}" aria-label="{{ section.settings.title }}">
+<section class="collection-banner section-{{ section.id }}" aria-label="{{ section.settings.title | default: collection.title }}">
   <div class="collection-banner__inner">
-    {%- if section.settings.image != blank -%}
+    {%- if collection.image != blank -%}
+      {{ collection.image | image_url: width: 2000 | image_tag: class: 'collection-banner__image', loading: 'eager' }}
+    {%- elsif section.settings.image != blank -%}
       {{ section.settings.image | image_url: width: 2000 | image_tag: class: 'collection-banner__image', loading: 'eager' }}
     {%- else -%}
       <div class="collection-banner__placeholder"></div>
     {%- endif -%}
     
-    <div class="collection-banner__content">
-      <h1 class="collection-banner__title">{{ section.settings.title | default: collection.title }}</h1>
-    </div>
+    {%- if section.settings.show_title -%}
+      <div class="collection-banner__content">
+        <h1 class="collection-banner__title">{{ section.settings.title | default: collection.title }}</h1>
+      </div>
+    {%- endif -%}
   </div>
 </section>
 
@@ -87,10 +91,15 @@
       "label": "Background Image"
     },
     {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show text on banner",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "title",
       "label": "Heading",
-      "default": "banner",
       "info": "Leave empty to use the collection title."
     }
   ],

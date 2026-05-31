@@ -11,9 +11,7 @@
   "sections": {
     "banner": {
       "type": "collection-banner",
-      "settings": {
-        "title": "Joias"
-      }
+      "settings": {}
     },
     "main": {
       "type": "collection",
