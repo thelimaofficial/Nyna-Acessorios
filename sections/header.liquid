@@ -223,15 +223,59 @@
   <div class="mobile-drawer__body">
     <ul class="mobile-drawer__menu">
       {%- for link in section.settings.menu.links -%}
-        <li class="mobile-drawer__menu-item">
-          <a href="{{ link.url }}" class="mobile-drawer__link"{% if link.active %} aria-current="page"{% endif %}>
-            {{ link.title }}
-          </a>
-          {%- if link.links.size > 0 -%}
-            <ul class="mobile-drawer__submenu">
-              {%- for child_link in link.links -%}
+        {%- assign handle_check = link.title | handleize -%}
+        {%- assign has_submenu = false -%}
+        {%- assign child_links = nil -%}
+
+        {%- if link.links.size > 0 -%}
+          {%- assign has_submenu = true -%}
+          {%- assign child_links = link.links -%}
+        {%- elsif handle_check == 'joias' and linklists['menu-joias'].links.size > 0 -%}
+          {%- assign has_submenu = true -%}
+          {%- assign child_links = linklists['menu-joias'].links -%}
+        {%- endif -%}
+
+        {%- assign is_link_active = link.active -%}
+        {%- if has_submenu -%}
+          {%- if handle_check == 'joias' -%}
+            {%- if collection.handle == 'joias' -%}
+              {%- assign is_link_active = true -%}
+            {%- else -%}
+              {%- for child_link in linklists['menu-joias'].links -%}
+                {%- if request.path == child_link.url or collection.url == child_link.url or child_link.active -%}
+                  {%- assign is_link_active = true -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          {%- else -%}
+            {%- for child_link in link.links -%}
+              {%- if request.path == child_link.url or collection.url == child_link.url or child_link.active -%}
+                {%- assign is_link_active = true -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+        {%- endif -%}
+
+        <li class="mobile-drawer__menu-item{% if has_submenu %} has-submenu{% endif %}">
+          <div class="mobile-drawer__link-wrapper">
+            <a href="{{ link.url }}" class="mobile-drawer__link{% if is_link_active %} is-active{% endif %}"{% if is_link_active %} aria-current="page"{% endif %}>
+              {{ link.title }}
+            </a>
+            {%- if has_submenu -%}
+              <button type="button" class="mobile-drawer__toggle" aria-label="Toggle submenu" aria-expanded="false">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-chevron">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+            {%- endif -%}
+          </div>
+          {%- if has_submenu -%}
+            <ul class="mobile-drawer__submenu" aria-hidden="true" style="display: none;">
+              {%- for child_link in child_links -%}
                 <li>
-                  <a href="{{ child_link.url }}" class="mobile-drawer__sublink">{{ child_link.title }}</a>
+                  <a href="{{ child_link.url }}" class="mobile-drawer__sublink">
+                    {{ child_link.title }}
+                  </a>
                 </li>
               {%- endfor -%}
             </ul>
@@ -754,6 +798,7 @@
     flex-direction: column;
     overflow-y: auto;
     scrollbar-width: none;
+    border-radius: 0 40px 40px 0;
   }
 
   .mobile-drawer::-webkit-scrollbar {
@@ -805,20 +850,28 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 0.5rem;
   }
 
   .mobile-drawer__menu-item {
-    border-bottom: 1px solid var(--color-border, #e6e1db);
+    border-bottom: none;
+  }
+
+  .mobile-drawer__link-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
   }
 
   .mobile-drawer__link {
+    flex-grow: 1;
     display: block;
-    padding: 1rem 0;
+    padding: 0.75rem 0;
     font-family: 'Inter', sans-serif;
-    font-size: 0.875rem;
+    font-size: 1.125rem;
     font-weight: 500;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     text-decoration: none;
     color: var(--color-foreground);
@@ -829,31 +882,52 @@
     opacity: 0.6;
   }
 
-  .mobile-drawer__link[aria-current="page"] {
-    color: var(--color-accent);
+  .mobile-drawer__link[aria-current="page"],
+  .mobile-drawer__link.is-active,
+  .mobile-drawer__link.is-open {
+    color: var(--color-foreground);
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    text-decoration-thickness: 1.5px;
+  }
+
+  .mobile-drawer__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0.75rem 0.5rem;
+    color: var(--color-foreground);
+    cursor: pointer;
+  }
+
+  .mobile-drawer__toggle svg {
+    transition: transform 0.3s ease;
   }
 
   .mobile-drawer__submenu {
     list-style: none;
-    padding: 0 0 0.75rem 1rem;
+    padding: 0.5rem 0 1rem 1.5rem;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.875rem;
   }
 
   .mobile-drawer__sublink {
     font-family: 'Inter', sans-serif;
-    font-size: 0.8125rem;
-    font-weight: 400;
+    font-size: 0.9375rem;
+    font-weight: 500;
     letter-spacing: 0.05em;
+    text-transform: uppercase;
     text-decoration: none;
-    color: var(--color-text-secondary, #6b6661);
-    transition: color 0.2s ease;
+    color: var(--color-foreground);
+    transition: opacity 0.2s ease;
   }
 
   .mobile-drawer__sublink:hover {
-    color: var(--color-accent);
+    opacity: 0.6;
   }
 
   /* ── Mobile ── */
@@ -1144,6 +1218,25 @@
         mobileOverlay.setAttribute('aria-hidden', 'true');
         mobileOpenBtn.setAttribute('aria-expanded', 'false');
         document.documentElement.style.overflow = '';
+
+        // Collapse all submenus on close
+        var openSubmenus = mobileDrawer.querySelectorAll('.mobile-drawer__submenu');
+        openSubmenus.forEach(function(submenu) {
+          submenu.style.display = 'none';
+          submenu.setAttribute('aria-hidden', 'true');
+        });
+        var openChevrons = mobileDrawer.querySelectorAll('.icon-chevron');
+        openChevrons.forEach(function(chevron) {
+          chevron.style.transform = 'rotate(0deg)';
+        });
+        var openLinks = mobileDrawer.querySelectorAll('.mobile-drawer__link');
+        openLinks.forEach(function(link) {
+          link.classList.remove('is-open');
+        });
+        var openToggles = mobileDrawer.querySelectorAll('.mobile-drawer__toggle');
+        openToggles.forEach(function(toggle) {
+          toggle.setAttribute('aria-expanded', 'false');
+        });
       }
 
       mobileOpenBtn.addEventListener('click', function (e) {
@@ -1162,6 +1255,38 @@
         if (e.key === 'Escape' && mobileDrawer.classList.contains('is-active')) {
           closeMobileMenu();
         }
+      });
+
+      // Submenu toggle logic (Accordion)
+      var submenuItems = mobileDrawer.querySelectorAll('.mobile-drawer__menu-item.has-submenu');
+      submenuItems.forEach(function (item) {
+        var link = item.querySelector('.mobile-drawer__link');
+        var toggle = item.querySelector('.mobile-drawer__toggle');
+        var submenu = item.querySelector('.mobile-drawer__submenu');
+        var chevron = item.querySelector('.icon-chevron');
+
+        if (!link || !toggle || !submenu || !chevron) return;
+
+        function toggleSubmenu(e) {
+          e.preventDefault();
+          var isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', !isExpanded);
+
+          if (isExpanded) {
+            submenu.style.display = 'none';
+            submenu.setAttribute('aria-hidden', 'true');
+            chevron.style.transform = 'rotate(0deg)';
+            link.classList.remove('is-open');
+          } else {
+            submenu.style.display = 'flex';
+            submenu.setAttribute('aria-hidden', 'false');
+            chevron.style.transform = 'rotate(180deg)';
+            link.classList.add('is-open');
+          }
+        }
+
+        link.addEventListener('click', toggleSubmenu);
+        toggle.addEventListener('click', toggleSubmenu);
       });
     }
 

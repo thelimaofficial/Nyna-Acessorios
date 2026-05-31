@@ -41,7 +41,7 @@
         </custom-select>
 
         <button type="button" class="search-page__filter-btn" data-filter-drawer-trigger>
-          <span class="search-page__dropdown-label" style="margin-right: 0; color: #050505; font-weight: 500;">Filtrar por</span>
+          <span class="search-page__dropdown-label" style="margin-right: 0;">Filtrar por</span>
         </button>
       </div>
 
@@ -133,6 +133,8 @@
     cursor: pointer;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    font-family: inherit;
+    font-weight: inherit;
   }
 
   .search-page__filter-btn {
@@ -150,6 +152,7 @@
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     font-family: inherit;
+    font-weight: inherit;
   }
 
   .search-page__filter-btn::after {
@@ -185,10 +188,13 @@
   }
 
   .search-page__dropdown-label {
+    font-family: inherit;
     font-size: 0.75rem;
+    font-weight: inherit;
     color: #666;
     margin-right: 0.5rem;
     white-space: nowrap;
+    text-transform: none;
   }
 
   .search-page__select {
