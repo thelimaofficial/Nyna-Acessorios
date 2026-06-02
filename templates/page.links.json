@@ -12,6 +12,33 @@
     "main": {
       "type": "links-page",
       "blocks": {
+        "link_DELpcz": {
+          "type": "link",
+          "settings": {
+            "text": "NOVA COLEÇÃO",
+            "url": "",
+            "icon": "sparkle",
+            "custom_svg": ""
+          }
+        },
+        "link_4bNWLM": {
+          "type": "link",
+          "settings": {
+            "text": "NOVA COLEÇÃO",
+            "url": "",
+            "icon": "sparkle",
+            "custom_svg": ""
+          }
+        },
+        "link_R8tPt6": {
+          "type": "link",
+          "settings": {
+            "text": "NOVA COLEÇÃO",
+            "url": "",
+            "icon": "sparkle",
+            "custom_svg": ""
+          }
+        },
         "link_dRT4Nw": {
           "type": "link",
           "settings": {
@@ -23,6 +50,9 @@
         }
       },
       "block_order": [
+        "link_DELpcz",
+        "link_4bNWLM",
+        "link_R8tPt6",
         "link_dRT4Nw"
       ],
       "settings": {
@@ -35,7 +65,7 @@
         "bg_color": "#ffffff",
         "accent_color": "#b08f7a",
         "text_color_on_accent": "#ffffff",
-        "text_color_dark": "#B08F7A"
+        "text_color_dark": "#b08f7a"
       }
     },
     "instagram_feed_cRtnKL": {
@@ -52,7 +82,6 @@
     },
     "footer": {
       "type": "links-footer",
-      "disabled": true,
       "settings": {
         "bg_color": "#b08f7a",
         "text_color": "#ffffff",
