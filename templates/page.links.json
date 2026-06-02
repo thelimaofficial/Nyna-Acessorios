@@ -79,22 +79,10 @@
         "button_label": "VER MAIS NO INSTAGRAM",
         "button_link": "https://instagram.com/bynyna"
       }
-    },
-    "footer": {
-      "type": "links-footer",
-      "settings": {
-        "bg_color": "#b08f7a",
-        "text_color": "#ffffff",
-        "footer_copyright": "© 2026 nyna. Todos os direitos reservados.",
-        "footer_developer_prefix": "Desenvolvido por",
-        "footer_developer_name": "Alwer",
-        "footer_developer_url": ""
-      }
     }
   },
   "order": [
     "main",
-    "instagram_feed_cRtnKL",
-    "footer"
+    "instagram_feed_cRtnKL"
   ]
 }
