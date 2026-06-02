@@ -1,21 +1,55 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "links-page",
-      "settings": {}
+      "settings": {
+        "logo_image": "shopify://shop_images/LogoNyna.svg",
+        "logo_width": 280,
+        "logo_width_mobile": 140,
+        "logo_text": "nyna",
+        "logo_text_sub": "ACESSÓRIOS",
+        "subtitle": "Elegância em cada detalhe.",
+        "bg_color": "#ffffff",
+        "accent_color": "#b08f7a",
+        "text_color_on_accent": "#ffffff",
+        "text_color_dark": "#B08F7A"
+      }
     },
-    "instagram": {
-      "type": "links-instagram-grid",
-      "settings": {}
+    "instagram_feed_cRtnKL": {
+      "type": "instagram-feed",
+      "name": "Instagram Feed",
+      "settings": {
+        "heading": "@bynyna",
+        "custom_html": "<div id=\"insta-feed\"></div>",
+        "show_button": false,
+        "button_label": "VER MAIS NO INSTAGRAM",
+        "button_link": "https://instagram.com/bynyna"
+      }
     },
     "footer": {
       "type": "links-footer",
-      "settings": {}
+      "settings": {
+        "bg_color": "#b08f7a",
+        "text_color": "#ffffff",
+        "footer_copyright": "© 2026 nyna. Todos os direitos reservados.",
+        "footer_developer_prefix": "Desenvolvido por",
+        "footer_developer_name": "Alwer",
+        "footer_developer_url": ""
+      }
     }
   },
   "order": [
     "main",
-    "instagram",
+    "instagram_feed_cRtnKL",
     "footer"
   ]
 }
