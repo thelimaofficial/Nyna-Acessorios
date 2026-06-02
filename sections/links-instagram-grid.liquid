@@ -1,0 +1,219 @@
+<div class="links-instagram-container" style="--links-bg-color: {{ section.settings.bg_color }}; --links-text-color-dark: {{ section.settings.text_color_dark }};">
+  <div class="links-instagram-content">
+    {%- if section.settings.social_handle != blank -%}
+      <div class="links-social-username">
+        <a href="{{ section.settings.social_link | default: '#' }}" class="links-social-link">
+          {{ section.settings.social_handle }}
+        </a>
+      </div>
+    {%- endif -%}
+
+    {%- assign has_grid_images = false -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'grid_image' -%}
+        {%- assign has_grid_images = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if has_grid_images -%}
+      <div class="links-grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'grid_image' -%}
+            <div class="links-grid__item" {{ block.shopify_attributes }}>
+              {%- if block.settings.url != blank -%}
+                <a href="{{ block.settings.url }}" class="links-grid__link">
+              {%- endif -%}
+              
+              {%- if block.settings.image != blank -%}
+                <img 
+                  src="{{ block.settings.image | image_url: width: 600 }}" 
+                  alt="{{ block.settings.image.alt | default: 'Grid Image' }}"
+                  width="{{ block.settings.image.width }}"
+                  height="{{ block.settings.image.height }}"
+                  loading="lazy"
+                >
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+
+              {%- if block.settings.url != blank -%}
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div class="links-grid">
+        {%- for i in (1..4) -%}
+          <div class="links-grid__item">
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .links-instagram-container {
+    width: 100%;
+    background-color: var(--links-bg-color);
+    color: var(--links-text-color-dark);
+    font-family: var(--font-primary--family), sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .links-instagram-content {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 20px 50px 20px;
+    box-sizing: border-box;
+  }
+
+  /* Username Link */
+  .links-social-username {
+    margin-top: 10px;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+  .links-social-link {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--links-text-color-dark);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: opacity 0.2s ease;
+  }
+  .links-social-link:hover {
+    opacity: 0.8;
+  }
+
+  /* Image Grid */
+  .links-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+  }
+  .links-grid__item {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: #f7f7f7;
+  }
+  .links-grid__link {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .links-grid__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .links-grid__item:hover img {
+    transform: scale(1.04);
+  }
+  .links-grid__item .placeholder-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    fill: #ddd;
+    background-color: #f2f2f2;
+  }
+
+  /* Desktop Styles */
+  @media (min-width: 769px) {
+    .links-instagram-content {
+      padding: 30px 30px 60px 30px;
+    }
+    .links-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Links - Instagram Grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Rede Social"
+    },
+    {
+      "type": "text",
+      "id": "social_handle",
+      "label": "Nome do usuário (com @)",
+      "default": "@bynyna"
+    },
+    {
+      "type": "url",
+      "id": "social_link",
+      "label": "Link da Rede Social"
+    },
+    {
+      "type": "header",
+      "content": "Estilos"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Fundo da Seção",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color_dark",
+      "label": "Cor do Texto",
+      "default": "#1a1a1a"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "grid_image",
+      "name": "Imagem do Grid",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagem"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link da Imagem (opcional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Links - Instagram Grid",
+      "blocks": [
+        {
+          "type": "grid_image"
+        },
+        {
+          "type": "grid_image"
+        },
+        {
+          "type": "grid_image"
+        },
+        {
+          "type": "grid_image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

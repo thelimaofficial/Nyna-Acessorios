@@ -1,26 +1,6 @@
 {%- layout 'links' -%}
 
 <div class="links-page-container" style="--links-bg-color: {{ section.settings.bg_color }}; --links-accent-color: {{ section.settings.accent_color }}; --links-text-color-on-accent: {{ section.settings.text_color_on_accent }}; --links-text-color-dark: {{ section.settings.text_color_dark }};">
-  
-  {%- if section.settings.show_top_bar -%}
-    <div class="links-top-bar">
-      <div class="links-top-bar__mobile">
-        {{ section.settings.top_bar_text_mobile }}
-      </div>
-      <div class="links-top-bar__desktop">
-        <div class="links-top-bar__side">
-          {{ section.settings.top_bar_text_desktop_side }}
-        </div>
-        <div class="links-top-bar__center">
-          {{ section.settings.top_bar_text_desktop_center }}
-        </div>
-        <div class="links-top-bar__side links-top-bar__side--right">
-          {{ section.settings.top_bar_text_desktop_side }}
-        </div>
-      </div>
-    </div>
-  {%- endif -%}
-
   <div class="links-content-wrapper">
     <header class="links-header">
       {%- if section.settings.logo_image != blank -%}
@@ -69,107 +49,20 @@
             </span>
           </a>
         {%- endif -%}
-      {%- endfor -%}-
+      {%- endfor -%}
     </main>
-
-    {%- if section.settings.social_handle != blank -%}
-      <div class="links-social-username">
-        <a href="{{ section.settings.social_link | default: '#' }}" class="links-social-link">
-          {{ section.settings.social_handle }}
-        </a>
-      </div>
-    {%- endif -%}
   </div>
-
-  {%- assign has_grid_images = false -%}
-  {%- for block in section.blocks -%}
-    {%- if block.type == 'grid_image' -%}
-      {%- assign has_grid_images = true -%}
-      {%- break -%}
-    {%- endif -%}-
-  {%- endfor -%}
-
-  {%- if has_grid_images -%}
-    <div class="links-grid-wrapper">
-      <div class="links-grid">
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'grid_image' -%}
-            <div class="links-grid__item" {{ block.shopify_attributes }}>
-              {%- if block.settings.url != blank -%}
-                <a href="{{ block.settings.url }}" class="links-grid__link">
-              {%- endif -%}
-              
-              {%- if block.settings.image != blank -%}
-                <img 
-                  src="{{ block.settings.image | image_url: width: 600 }}" 
-                  alt="{{ block.settings.image.alt | default: 'Grid Image' }}"
-                  width="{{ block.settings.image.width }}"
-                  height="{{ block.settings.image.height }}"
-                  loading="lazy"
-                >
-              {%- else -%}
-                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
-              {%- endif -%}
-
-              {%- if block.settings.url != blank -%}
-                </a>
-              {%- endif -%}
-            </div>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
-    </div>
-  {%- endif -%}
-
-  <footer class="links-footer">
-    <div class="links-footer__container">
-      <div class="links-footer__copyright">
-        {{ section.settings.footer_copyright }}
-      </div>
-      <div class="links-footer__developer">
-        {%- if section.settings.footer_developer_url != blank -%}
-          <a href="{{ section.settings.footer_developer_url }}" target="_blank" rel="noopener">
-        {%- endif -%}
-        {{ section.settings.footer_developer }}
-        {%- if section.settings.footer_developer_url != blank -%}
-          </a>
-        {%- endif -%}
-      </div>
-    </div>
-  </footer>
 </div>
 
 {% stylesheet %}
   .links-page-container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    width: 100%;
     background-color: var(--links-bg-color);
     color: var(--links-text-color-dark);
     font-family: var(--font-primary--family), sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  }
-
-  /* Announcements / Top Bar */
-  .links-top-bar {
-    background-color: var(--links-accent-color);
-    color: var(--links-text-color-on-accent);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 10px 16px;
-    text-align: center;
-    line-height: 1.4;
-  }
-  .links-top-bar__desktop {
-    display: none;
-  }
-  .links-top-bar__mobile {
-    display: block;
-    word-spacing: 0.1em;
   }
 
   /* Content Wrapper */
@@ -280,193 +173,21 @@
     line-height: 1.2;
   }
 
-  /* Username Link */
-  .links-social-username {
-    margin-top: 10px;
-    margin-bottom: 25px;
-    text-align: center;
-  }
-  .links-social-link {
-    font-size: 20px;
-    font-weight: 400;
-    color: var(--links-text-color-dark);
-    text-decoration: none;
-    letter-spacing: 0.02em;
-    transition: opacity 0.2s ease;
-  }
-  .links-social-link:hover {
-    opacity: 0.8;
-  }
-
-  /* Image Grid */
-  .links-grid-wrapper {
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto auto auto; /* Push footer down but keep grid centered */
-    padding: 0 20px 50px 20px;
-    box-sizing: border-box;
-  }
-  .links-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    width: 100%;
-  }
-  .links-grid__item {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-    background-color: #f7f7f7;
-  }
-  .links-grid__link {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-  .links-grid__item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .links-grid__item:hover img {
-    transform: scale(1.04);
-  }
-  .links-grid__item .placeholder-svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-    fill: #ddd;
-    background-color: #f2f2f2;
-  }
-
-  /* Footer */
-  .links-footer {
-    background-color: var(--links-accent-color);
-    color: var(--links-text-color-on-accent);
-    padding: 35px 24px;
-    border-radius: 36px 36px 0 0;
-    margin-top: auto;
-    font-size: 13px;
-    line-height: 1.6;
-  }
-  .links-footer__container {
-    max-width: 900px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-  .links-footer__copyright {
-    font-weight: 300;
-    opacity: 0.95;
-  }
-  .links-footer__developer {
-    font-weight: 300;
-    opacity: 0.95;
-  }
-  .links-footer__developer a {
-    color: inherit;
-    text-decoration: none;
-    font-weight: 600;
-    transition: opacity 0.2s ease;
-  }
-  .links-footer__developer a:hover {
-    opacity: 0.85;
-  }
-
   /* Desktop Styles */
   @media (min-width: 769px) {
-    .links-top-bar {
-      padding: 12px 30px;
-      font-size: 12px;
-    }
-    .links-top-bar__mobile {
-      display: none;
-    }
-    .links-top-bar__desktop {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .links-top-bar__side {
-      flex: 1;
-      text-align: left;
-    }
-    .links-top-bar__side--right {
-      text-align: right;
-    }
-    .links-top-bar__center {
-      flex: 1.5;
-      text-align: center;
-      font-weight: 600;
-    }
-
     .links-logo {
       width: var(--logo-width-desktop);
     }
-
     .links-content-wrapper {
       padding: 50px 20px 30px 20px;
-    }
-
-    .links-grid {
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-    .links-grid-wrapper {
-      padding: 0 30px 60px 30px;
-    }
-
-    .links-footer {
-      padding: 40px 60px;
-      border-radius: 40px 40px 0 0;
-    }
-    .links-footer__container {
-      flex-direction: row;
-      justify-content: space-between;
-      gap: 0;
     }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Página de Links",
+  "name": "Links - Perfil e Botões",
   "settings": [
-    {
-      "type": "header",
-      "content": "Barra Superior (Avisos)"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_top_bar",
-      "label": "Mostrar barra superior",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "top_bar_text_mobile",
-      "label": "Texto da barra (Mobile)",
-      "default": "DELICADEZA • SOFISTICAÇÃO • ATEMPORALIDADE"
-    },
-    {
-      "type": "text",
-      "id": "top_bar_text_desktop_side",
-      "label": "Texto das laterais (Desktop)",
-      "default": "DELICADEZA • SOFISTICAÇÃO • ATEMPORALIDADE"
-    },
-    {
-      "type": "text",
-      "id": "top_bar_text_desktop_center",
-      "label": "Texto do centro (Desktop)",
-      "default": "✦ JOIAS QUE ELEVAM O ESSENCIAL ✦"
-    },
     {
       "type": "header",
       "content": "Perfil / Logo"
@@ -516,39 +237,24 @@
     },
     {
       "type": "header",
-      "content": "Rede Social"
-    },
-    {
-      "type": "text",
-      "id": "social_handle",
-      "label": "Nome do usuário (com @)",
-      "default": "@bynyna"
-    },
-    {
-      "type": "url",
-      "id": "social_link",
-      "label": "Link da Rede Social"
-    },
-    {
-      "type": "header",
       "content": "Cores e Estilos"
     },
     {
       "type": "color",
       "id": "bg_color",
-      "label": "Fundo da Página",
+      "label": "Fundo da Seção",
       "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "accent_color",
-      "label": "Cor Principal (Botões/Rodapé/Barra Superior)",
+      "label": "Cor Principal (Botões)",
       "default": "#B08F7A"
     },
     {
       "type": "color",
       "id": "text_color_on_accent",
-      "label": "Cor do Texto sobre Cor Principal",
+      "label": "Cor do Texto sobre os Botões",
       "default": "#ffffff"
     },
     {
@@ -556,27 +262,6 @@
       "id": "text_color_dark",
       "label": "Cor do Texto Principal",
       "default": "#1a1a1a"
-    },
-    {
-      "type": "header",
-      "content": "Rodapé"
-    },
-    {
-      "type": "text",
-      "id": "footer_copyright",
-      "label": "Texto dos Direitos Reservados",
-      "default": "© 2026 nyna. Todos os direitos reservados."
-    },
-    {
-      "type": "text",
-      "id": "footer_developer",
-      "label": "Texto do Desenvolvedor",
-      "default": "Desenvolvido por Alwer"
-    },
-    {
-      "type": "url",
-      "id": "footer_developer_url",
-      "label": "Link do Desenvolvedor"
     }
   ],
   "blocks": [
@@ -629,27 +314,11 @@
           "label": "SVG Customizado (opcional - sobrepõe a seleção acima)"
         }
       ]
-    },
-    {
-      "type": "grid_image",
-      "name": "Imagem do Grid",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Imagem"
-        },
-        {
-          "type": "url",
-          "id": "url",
-          "label": "Link da Imagem (opcional)"
-        }
-      ]
     }
   ],
   "presets": [
     {
-      "name": "Página de Links",
+      "name": "Links - Perfil e Botões",
       "blocks": [
         {
           "type": "link",

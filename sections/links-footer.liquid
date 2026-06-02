@@ -1,0 +1,139 @@
+<div class="links-footer-wrapper" style="--links-accent-color: {{ section.settings.bg_color }}; --links-text-color-on-accent: {{ section.settings.text_color }};">
+  <footer class="links-footer">
+    <div class="links-footer__container">
+      <div class="links-footer__copyright">
+        {{ section.settings.footer_copyright }}
+      </div>
+      <div class="links-footer__developer">
+        {%- if section.settings.footer_developer_url != blank -%}
+          <a href="{{ section.settings.footer_developer_url }}" target="_blank" rel="noopener">
+        {%- endif -%}
+        {{ section.settings.footer_developer }}
+        {%- if section.settings.footer_developer_url != blank -%}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </footer>
+</div>
+
+{% stylesheet %}
+  /* Align footer section to bottom of flex layout layout/links */
+  #shopify-section-links-footer,
+  [id*="links-footer"] {
+    margin-top: auto;
+    width: 100%;
+  }
+
+  .links-footer-wrapper {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: var(--links-accent-color);
+    color: var(--links-text-color-on-accent);
+    font-family: var(--font-primary--family), sans-serif;
+  }
+
+  .links-footer {
+    width: 100%;
+    padding: 35px 24px;
+    border-radius: 36px 36px 0 0;
+    box-sizing: border-box;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .links-footer__container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .links-footer__copyright {
+    font-weight: 300;
+    opacity: 0.95;
+  }
+
+  .links-footer__developer {
+    font-weight: 300;
+    opacity: 0.95;
+  }
+
+  .links-footer__developer a {
+    color: inherit;
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity 0.2s ease;
+  }
+
+  .links-footer__developer a:hover {
+    opacity: 0.85;
+  }
+
+  /* Desktop Styles */
+  @media (min-width: 769px) {
+    .links-footer {
+      padding: 40px 60px;
+      border-radius: 40px 40px 0 0;
+    }
+    .links-footer__container {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Links - Rodapé",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Cores"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Fundo do Rodapé",
+      "default": "#B08F7A"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Cor do Texto",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Textos"
+    },
+    {
+      "type": "text",
+      "id": "footer_copyright",
+      "label": "Texto dos Direitos Reservados",
+      "default": "© 2026 nyna. Todos os direitos reservados."
+    },
+    {
+      "type": "text",
+      "id": "footer_developer",
+      "label": "Texto do Desenvolvedor",
+      "default": "Desenvolvido por Alwer"
+    },
+    {
+      "type": "url",
+      "id": "footer_developer_url",
+      "label": "Link do Desenvolvedor"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Links - Rodapé"
+    }
+  ]
+}
+{% endschema %}
