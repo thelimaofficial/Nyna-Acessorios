@@ -29,7 +29,16 @@
         {%- if block.type == 'link' -%}
           <a href="{{ block.settings.url | default: '#' }}" class="links-button" {{ block.shopify_attributes }}>
             <span class="links-button__icon-left">
-              {%- if block.settings.custom_svg != blank -%}
+              {%- if block.settings.icon_image != blank -%}
+                <img 
+                  src="{{ block.settings.icon_image | image_url: width: 64, height: 64 }}" 
+                  alt="{{ block.settings.icon_image.alt | default: block.settings.text }}"
+                  width="{{ block.settings.icon_image.width }}"
+                  height="{{ block.settings.icon_image.height }}"
+                  loading="lazy"
+                  class="links-button__custom-icon"
+                >
+              {%- elsif block.settings.custom_svg != blank -%}
                 {{ block.settings.custom_svg }}
               {%- elsif block.settings.icon == 'sparkle' -%}
                 <svg viewBox="0 0 24 24"><path d="M12 2L14.8 9.2L22 12L14.8 14.8L12 22L9.2 14.8L2 12L9.2 9.2L12 2Z"/></svg>
@@ -158,6 +167,12 @@
     width: 16px;
     height: 16px;
     flex-shrink: 0;
+  }
+  .links-button__custom-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 2px;
   }
   .links-button__icon-left svg,
   .links-button__icon-right svg {
@@ -307,6 +322,11 @@
             }
           ],
           "default": "sparkle"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Imagem do Ícone (opcional - sobrepõe as opções abaixo)"
         },
         {
           "type": "html",
