@@ -11,10 +11,24 @@
   "sections": {
     "main": {
       "type": "links-page",
+      "blocks": {
+        "link_dRT4Nw": {
+          "type": "link",
+          "settings": {
+            "text": "NOVA COLEÇÃO",
+            "url": "",
+            "icon": "sparkle",
+            "custom_svg": ""
+          }
+        }
+      },
+      "block_order": [
+        "link_dRT4Nw"
+      ],
       "settings": {
         "logo_image": "shopify://shop_images/LogoNyna.svg",
         "logo_width": 280,
-        "logo_width_mobile": 140,
+        "logo_width_mobile": 200,
         "logo_text": "nyna",
         "logo_text_sub": "ACESSÓRIOS",
         "subtitle": "Elegância em cada detalhe.",
@@ -26,6 +40,7 @@
     },
     "instagram_feed_cRtnKL": {
       "type": "instagram-feed",
+      "disabled": true,
       "name": "Instagram Feed",
       "settings": {
         "heading": "@bynyna",
@@ -37,6 +52,7 @@
     },
     "footer": {
       "type": "links-footer",
+      "disabled": true,
       "settings": {
         "bg_color": "#b08f7a",
         "text_color": "#ffffff",
