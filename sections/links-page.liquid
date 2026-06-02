@@ -1,0 +1,676 @@
+{%- layout 'links' -%}
+
+<div class="links-page-container" style="--links-bg-color: {{ section.settings.bg_color }}; --links-accent-color: {{ section.settings.accent_color }}; --links-text-color-on-accent: {{ section.settings.text_color_on_accent }}; --links-text-color-dark: {{ section.settings.text_color_dark }};">
+  
+  {%- if section.settings.show_top_bar -%}
+    <div class="links-top-bar">
+      <div class="links-top-bar__mobile">
+        {{ section.settings.top_bar_text_mobile }}
+      </div>
+      <div class="links-top-bar__desktop">
+        <div class="links-top-bar__side">
+          {{ section.settings.top_bar_text_desktop_side }}
+        </div>
+        <div class="links-top-bar__center">
+          {{ section.settings.top_bar_text_desktop_center }}
+        </div>
+        <div class="links-top-bar__side links-top-bar__side--right">
+          {{ section.settings.top_bar_text_desktop_side }}
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="links-content-wrapper">
+    <header class="links-header">
+      {%- if section.settings.logo_image != blank -%}
+        <img 
+          class="links-logo" 
+          src="{{ section.settings.logo_image | image_url: width: 400 }}" 
+          alt="{{ shop.name }}"
+          width="{{ section.settings.logo_image.width }}"
+          height="{{ section.settings.logo_image.height }}"
+          style="--logo-width-desktop: {{ section.settings.logo_width }}px; --logo-width-mobile: {{ section.settings.logo_width_mobile }}px;"
+        >
+      {%- else -%}
+        <div class="links-logo-text">
+          <span class="logo-title">{{ section.settings.logo_text }}</span>
+          <span class="logo-subtitle">{{ section.settings.logo_text_sub }}</span>
+        </div>
+      {%- endif -%}
+      
+      {%- if section.settings.subtitle != blank -%}
+        <p class="links-header-subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </header>
+
+    <main class="links-main-buttons">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'link' -%}
+          <a href="{{ block.settings.url | default: '#' }}" class="links-button" {{ block.shopify_attributes }}>
+            <span class="links-button__icon-left">
+              {%- if block.settings.custom_svg != blank -%}
+                {{ block.settings.custom_svg }}
+              {%- elsif block.settings.icon == 'sparkle' -%}
+                <svg viewBox="0 0 24 24"><path d="M12 2L14.8 9.2L22 12L14.8 14.8L12 22L9.2 14.8L2 12L9.2 9.2L12 2Z"/></svg>
+              {%- elsif block.settings.icon == 'heart' -%}
+                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              {%- elsif block.settings.icon == 'bag' -%}
+                <svg viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-1.99.9-1.99 2L3 20c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm0 10c-2.76 0-5-2.24-5-5h2c0 1.66 1.34 3 3 3s3-1.34 3-3h2c0 2.76-2.24 5-5 5z"/></svg>
+              {%- elsif block.settings.icon == 'gift' -%}
+                <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.62 0-2.95 1.29-3 2.9L12 4.7l-.02-.18C11.95 2.92 10.62 1.63 9 1.63c-1.66 0-3 1.34-3 3 0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2.37c.75 0 1.37.61 1.37 1.37s-.61 1.37-1.37 1.37-1.37-.62-1.37-1.37.62-1.37 1.37-1.37zM9 3.63c.75 0 1.37.61 1.37 1.37s-.61 1.37-1.37 1.37-1.37-.62-1.37-1.37.62-1.37 1.37-1.37zM20 19H4v-2h16v2zm0-5H4V8h7v6h2V8h7v6z"/></svg>
+              {%- endif -%}
+            </span>
+
+            <span class="links-button__text">{{ block.settings.text }}</span>
+
+            <span class="links-button__icon-right">
+              <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+            </span>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}-
+    </main>
+
+    {%- if section.settings.social_handle != blank -%}
+      <div class="links-social-username">
+        <a href="{{ section.settings.social_link | default: '#' }}" class="links-social-link">
+          {{ section.settings.social_handle }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- assign has_grid_images = false -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'grid_image' -%}
+      {%- assign has_grid_images = true -%}
+      {%- break -%}
+    {%- endif -%}-
+  {%- endfor -%}
+
+  {%- if has_grid_images -%}
+    <div class="links-grid-wrapper">
+      <div class="links-grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'grid_image' -%}
+            <div class="links-grid__item" {{ block.shopify_attributes }}>
+              {%- if block.settings.url != blank -%}
+                <a href="{{ block.settings.url }}" class="links-grid__link">
+              {%- endif -%}
+              
+              {%- if block.settings.image != blank -%}
+                <img 
+                  src="{{ block.settings.image | image_url: width: 600 }}" 
+                  alt="{{ block.settings.image.alt | default: 'Grid Image' }}"
+                  width="{{ block.settings.image.width }}"
+                  height="{{ block.settings.image.height }}"
+                  loading="lazy"
+                >
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+
+              {%- if block.settings.url != blank -%}
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <footer class="links-footer">
+    <div class="links-footer__container">
+      <div class="links-footer__copyright">
+        {{ section.settings.footer_copyright }}
+      </div>
+      <div class="links-footer__developer">
+        {%- if section.settings.footer_developer_url != blank -%}
+          <a href="{{ section.settings.footer_developer_url }}" target="_blank" rel="noopener">
+        {%- endif -%}
+        {{ section.settings.footer_developer }}
+        {%- if section.settings.footer_developer_url != blank -%}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </footer>
+</div>
+
+{% stylesheet %}
+  .links-page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--links-bg-color);
+    color: var(--links-text-color-dark);
+    font-family: var(--font-primary--family), sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  /* Announcements / Top Bar */
+  .links-top-bar {
+    background-color: var(--links-accent-color);
+    color: var(--links-text-color-on-accent);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .links-top-bar__desktop {
+    display: none;
+  }
+  .links-top-bar__mobile {
+    display: block;
+    word-spacing: 0.1em;
+  }
+
+  /* Content Wrapper */
+  .links-content-wrapper {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 40px 20px 20px 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Header */
+  .links-header {
+    text-align: center;
+    margin-bottom: 30px;
+    width: 100%;
+  }
+  .links-logo {
+    display: block;
+    margin: 0 auto 15px auto;
+    height: auto;
+    width: var(--logo-width-mobile);
+  }
+  .links-logo-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .links-logo-text .logo-title {
+    font-family: Georgia, serif;
+    font-size: 48px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--links-text-color-dark);
+    line-height: 1.1;
+  }
+  .links-logo-text .logo-subtitle {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: var(--links-text-color-dark);
+    margin-top: 2px;
+    text-transform: uppercase;
+  }
+  .links-header-subtitle {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--links-text-color-dark);
+    margin: 10px 0 0 0;
+    letter-spacing: 0.05em;
+  }
+
+  /* Main Buttons */
+  .links-main-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 25px;
+  }
+  .links-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 15px 24px;
+    background-color: var(--links-accent-color);
+    color: var(--links-text-color-on-accent);
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+  .links-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    filter: brightness(0.95);
+  }
+  .links-button__icon-left,
+  .links-button__icon-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+  .links-button__icon-left svg,
+  .links-button__icon-right svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+    display: block;
+  }
+  .links-button__text {
+    flex-grow: 1;
+    text-align: center;
+    padding: 0 10px;
+    line-height: 1.2;
+  }
+
+  /* Username Link */
+  .links-social-username {
+    margin-top: 10px;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+  .links-social-link {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--links-text-color-dark);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: opacity 0.2s ease;
+  }
+  .links-social-link:hover {
+    opacity: 0.8;
+  }
+
+  /* Image Grid */
+  .links-grid-wrapper {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto auto auto; /* Push footer down but keep grid centered */
+    padding: 0 20px 50px 20px;
+    box-sizing: border-box;
+  }
+  .links-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+  }
+  .links-grid__item {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: #f7f7f7;
+  }
+  .links-grid__link {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .links-grid__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .links-grid__item:hover img {
+    transform: scale(1.04);
+  }
+  .links-grid__item .placeholder-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    fill: #ddd;
+    background-color: #f2f2f2;
+  }
+
+  /* Footer */
+  .links-footer {
+    background-color: var(--links-accent-color);
+    color: var(--links-text-color-on-accent);
+    padding: 35px 24px;
+    border-radius: 36px 36px 0 0;
+    margin-top: auto;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .links-footer__container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .links-footer__copyright {
+    font-weight: 300;
+    opacity: 0.95;
+  }
+  .links-footer__developer {
+    font-weight: 300;
+    opacity: 0.95;
+  }
+  .links-footer__developer a {
+    color: inherit;
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity 0.2s ease;
+  }
+  .links-footer__developer a:hover {
+    opacity: 0.85;
+  }
+
+  /* Desktop Styles */
+  @media (min-width: 769px) {
+    .links-top-bar {
+      padding: 12px 30px;
+      font-size: 12px;
+    }
+    .links-top-bar__mobile {
+      display: none;
+    }
+    .links-top-bar__desktop {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .links-top-bar__side {
+      flex: 1;
+      text-align: left;
+    }
+    .links-top-bar__side--right {
+      text-align: right;
+    }
+    .links-top-bar__center {
+      flex: 1.5;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .links-logo {
+      width: var(--logo-width-desktop);
+    }
+
+    .links-content-wrapper {
+      padding: 50px 20px 30px 20px;
+    }
+
+    .links-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .links-grid-wrapper {
+      padding: 0 30px 60px 30px;
+    }
+
+    .links-footer {
+      padding: 40px 60px;
+      border-radius: 40px 40px 0 0;
+    }
+    .links-footer__container {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Página de Links",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Barra Superior (Avisos)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_bar",
+      "label": "Mostrar barra superior",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "top_bar_text_mobile",
+      "label": "Texto da barra (Mobile)",
+      "default": "DELICADEZA • SOFISTICAÇÃO • ATEMPORALIDADE"
+    },
+    {
+      "type": "text",
+      "id": "top_bar_text_desktop_side",
+      "label": "Texto das laterais (Desktop)",
+      "default": "DELICADEZA • SOFISTICAÇÃO • ATEMPORALIDADE"
+    },
+    {
+      "type": "text",
+      "id": "top_bar_text_desktop_center",
+      "label": "Texto do centro (Desktop)",
+      "default": "✦ JOIAS QUE ELEVAM O ESSENCIAL ✦"
+    },
+    {
+      "type": "header",
+      "content": "Perfil / Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Imagem do Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Largura do Logo (Desktop)",
+      "default": 180
+    },
+    {
+      "type": "range",
+      "id": "logo_width_mobile",
+      "min": 40,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Largura do Logo (Mobile)",
+      "default": 140
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Texto do Logo (caso não envie imagem)",
+      "default": "nyna"
+    },
+    {
+      "type": "text",
+      "id": "logo_text_sub",
+      "label": "Subtexto do Logo (caso não envie imagem)",
+      "default": "ACESSÓRIOS"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtítulo / Descrição",
+      "default": "Elegância em cada detalhe."
+    },
+    {
+      "type": "header",
+      "content": "Rede Social"
+    },
+    {
+      "type": "text",
+      "id": "social_handle",
+      "label": "Nome do usuário (com @)",
+      "default": "@bynyna"
+    },
+    {
+      "type": "url",
+      "id": "social_link",
+      "label": "Link da Rede Social"
+    },
+    {
+      "type": "header",
+      "content": "Cores e Estilos"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Fundo da Página",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Cor Principal (Botões/Rodapé/Barra Superior)",
+      "default": "#B08F7A"
+    },
+    {
+      "type": "color",
+      "id": "text_color_on_accent",
+      "label": "Cor do Texto sobre Cor Principal",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color_dark",
+      "label": "Cor do Texto Principal",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "header",
+      "content": "Rodapé"
+    },
+    {
+      "type": "text",
+      "id": "footer_copyright",
+      "label": "Texto dos Direitos Reservados",
+      "default": "© 2026 nyna. Todos os direitos reservados."
+    },
+    {
+      "type": "text",
+      "id": "footer_developer",
+      "label": "Texto do Desenvolvedor",
+      "default": "Desenvolvido por Alwer"
+    },
+    {
+      "type": "url",
+      "id": "footer_developer_url",
+      "label": "Link do Desenvolvedor"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Botão de Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texto do Botão",
+          "default": "NOVA COLEÇÃO"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link / Direcionamento"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Ícone Esquerdo",
+          "options": [
+            {
+              "value": "sparkle",
+              "label": "Estrela / Brilho"
+            },
+            {
+              "value": "heart",
+              "label": "Coração"
+            },
+            {
+              "value": "bag",
+              "label": "Sacola de Compras"
+            },
+            {
+              "value": "gift",
+              "label": "Presente"
+            },
+            {
+              "value": "none",
+              "label": "Nenhum"
+            }
+          ],
+          "default": "sparkle"
+        },
+        {
+          "type": "html",
+          "id": "custom_svg",
+          "label": "SVG Customizado (opcional - sobrepõe a seleção acima)"
+        }
+      ]
+    },
+    {
+      "type": "grid_image",
+      "name": "Imagem do Grid",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagem"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link da Imagem (opcional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Página de Links",
+      "blocks": [
+        {
+          "type": "link",
+          "settings": {
+            "text": "NOVA COLEÇÃO"
+          }
+        },
+        {
+          "type": "link",
+          "settings": {
+            "text": "NOVA COLEÇÃO"
+          }
+        },
+        {
+          "type": "link",
+          "settings": {
+            "text": "NOVA COLEÇÃO"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
