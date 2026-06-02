@@ -1,4 +1,4 @@
-<div class="links-footer-wrapper" style="--links-accent-color: {{ section.settings.bg_color }}; --links-text-color-on-accent: {{ section.settings.text_color }};">
+<div class="links-footer-wrapper full-width" style="--links-accent-color: {{ section.settings.bg_color }}; --links-text-color-on-accent: {{ section.settings.text_color }};">
   <footer class="links-footer">
     <div class="links-footer__container">
       <div class="links-footer__copyright">
@@ -33,12 +33,13 @@
     background-color: var(--links-accent-color);
     color: var(--links-text-color-on-accent);
     font-family: var(--font-primary--family), sans-serif;
+    border-radius: 36px 36px 0 0;
+    overflow: hidden;
   }
 
   .links-footer {
     width: 100%;
     padding: 35px 24px;
-    border-radius: 36px 36px 0 0;
     box-sizing: border-box;
     font-size: 13px;
     line-height: 1.6;
@@ -76,9 +77,11 @@
 
   /* Desktop Styles */
   @media (min-width: 769px) {
+    .links-footer-wrapper {
+      border-radius: 40px 40px 0 0;
+    }
     .links-footer {
       padding: 40px 60px;
-      border-radius: 40px 40px 0 0;
     }
     .links-footer__container {
       flex-direction: row;
