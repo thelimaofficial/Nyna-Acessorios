@@ -5,12 +5,13 @@
         {{ section.settings.footer_copyright }}
       </div>
       <div class="links-footer__developer">
+        {{ section.settings.footer_developer_prefix }} 
         {%- if section.settings.footer_developer_url != blank -%}
           <a href="{{ section.settings.footer_developer_url }}" target="_blank" rel="noopener">
-        {%- endif -%}
-        {{ section.settings.footer_developer }}
-        {%- if section.settings.footer_developer_url != blank -%}
+            {{ section.settings.footer_developer_name }}
           </a>
+        {%- else -%}
+          {{ section.settings.footer_developer_name }}
         {%- endif -%}
       </div>
     </div>
@@ -123,9 +124,15 @@
     },
     {
       "type": "text",
-      "id": "footer_developer",
-      "label": "Texto do Desenvolvedor",
-      "default": "Desenvolvido por Alwer"
+      "id": "footer_developer_prefix",
+      "label": "Prefixo de Crédito",
+      "default": "Desenvolvido por"
+    },
+    {
+      "type": "text",
+      "id": "footer_developer_name",
+      "label": "Nome do Desenvolvedor",
+      "default": "Alwer"
     },
     {
       "type": "url",
