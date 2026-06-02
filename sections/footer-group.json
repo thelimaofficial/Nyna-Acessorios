@@ -13,7 +13,6 @@
   "sections": {
     "footer": {
       "type": "footer",
-      "disabled": true,
       "settings": {
         "background_color": "#b08f7a",
         "text_color": "#ffffff",
@@ -30,6 +29,7 @@
     },
     "links_footer_m6Ufk8": {
       "type": "links-footer",
+      "disabled": true,
       "name": "Links - Rodapé",
       "settings": {
         "bg_color": "#B08F7A",
