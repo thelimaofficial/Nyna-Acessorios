@@ -22,6 +22,7 @@
     },
     "header": {
       "type": "header",
+      "disabled": true,
       "settings": {
         "logo_width": 160,
         "menu": "main-menu",

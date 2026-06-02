@@ -13,6 +13,7 @@
   "sections": {
     "footer": {
       "type": "footer",
+      "disabled": true,
       "settings": {
         "background_color": "#b08f7a",
         "text_color": "#ffffff",

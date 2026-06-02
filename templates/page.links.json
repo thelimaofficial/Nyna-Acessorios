@@ -1,8 +1,51 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "links-page",
-      "settings": {}
+      "blocks": {
+        "link_kCVCEL": {
+          "type": "link",
+          "settings": {
+            "text": "NOVA COLEÇÃO",
+            "url": "",
+            "icon": "none",
+            "custom_svg": ""
+          }
+        }
+      },
+      "block_order": [
+        "link_kCVCEL"
+      ],
+      "settings": {
+        "show_top_bar": false,
+        "top_bar_text_mobile": "DELICADEZA • SOFISTICAÇÃO • ATEMPORALIDADE",
+        "top_bar_text_desktop_side": "DELICADEZA • SOFISTICAÇÃO • ATEMPORALIDADE",
+        "top_bar_text_desktop_center": "✦ JOIAS QUE ELEVAM O ESSENCIAL ✦",
+        "logo_image": "shopify://shop_images/LogoNyna.svg",
+        "logo_width": 220,
+        "logo_width_mobile": 200,
+        "logo_text": "nyna",
+        "logo_text_sub": "ACESSÓRIOS",
+        "subtitle": "Elegância em cada detalhe.",
+        "social_handle": "@bynyna",
+        "social_link": "",
+        "bg_color": "#ffffff",
+        "accent_color": "#b08f7a",
+        "text_color_on_accent": "#ffffff",
+        "text_color_dark": "#B08F7A",
+        "footer_copyright": "© 2026 nyna. Todos os direitos reservados.",
+        "footer_developer": "Desenvolvido por Alwer",
+        "footer_developer_url": ""
+      }
     }
   },
   "order": [
