@@ -11,18 +11,6 @@
   "type": "footer",
   "name": "t:general.footer",
   "sections": {
-    "links_footer_m6Ufk8": {
-      "type": "links-footer",
-      "name": "Links - Rodapé",
-      "settings": {
-        "bg_color": "#B08F7A",
-        "text_color": "#ffffff",
-        "footer_copyright": "© 2026 nyna. Todos os direitos reservados.",
-        "footer_developer_prefix": "Desenvolvido por",
-        "footer_developer_name": "Alwer",
-        "footer_developer_url": "https://www.usealwer.com"
-      }
-    },
     "footer": {
       "type": "footer",
       "disabled": true,
@@ -39,10 +27,22 @@
         "social_email_link": "sacbynyna@gmail.com",
         "show_payment_icons": true
       }
+    },
+    "links_footer_m6Ufk8": {
+      "type": "links-footer",
+      "name": "Links - Rodapé",
+      "settings": {
+        "bg_color": "#B08F7A",
+        "text_color": "#ffffff",
+        "footer_copyright": "© 2026 nyna. Todos os direitos reservados.",
+        "footer_developer_prefix": "Desenvolvido por",
+        "footer_developer_name": "Alwer",
+        "footer_developer_url": "https://www.usealwer.com"
+      }
     }
   },
   "order": [
-    "links_footer_m6Ufk8",
-    "footer"
+    "footer",
+    "links_footer_m6Ufk8"
   ]
 }
