@@ -1,0 +1,254 @@
+<div class="links-social-buttons-section" style="--bg-color: {{ section.settings.bg_color }}; --padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="links-social-buttons-container" style="--btn-size: {{ section.settings.button_size }}px; --btn-bg: {{ section.settings.button_bg_color }}; --btn-color: {{ section.settings.button_icon_color }}; --gap: {{ section.settings.gap }}px;">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'social_link' -%}
+        <a 
+          href="{{ block.settings.url | default: '#' }}" 
+          class="links-social-button" 
+          target="_blank" 
+          rel="noopener" 
+          aria-label="{{ block.settings.aria_label | default: block.settings.network | escape }}"
+          {{ block.shopify_attributes }}
+        >
+          {%- if block.settings.network == 'whatsapp' -%}
+            <img src="{{ 'wpp-links.svg' | asset_url }}" alt="WhatsApp" width="24" height="24" loading="lazy">
+          {%- elsif block.settings.network == 'instagram' -%}
+            <img src="{{ 'instagram-links.svg' | asset_url }}" alt="Instagram" width="24" height="24" loading="lazy">
+          {%- elsif block.settings.network == 'tiktok' -%}
+            <img src="{{ 'tiktok-links.svg' | asset_url }}" alt="TikTok" width="24" height="24" loading="lazy">
+          {%- elsif block.settings.network == 'email' -%}
+            <img src="{{ 'email-links.svg' | asset_url }}" alt="E-mail" width="24" height="24" loading="lazy">
+          {%- elsif block.settings.network == 'custom' -%}
+            {%- if block.settings.custom_svg != blank -%}
+              {{ block.settings.custom_svg }}
+            {%- elsif block.settings.custom_icon != blank -%}
+              <img src="{{ block.settings.custom_icon | image_url: width: 48, height: 48 }}" alt="{{ block.settings.aria_label | default: 'Social Icon' }}" width="24" height="24" loading="lazy">
+            {%- endif -%}
+          {%- endif -%}
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .links-social-buttons-section {
+    width: 100%;
+    background-color: var(--bg-color);
+    padding-top: var(--padding-top);
+    padding-bottom: var(--padding-bottom);
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .links-social-buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--gap);
+    max-width: 480px;
+    width: 100%;
+    padding-inline: 20px;
+    box-sizing: border-box;
+  }
+
+  .links-social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--btn-size);
+    height: var(--btn-size);
+    border-radius: 50%;
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  }
+
+  .links-social-button:hover {
+    transform: scale(1.08);
+    filter: brightness(0.95);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  .links-social-button:active {
+    transform: scale(0.98);
+  }
+
+  .links-social-button img,
+  .links-social-button svg {
+    width: 46%;
+    height: 46%;
+    object-fit: contain;
+    fill: currentColor;
+    display: block;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Links - Botões Sociais",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Cores"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Fundo da Seção",
+      "default": "#faf8f5"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Fundo do Botão",
+      "default": "#B08F7A"
+    },
+    {
+      "type": "color",
+      "id": "button_icon_color",
+      "label": "Cor do Ícone (SVGs customizados)",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Dimensões"
+    },
+    {
+      "type": "range",
+      "id": "button_size",
+      "min": 32,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Tamanho do Botão",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Espaçamento entre Botões",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Espaçamento Superior (Seção)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Espaçamento Inferior (Seção)",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "social_link",
+      "name": "Rede Social",
+      "settings": [
+        {
+          "type": "select",
+          "id": "network",
+          "label": "Rede Social",
+          "options": [
+            {
+              "value": "whatsapp",
+              "label": "WhatsApp"
+            },
+            {
+              "value": "instagram",
+              "label": "Instagram"
+            },
+            {
+              "value": "tiktok",
+              "label": "TikTok"
+            },
+            {
+              "value": "email",
+              "label": "E-mail"
+            },
+            {
+              "value": "custom",
+              "label": "Customizado"
+            }
+          ],
+          "default": "whatsapp"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link / Direcionamento"
+        },
+        {
+          "type": "text",
+          "id": "aria_label",
+          "label": "Aria-label (Acessibilidade)",
+          "info": "Nome amigável para leitores de tela."
+        },
+        {
+          "type": "header",
+          "content": "Para ícones customizados"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Imagem do Ícone Customizado"
+        },
+        {
+          "type": "html",
+          "id": "custom_svg",
+          "label": "Código SVG Customizado"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Links - Botões Sociais",
+      "blocks": [
+        {
+          "type": "social_link",
+          "settings": {
+            "network": "whatsapp"
+          }
+        },
+        {
+          "type": "social_link",
+          "settings": {
+            "network": "instagram"
+          }
+        },
+        {
+          "type": "social_link",
+          "settings": {
+            "network": "tiktok"
+          }
+        },
+        {
+          "type": "social_link",
+          "settings": {
+            "network": "email"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

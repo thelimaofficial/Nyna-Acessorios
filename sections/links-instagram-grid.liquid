@@ -1,4 +1,4 @@
-<div class="links-instagram-container" style="--links-bg-color: {{ section.settings.bg_color }}; --links-text-color-dark: {{ section.settings.text_color_dark }};">
+<div class="links-instagram-container" style="--links-bg-color: {{ section.settings.bg_color }}; --links-text-color-dark: {{ section.settings.text_color_dark }}; --social-handle-size: {{ section.settings.social_handle_size }}px; --social-handle-size-mobile: {{ section.settings.social_handle_size_mobile }}px;">
   <div class="links-instagram-content">
     {%- if section.settings.social_handle != blank -%}
       <div class="links-social-username">
@@ -82,7 +82,7 @@
     text-align: center;
   }
   .links-social-link {
-    font-size: 20px;
+    font-size: var(--social-handle-size-mobile, 18px);
     font-weight: 400;
     color: var(--links-text-color-dark);
     text-decoration: none;
@@ -91,6 +91,11 @@
   }
   .links-social-link:hover {
     opacity: 0.8;
+  }
+  @media (min-width: 769px) {
+    .links-social-link {
+      font-size: var(--social-handle-size, 20px);
+    }
   }
 
   /* Image Grid */
@@ -160,6 +165,26 @@
       "type": "url",
       "id": "social_link",
       "label": "Link da Rede Social"
+    },
+    {
+      "type": "range",
+      "id": "social_handle_size",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamanho do Usuário (Desktop)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "social_handle_size_mobile",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamanho do Usuário (Mobile)",
+      "default": 18
     },
     {
       "type": "header",
