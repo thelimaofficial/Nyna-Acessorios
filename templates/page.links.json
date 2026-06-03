@@ -63,7 +63,7 @@
         "logo_text": "nyna",
         "logo_text_sub": "ACESSÓRIOS",
         "subtitle": "Elegância em cada detalhe.",
-        "bg_color": "#ffffff",
+        "bg_color": "#faf8f5",
         "accent_color": "#b08f7a",
         "text_color_on_accent": "#ffffff",
         "text_color_dark": "#b08f7a"
@@ -73,8 +73,8 @@
       "type": "links-footer",
       "name": "Links - Rodapé",
       "settings": {
-        "bg_color": "#B08F7A",
-        "text_color": "#ffffff",
+        "bg_color": "#faf8f5",
+        "text_color": "#B08F7A",
         "footer_copyright": "© 2026 nyna. Todos os direitos reservados.",
         "footer_developer_prefix": "Desenvolvido por",
         "footer_developer_name": "Alwer",
