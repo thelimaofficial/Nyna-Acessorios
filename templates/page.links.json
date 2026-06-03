@@ -75,25 +75,38 @@
         "whatsapp": {
           "type": "social_link",
           "settings": {
-            "network": "whatsapp"
+            "network": "whatsapp",
+            "url": "",
+            "aria_label": "",
+            "custom_icon": "shopify://shop_images/wpplinks.svg",
+            "custom_svg": ""
           }
         },
         "instagram": {
           "type": "social_link",
           "settings": {
-            "network": "instagram"
+            "network": "instagram",
+            "url": "",
+            "aria_label": "",
+            "custom_svg": ""
           }
         },
         "tiktok": {
           "type": "social_link",
           "settings": {
-            "network": "tiktok"
+            "network": "tiktok",
+            "url": "",
+            "aria_label": "",
+            "custom_svg": ""
           }
         },
         "email": {
           "type": "social_link",
           "settings": {
-            "network": "email"
+            "network": "email",
+            "url": "",
+            "aria_label": "",
+            "custom_svg": ""
           }
         }
       },
@@ -105,12 +118,25 @@
       ],
       "settings": {
         "bg_color": "#faf8f5",
-        "button_bg_color": "#B08F7A",
+        "button_bg_color": "#b08f7a",
         "button_icon_color": "#ffffff",
         "button_size": 52,
         "gap": 16,
         "padding_top": 20,
         "padding_bottom": 20
+      }
+    },
+    "instagram_feed_3m4BN9": {
+      "type": "instagram-feed",
+      "name": "Instagram Feed",
+      "settings": {
+        "heading": "@bynyna",
+        "heading_size": 22,
+        "heading_size_mobile": 16,
+        "custom_html": "<div id=\"insta-feed\"></div>",
+        "show_button": false,
+        "button_label": "VER MAIS NO INSTAGRAM",
+        "button_link": "https://instagram.com/bynyna"
       }
     },
     "links_footer_CQhXAe": {
@@ -124,22 +150,12 @@
         "footer_developer_name": "Alwer",
         "footer_developer_url": "https://www.usealwer.com"
       }
-    },
-    "links_instagram_grid_LtGNz6": {
-      "type": "links-instagram-grid",
-      "name": "Links - Instagram Grid",
-      "settings": {
-        "social_handle": "@bynyna",
-        "social_link": "",
-        "bg_color": "#faf8f5",
-        "text_color_dark": "#1a1a1a"
-      }
     }
   },
   "order": [
     "main",
     "social_buttons",
-    "links_footer_CQhXAe",
-    "links_instagram_grid_LtGNz6"
+    "instagram_feed_3m4BN9",
+    "links_footer_CQhXAe"
   ]
 }
