@@ -75,15 +75,26 @@
       "settings": {
         "bg_color": "#faf8f5",
         "text_color": "#696969",
-        "footer_copyright": "",
-        "footer_developer_prefix": "© 2026 nyna. Desenvolvido por",
+        "footer_copyright": "© 2026 nyna. Todos os direitos reservados.",
+        "footer_developer_prefix": "Desenvolvido por",
         "footer_developer_name": "Alwer",
         "footer_developer_url": "https://www.usealwer.com"
+      }
+    },
+    "links_instagram_grid_LtGNz6": {
+      "type": "links-instagram-grid",
+      "name": "Links - Instagram Grid",
+      "settings": {
+        "social_handle": "@bynyna",
+        "social_link": "",
+        "bg_color": "#faf8f5",
+        "text_color_dark": "#1a1a1a"
       }
     }
   },
   "order": [
     "main",
-    "links_footer_CQhXAe"
+    "links_footer_CQhXAe",
+    "links_instagram_grid_LtGNz6"
   ]
 }
