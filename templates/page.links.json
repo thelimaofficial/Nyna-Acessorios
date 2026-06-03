@@ -69,21 +69,21 @@
         "text_color_dark": "#b08f7a"
       }
     },
-    "instagram_feed_cRtnKL": {
-      "type": "instagram-feed",
-      "disabled": true,
-      "name": "Instagram Feed",
+    "links_footer_CQhXAe": {
+      "type": "links-footer",
+      "name": "Links - Rodapé",
       "settings": {
-        "heading": "@bynyna",
-        "custom_html": "<div id=\"insta-feed\"></div>",
-        "show_button": false,
-        "button_label": "VER MAIS NO INSTAGRAM",
-        "button_link": "https://instagram.com/bynyna"
+        "bg_color": "#B08F7A",
+        "text_color": "#ffffff",
+        "footer_copyright": "© 2026 nyna. Todos os direitos reservados.",
+        "footer_developer_prefix": "Desenvolvido por",
+        "footer_developer_name": "Alwer",
+        "footer_developer_url": ""
       }
     }
   },
   "order": [
     "main",
-    "instagram_feed_cRtnKL"
+    "links_footer_CQhXAe"
   ]
 }
