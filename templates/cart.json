@@ -11,10 +11,22 @@
   "sections": {
     "main": {
       "type": "cart",
-      "settings": {}
+      "settings": {
+        "installments_number": 3,
+        "recommendations_heading": "Você também pode gostar",
+        "recommendations_collection": ""
+      }
+    },
+    "about_values_hci8a3": {
+      "type": "about-values",
+      "name": "Nossos Valores",
+      "settings": {
+        "heading": ""
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "about_values_hci8a3"
   ]
 }
