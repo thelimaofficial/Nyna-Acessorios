@@ -152,48 +152,6 @@
       </div>
     {%- endif -%}
 
-    <!-- Grade de Benefícios -->
-    <div class="cart-page__features">
-      <div class="cart-page__feature-item">
-        <div class="cart-page__feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 3h12l4 6-10 12L2 9z"/>
-            <path d="M11 3 8 9l4 12 4-12-3-6"/>
-            <path d="M2 9h20"/>
-          </svg>
-        </div>
-        <h3>QUALIDADE</h3>
-        <p>Selecionamos o melhor para você.</p>
-      </div>
-      <div class="cart-page__feature-item">
-        <div class="cart-page__feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275z"/>
-          </svg>
-        </div>
-        <h3>ESSÊNCIA</h3>
-        <p>Delicadeza e modernidade em cada escolha.</p>
-      </div>
-      <div class="cart-page__feature-item">
-        <div class="cart-page__feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
-          </svg>
-        </div>
-        <h3>PRESENÇA</h3>
-        <p>Acessórios que realçam sua melhor versão.</p>
-      </div>
-      <div class="cart-page__feature-item">
-        <div class="cart-page__feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
-        </div>
-        <h3>DETALHES</h3>
-        <p>Feito para durar e te acompanhar sempre.</p>
-      </div>
-    </div>
-
     <!-- Recomendações de Produtos -->
     {%- if cart.item_count > 0 -%}
       <div class="product-recommendations" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ cart.items.first.product_id }}&limit=5">
@@ -697,65 +655,6 @@
     stroke: var(--color-text-secondary);
   }
 
-  /* Benefícios */
-  .cart-page__features {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    margin-top: 5rem;
-    padding-block: 3rem;
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .cart-page__feature-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding-inline: 1.5rem;
-    position: relative;
-  }
-
-  .cart-page__feature-item:not(:last-child)::after {
-    content: "";
-    position: absolute;
-    top: 15%;
-    right: 0;
-    height: 70%;
-    width: 1px;
-    background-color: var(--color-border);
-  }
-
-  .cart-page__feature-icon {
-    width: 32px;
-    height: 32px;
-    color: var(--color-accent);
-    margin-bottom: 1.25rem;
-  }
-
-  .cart-page__feature-icon svg {
-    width: 100%;
-    height: 100%;
-    stroke-width: 1.25;
-  }
-
-  .cart-page__feature-item h3 {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    color: var(--color-foreground);
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-  }
-
-  .cart-page__feature-item p {
-    font-size: 0.8125rem;
-    color: var(--color-text-secondary);
-    line-height: 1.5;
-    margin: 0;
-    max-width: 24ch;
-  }
-
   /* Vitrine de Recomendações */
   .cart-recommendations {
     margin-top: 5rem;
@@ -779,15 +678,6 @@
     .cart-page__layout {
       grid-template-columns: 1fr;
       gap: 40px;
-    }
-    
-    .cart-page__features {
-      grid-template-columns: repeat(2, 1fr);
-      row-gap: 3rem;
-    }
-
-    .cart-page__feature-item:nth-child(2n)::after {
-      display: none;
     }
     
     .cart-recommendations__grid {
@@ -822,15 +712,6 @@
 
     .cart-page__summary {
       padding: 1.5rem;
-    }
-
-    .cart-page__features {
-      grid-template-columns: 1fr;
-      row-gap: 2.5rem;
-    }
-
-    .cart-page__feature-item::after {
-      display: none !important;
     }
 
     .cart-recommendations__grid {
