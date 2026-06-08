@@ -64,7 +64,7 @@
 
         {%- if paginate.pages > 1 -%}
           <div class="search-page__pagination">
-            {{ paginate | default_pagination }}
+            {% render 'pagination', paginate: paginate %}
           </div>
         {%- endif -%}
       {% endpaginate %}
@@ -282,7 +282,7 @@
   }
 
   .search-page__pagination {
-    margin-top: 2rem;
+    margin-top: 0;
     text-align: center;
   }
 

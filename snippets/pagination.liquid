@@ -1,0 +1,142 @@
+{% doc %}
+  Renders a custom pagination component with square/rounded buttons and chevron icons.
+
+  @param {object} paginate - The Shopify paginate object
+
+  @example
+  {% render 'pagination', paginate: paginate %}
+{% enddoc %}
+
+<div class="pagination">
+  {%- if paginate.previous -%}
+    <a href="{{ paginate.previous.url }}" class="pagination__item pagination__btn" aria-label="Página anterior">
+      <svg class="pagination__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </a>
+  {%- else -%}
+    <span class="pagination__item pagination__btn is-disabled" aria-label="Página anterior">
+      <svg class="pagination__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </span>
+  {%- endif -%}
+
+  {%- for part in paginate.parts -%}
+    {%- if part.is_link -%}
+      <a href="{{ part.url }}" class="pagination__item pagination__link">{{ part.title }}</a>
+    {%- else -%}
+      {%- if part.title == paginate.current_page -%}
+        <span class="pagination__item pagination__link is-active" aria-current="page">{{ part.title }}</span>
+      {%- else -%}
+        <span class="pagination__item pagination__deco">{{ part.title }}</span>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if paginate.next -%}
+    <a href="{{ paginate.next.url }}" class="pagination__item pagination__btn" aria-label="Próxima página">
+      <svg class="pagination__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </a>
+  {%- else -%}
+    <span class="pagination__item pagination__btn is-disabled" aria-label="Próxima página">
+      <svg class="pagination__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </span>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .pagination {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.4rem, 1.5vw, 0.75rem);
+    width: 100%;
+    margin-block: clamp(3rem, 6vw, 5rem);
+    font-family: var(--font-primary--family), 'Inter', sans-serif;
+  }
+
+  .pagination__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    height: clamp(2.25rem, 4vw, 2.625rem);
+    min-width: clamp(2.25rem, 4vw, 2.625rem);
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 8px;
+    border: 1.5px solid var(--color-border, #e0d8d0);
+    color: var(--color-text-secondary, #6b6661);
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .pagination__btn {
+    padding: 0;
+  }
+
+  .pagination__icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: inherit;
+    transition: transform 0.2s ease;
+  }
+
+  .pagination__btn:hover:not(.is-disabled) .pagination__icon {
+    transform: scale(1.1);
+  }
+
+  .pagination__item:hover:not(.is-active):not(.is-disabled):not(.pagination__deco) {
+    border-color: var(--color-accent, #c5a491);
+    color: var(--color-accent, #c5a491);
+    background-color: rgba(197, 164, 145, 0.04);
+  }
+
+  .pagination__item.is-active {
+    background-color: var(--color-accent, #c5a491);
+    border-color: var(--color-accent, #c5a491);
+    color: #fff;
+    cursor: default;
+  }
+
+  .pagination__item.is-disabled {
+    opacity: 0.45;
+    border-color: var(--color-border, #eee);
+    color: var(--color-text-secondary, #999);
+    cursor: not-allowed;
+    background-color: #fafafa;
+  }
+
+  .pagination__deco {
+    border: none;
+    background: transparent;
+    cursor: default;
+    color: var(--color-text-secondary, #6b6661);
+  }
+
+  /* Responsividade: mobile utiliza exatamente o mesmo conceito visual, apenas ajustando tamanhos */
+  @media (max-width: 768px) {
+    .pagination {
+      gap: 0.35rem;
+      margin-block: 2.5rem;
+    }
+    .pagination__item {
+      height: 2.25rem;
+      min-width: 2.25rem;
+      font-size: 0.85rem;
+      border-radius: 6px;
+      border-width: 1.2px;
+    }
+    .pagination__icon {
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+  }
+{% endstylesheet %}
