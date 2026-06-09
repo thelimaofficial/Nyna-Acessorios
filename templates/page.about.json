@@ -27,7 +27,8 @@
     "story": {
       "type": "image-with-text",
       "settings": {
-        "layout": "text_first",
+        "image": "shopify://shop_images/1_65aa1695-0479-4cd9-9069-8804401f367f.png",
+        "layout": "image_first",
         "subheading": "SOBRE NÓS",
         "heading": "Elegância em cada detalhe",
         "text": "<p>Na NYNA Acessórios, acreditamos que a verdadeira elegância está nos detalhes. Nossa curadoria é cuidadosamente selecionada para mulheres que valorizam delicadeza, sofisticação e autenticidade em cada momento da vida.<br/><br/>Cada peça é escolhida para unir beleza, versatilidade e estilo, acompanhando diferentes ocasiões e realçando a personalidade única de quem a usa.<br/><br/>Mais do que acessórios, buscamos oferecer confiança, leveza e inspiração por meio de uma seleção atemporal, criada para valorizar sua essência e tornar cada detalhe ainda mais especial.<br/><br/>Porque a elegância não está no excesso, mas nos pequenos detalhes que fazem toda a diferença.</p>",
