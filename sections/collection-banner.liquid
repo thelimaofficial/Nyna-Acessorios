@@ -1,16 +1,48 @@
-<section class="collection-banner section-{{ section.id }}" aria-label="{{ section.settings.title | default: collection.title }}">
+{%- assign banner_image = nil -%}
+{%- assign banner_title = nil -%}
+{%- assign show_title = section.settings.show_title -%}
+
+{%- for block in section.blocks -%}
+  {%- if block.type == 'collection_customization' -%}
+    {%- assign block_collection_handle = block.settings.collection.handle | default: block.settings.collection -%}
+    {%- if block_collection_handle == collection.handle -%}
+      {%- if block.settings.image != blank -%}
+        {%- assign banner_image = block.settings.image -%}
+      {%- endif -%}
+      {%- if block.settings.title != blank -%}
+        {%- assign banner_title = block.settings.title -%}
+      {%- else -%}
+        {%- assign banner_title = collection.title -%}
+      {%- endif -%}
+      {%- assign show_title = block.settings.show_title -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if banner_image == nil -%}
+  {%- if collection.image != blank -%}
+    {%- assign banner_image = collection.image -%}
+  {%- elsif section.settings.image != blank -%}
+    {%- assign banner_image = section.settings.image -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if banner_title == nil -%}
+  {%- assign banner_title = section.settings.title | default: collection.title -%}
+{%- endif -%}
+
+<section class="collection-banner section-{{ section.id }}" aria-label="{{ banner_title }}">
   <div class="collection-banner__inner">
-    {%- if collection.image != blank -%}
-      {{ collection.image | image_url: width: 2000 | image_tag: class: 'collection-banner__image', loading: 'eager' }}
-    {%- elsif section.settings.image != blank -%}
-      {{ section.settings.image | image_url: width: 2000 | image_tag: class: 'collection-banner__image', loading: 'eager' }}
+    {%- if banner_image != blank -%}
+      {{ banner_image | image_url: width: 2000 | image_tag: class: 'collection-banner__image', loading: 'eager' }}
     {%- else -%}
       <div class="collection-banner__placeholder"></div>
     {%- endif -%}
     
-    {%- if section.settings.show_title -%}
+    {%- if show_title -%}
       <div class="collection-banner__content">
-        <h1 class="collection-banner__title">{{ section.settings.title | default: collection.title }}</h1>
+        <h1 class="collection-banner__title">{{ banner_title }}</h1>
       </div>
     {%- endif -%}
   </div>
@@ -101,6 +133,36 @@
       "id": "title",
       "label": "Heading",
       "info": "Leave empty to use the collection title."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_customization",
+      "name": "Coleção Personalizada",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Coleção"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Banner da Coleção"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título Personalizado",
+          "info": "Deixe em branco para usar o título original da coleção."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_title",
+          "label": "Mostrar título no banner",
+          "default": true
+        }
+      ]
     }
   ],
   "presets": [
