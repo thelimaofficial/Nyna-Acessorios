@@ -59,6 +59,9 @@
         {%- for type in shop.enabled_payment_types -%}
           {{ type | payment_type_svg_tag }}
         {%- endfor -%}
+        {%- unless shop.enabled_payment_types contains 'pix' -%}
+          {{ 'pix' | payment_type_svg_tag }}
+        {%- endunless -%}
       {%- endif -%}
     </div>
 
