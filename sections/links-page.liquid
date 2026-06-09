@@ -1,6 +1,6 @@
 {%- layout 'links' -%}
 
-<div class="links-page-container" style="--links-bg-color: {{ section.settings.bg_color }}; --links-accent-color: {{ section.settings.accent_color }}; --links-text-color-on-accent: {{ section.settings.text_color_on_accent }}; --links-text-color-dark: {{ section.settings.text_color_dark }};">
+<div class="links-page-container" style="--links-bg-color: {{ section.settings.bg_color }}; --links-accent-color: {{ section.settings.accent_color }}; --links-text-color-on-accent: {{ section.settings.text_color_on_accent }}; --links-text-color-dark: {{ section.settings.text_color_dark }}; --links-icon-size: {{ section.settings.icon_size }}px;">
   <div class="links-content-wrapper">
     <header class="links-header">
       {%- if section.settings.logo_image != blank -%}
@@ -27,7 +27,20 @@
     <main class="links-main-buttons">
       {%- for block in section.blocks -%}
         {%- if block.type == 'link' -%}
-          <a href="{{ block.settings.url | default: '#' }}" class="links-button" {{ block.shopify_attributes }}>
+          {%- assign btn_bg = section.settings.accent_color -%}
+          {%- if block.settings.button_bg_color != blank and block.settings.button_bg_color != 'rgba(0,0,0,0)' -%}
+            {%- assign btn_bg = block.settings.button_bg_color -%}
+          {%- endif -%}
+          {%- assign btn_text = section.settings.text_color_on_accent -%}
+          {%- if block.settings.button_text_color != blank and block.settings.button_text_color != 'rgba(0,0,0,0)' -%}
+            {%- assign btn_text = block.settings.button_text_color -%}
+          {%- endif -%}
+          <a 
+            href="{{ block.settings.url | default: '#' }}" 
+            class="links-button" 
+            style="--btn-bg: {{ btn_bg }}; --btn-text: {{ btn_text }};" 
+            {{ block.shopify_attributes }}
+          >
             <span class="links-button__icon-left">
               {%- if block.settings.icon_image != blank -%}
                 <img 
@@ -142,8 +155,8 @@
     justify-content: space-between;
     width: 100%;
     padding: 15px 24px;
-    background-color: var(--links-accent-color);
-    color: var(--links-text-color-on-accent);
+    background-color: var(--btn-bg, var(--links-accent-color));
+    color: var(--btn-text, var(--links-text-color-on-accent));
     border-radius: 50px;
     text-decoration: none;
     font-size: 13px;
@@ -164,8 +177,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 16px;
-    height: 16px;
+    width: var(--links-icon-size, 16px);
+    height: var(--links-icon-size, 16px);
     flex-shrink: 0;
   }
   .links-button__custom-icon {
@@ -277,6 +290,16 @@
       "id": "text_color_dark",
       "label": "Cor do Texto Principal",
       "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Tamanho dos Ícones (Botões)",
+      "default": 16
     }
   ],
   "blocks": [
@@ -332,6 +355,22 @@
           "type": "html",
           "id": "custom_svg",
           "label": "SVG Customizado (opcional - sobrepõe a seleção acima)"
+        },
+        {
+          "type": "header",
+          "content": "Cores Customizadas (Opcional)"
+        },
+        {
+          "type": "color",
+          "id": "button_bg_color",
+          "label": "Cor de Fundo Customizada",
+          "info": "Se deixada em branco, usará a cor padrão de fundo dos botões definida na seção."
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": "Cor do Texto Customizada",
+          "info": "Se deixada em branco, usará a cor padrão do texto definida na seção."
         }
       ]
     }

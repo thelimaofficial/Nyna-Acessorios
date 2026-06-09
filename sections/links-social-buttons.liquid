@@ -1,10 +1,19 @@
 <div class="links-social-buttons-section" style="--bg-color: {{ section.settings.bg_color }}; --padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px;">
-  <div class="links-social-buttons-container" style="--btn-size: {{ section.settings.button_size }}px; --btn-bg: {{ section.settings.button_bg_color }}; --btn-color: {{ section.settings.button_icon_color }}; --gap: {{ section.settings.gap }}px;">
+  <div class="links-social-buttons-container" style="--btn-size: {{ section.settings.button_size }}px; --btn-bg: {{ section.settings.button_bg_color }}; --btn-color: {{ section.settings.button_icon_color }}; --gap: {{ section.settings.gap }}px; --icon-size: {{ section.settings.icon_size }}%;">
     {%- for block in section.blocks -%}
       {%- if block.type == 'social_link' -%}
+        {%- assign btn_bg = section.settings.button_bg_color -%}
+        {%- if block.settings.button_bg_color != blank and block.settings.button_bg_color != 'rgba(0,0,0,0)' -%}
+          {%- assign btn_bg = block.settings.button_bg_color -%}
+        {%- endif -%}
+        {%- assign btn_color = section.settings.button_icon_color -%}
+        {%- if block.settings.button_icon_color != blank and block.settings.button_icon_color != 'rgba(0,0,0,0)' -%}
+          {%- assign btn_color = block.settings.button_icon_color -%}
+        {%- endif -%}
         <a 
           href="{{ block.settings.url | default: '#' }}" 
           class="links-social-button" 
+          style="--btn-bg: {{ btn_bg }}; --btn-color: {{ btn_color }};" 
           target="_blank" 
           rel="noopener" 
           aria-label="{{ block.settings.aria_label | default: block.settings.network | escape }}"
@@ -79,8 +88,8 @@
 
   .links-social-button img,
   .links-social-button svg {
-    width: 46%;
-    height: 46%;
+    width: var(--icon-size, 46%);
+    height: var(--icon-size, 46%);
     object-fit: contain;
     fill: currentColor;
     display: block;
@@ -116,6 +125,17 @@
     {
       "type": "header",
       "content": "Dimensões"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "%",
+      "label": "Tamanho dos Ícones (Botões Sociais)",
+      "default": 46,
+      "info": "Tamanho proporcional do ícone em relação ao botão."
     },
     {
       "type": "range",
@@ -215,6 +235,22 @@
           "type": "html",
           "id": "custom_svg",
           "label": "Código SVG Customizado"
+        },
+        {
+          "type": "header",
+          "content": "Cores Customizadas (Opcional)"
+        },
+        {
+          "type": "color",
+          "id": "button_bg_color",
+          "label": "Cor de Fundo Customizada",
+          "info": "Se deixada em branco, usará a cor padrão de fundo dos botões definida na seção."
+        },
+        {
+          "type": "color",
+          "id": "button_icon_color",
+          "label": "Cor do Ícone Customizada",
+          "info": "Se deixada em branco, usará a cor padrão do ícone definida na seção."
         }
       ]
     }
