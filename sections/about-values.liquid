@@ -71,8 +71,11 @@
   }
 
   .about-values__grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    column-gap: 2rem;
+    row-gap: 2rem;
     background-color: transparent;
     padding-block: 2rem;
   }
@@ -84,6 +87,9 @@
     text-align: center;
     padding-inline: 1.5rem;
     position: relative;
+    width: calc(25% - 1.5rem);
+    min-width: 200px;
+    max-width: 260px;
   }
 
   /* Thin divider line between columns */
@@ -91,7 +97,7 @@
     content: "";
     position: absolute;
     top: 10%;
-    right: 0;
+    right: -1rem;
     bottom: 10%;
     width: 1px;
     background-color: var(--color-border, #e5dfd8);
@@ -141,21 +147,32 @@
 
   @media (max-width: 990px) {
     .about-values__grid {
-      grid-template-columns: repeat(2, 1fr);
+      column-gap: 1.5rem;
       row-gap: 3rem;
       padding: 3rem 2rem;
+    }
+
+    .about-values__item {
+      width: calc(50% - 0.75rem);
+      max-width: none;
     }
 
     .about-values__item:nth-child(2n)::after {
       display: none;
     }
+
+    .about-values__item:not(:last-child)::after {
+      right: -0.75rem;
+    }
   }
 
   @media (max-width: 576px) {
     .about-values__grid {
-      grid-template-columns: 1fr;
-      row-gap: 2.5rem;
       padding: 2.5rem 1rem;
+    }
+
+    .about-values__item {
+      width: 100%;
     }
 
     .about-values__item::after {
