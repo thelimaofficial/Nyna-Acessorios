@@ -80,21 +80,13 @@
             "collection": "",
             "title": "Pulseiras"
           }
-        },
-        "glasses": {
-          "type": "collection",
-          "settings": {
-            "collection": "",
-            "title": "Óculos"
-          }
         }
       },
       "block_order": [
         "rings",
         "earrings",
         "necklaces",
-        "bracelets",
-        "glasses"
+        "bracelets"
       ],
       "settings": {
         "heading": "Categorias",
@@ -129,7 +121,12 @@
       "type": "instagram-feed",
       "settings": {
         "heading": "@bynyna",
-        "custom_html": "<div id=\"insta-feed\"></div>"
+        "heading_size": 36,
+        "heading_size_mobile": 24,
+        "custom_html": "<div id=\"insta-feed\"></div>",
+        "show_button": true,
+        "button_label": "VER MAIS NO INSTAGRAM",
+        "button_link": "https://instagram.com/bynyna"
       }
     }
   },
