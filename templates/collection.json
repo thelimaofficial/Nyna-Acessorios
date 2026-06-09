@@ -11,6 +11,64 @@
   "sections": {
     "banner": {
       "type": "collection-banner",
+      "blocks": {
+        "collection_customization_PH6BFW": {
+          "type": "collection_customization",
+          "settings": {
+            "collection": "colecao-canarinho",
+            "title": "",
+            "show_title": false
+          }
+        },
+        "collection_customization_ebcaqH": {
+          "type": "collection_customization",
+          "settings": {
+            "collection": "joias",
+            "title": "",
+            "show_title": false
+          }
+        },
+        "collection_customization_NYdbp3": {
+          "type": "collection_customization",
+          "settings": {
+            "collection": "pulseiras",
+            "title": "",
+            "show_title": false
+          }
+        },
+        "collection_customization_mrwPMh": {
+          "type": "collection_customization",
+          "settings": {
+            "collection": "colares",
+            "title": "",
+            "show_title": false
+          }
+        },
+        "collection_customization_7MTtij": {
+          "type": "collection_customization",
+          "settings": {
+            "collection": "brincos",
+            "title": "",
+            "show_title": false
+          }
+        },
+        "collection_customization_UwQrA8": {
+          "type": "collection_customization",
+          "settings": {
+            "collection": "aneis",
+            "title": "",
+            "show_title": false
+          }
+        }
+      },
+      "block_order": [
+        "collection_customization_PH6BFW",
+        "collection_customization_ebcaqH",
+        "collection_customization_NYdbp3",
+        "collection_customization_mrwPMh",
+        "collection_customization_7MTtij",
+        "collection_customization_UwQrA8"
+      ],
       "settings": {
         "show_title": true,
         "title": ""
