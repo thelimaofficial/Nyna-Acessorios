@@ -14,12 +14,12 @@
       "settings": {
         "full_width": true,
         "overlay_opacity": 30,
-        "text_alignment": "left",
+        "text_alignment": "center",
         "eyebrow": "SOBRE NÓS",
         "heading": "Mais que acessórios. Uma extensão da sua essência.",
         "description": "",
         "button_label": "CONHEÇA A NYNA",
-        "button_link": "shopify://collections",
+        "button_link": "shopify://collections/all",
         "desktop_height": 600,
         "mobile_height": 450
       }
@@ -27,10 +27,11 @@
     "story": {
       "type": "image-with-text",
       "settings": {
+        "image": "shopify://shop_images/Logo-nyna.png",
         "layout": "text_first",
-        "subheading": "",
-        "heading": "Titulo",
-        "text": "<p>Texto</p>",
+        "subheading": "SOBRE NÓS",
+        "heading": "Nyna Acessórios",
+        "text": "<p>Na Nyna Acessórios, acreditamos que cada detalhe faz a diferença. Mais do que simples acessórios, nossas peças são escolhidas para acompanhar momentos especiais, expressar personalidade e realçar a beleza única de cada mulher.<br/><br/>Nossa história nasceu da paixão pela elegância, pelo cuidado nos detalhes e pelo desejo de oferecer acessórios que unem qualidade, estilo e delicadeza. <br/><br/>Sabemos que um brinco, um colar, uma pulseira ou um anel pode ir muito além de complementar um visual. Eles podem transmitir confiança, marcar lembranças e refletir quem você é. Por isso, buscamos oferecer produtos que encantem não apenas pela beleza, mas também pela experiência e pelo carinho presentes em cada etapa do nosso trabalho.<br/><br/>Agradecemos por escolher a Nyna Acessórios. É um prazer fazer parte dos seus momentos e contribuir para que você se sinta ainda mais bonita, confiante e especial.</p>",
         "button_label": "",
         "button_link": ""
       }
@@ -98,6 +99,8 @@
       "type": "instagram-feed",
       "settings": {
         "heading": "@bynyna",
+        "heading_size": 36,
+        "heading_size_mobile": 24,
         "custom_html": "<div id=\"insta-feed\"></div>",
         "show_button": true,
         "button_label": "VER MAIS NO INSTAGRAM",
