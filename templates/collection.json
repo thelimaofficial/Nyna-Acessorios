@@ -11,7 +11,24 @@
   "sections": {
     "banner": {
       "type": "collection-banner",
-      "settings": {}
+      "blocks": {
+        "collection_customization_i7WYne": {
+          "type": "collection_customization",
+          "settings": {
+            "collection": "aneis",
+            "image": "shopify://shop_images/Aneis.png",
+            "title": "",
+            "show_title": false
+          }
+        }
+      },
+      "block_order": [
+        "collection_customization_i7WYne"
+      ],
+      "settings": {
+        "show_title": true,
+        "title": ""
+      }
     },
     "main": {
       "type": "collection",
@@ -20,35 +37,35 @@
           "type": "category_menu",
           "settings": {
             "collection": "brincos",
-            "menu": "menu-produtos"
+            "menu": ""
           }
         },
         "category_menu_RF7yzA": {
           "type": "category_menu",
           "settings": {
             "collection": "colares",
-            "menu": "menu-produtos"
+            "menu": "menu-joias"
           }
         },
         "category_menu_P6paaC": {
           "type": "category_menu",
           "settings": {
-            "collection": "brincos-1",
-            "menu": "menu-produtos"
+            "collection": "brincos",
+            "menu": "menu-joias"
           }
         },
         "category_menu_3az6QG": {
           "type": "category_menu",
           "settings": {
             "collection": "joias",
-            "menu": "menu-produtos"
+            "menu": "menu-joias"
           }
         },
         "category_menu_EWPTHd": {
           "type": "category_menu",
           "settings": {
             "collection": "aneis",
-            "menu": "menu-produtos"
+            "menu": "menu-joias"
           }
         }
       },
@@ -65,7 +82,12 @@
       "type": "instagram-feed",
       "settings": {
         "heading": "@bynyna",
-        "custom_html": "<div id=\"insta-feed\"></div>"
+        "heading_size": 36,
+        "heading_size_mobile": 24,
+        "custom_html": "<div id=\"insta-feed\"></div>",
+        "show_button": true,
+        "button_label": "VER MAIS NO INSTAGRAM",
+        "button_link": "https://instagram.com/bynyna"
       }
     }
   },
