@@ -4,8 +4,18 @@
 
 {%- for block in section.blocks -%}
   {%- if block.type == 'collection_customization' -%}
-    {%- assign block_collection_handle = block.settings.collection.handle | default: block.settings.collection -%}
-    {%- if block_collection_handle == collection.handle -%}
+    {%- assign block_collection = block.settings.collection -%}
+    {%- assign match = false -%}
+    
+    {%- if block_collection == collection -%}
+      {%- assign match = true -%}
+    {%- elsif block_collection.handle == collection.handle -%}
+      {%- assign match = true -%}
+    {%- elsif block_collection == collection.handle -%}
+      {%- assign match = true -%}
+    {%- endif -%}
+
+    {%- if match -%}
       {%- if block.settings.image != blank -%}
         {%- assign banner_image = block.settings.image -%}
       {%- endif -%}
