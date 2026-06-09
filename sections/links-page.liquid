@@ -35,10 +35,14 @@
           {%- if block.settings.button_text_color != blank and block.settings.button_text_color != 'rgba(0,0,0,0)' -%}
             {%- assign btn_text = block.settings.button_text_color -%}
           {%- endif -%}
+          {%- assign btn_icon_size = section.settings.icon_size -%}
+          {%- if block.settings.icon_size > 0 -%}
+            {%- assign btn_icon_size = block.settings.icon_size -%}
+          {%- endif -%}
           <a 
             href="{{ block.settings.url | default: '#' }}" 
             class="links-button" 
-            style="--btn-bg: {{ btn_bg }}; --btn-text: {{ btn_text }};" 
+            style="--btn-bg: {{ btn_bg }}; --btn-text: {{ btn_text }}; --btn-icon-size: {{ btn_icon_size }}px;" 
             {{ block.shopify_attributes }}
           >
             <span class="links-button__icon-left">
@@ -177,8 +181,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--links-icon-size, 16px);
-    height: var(--links-icon-size, 16px);
+    width: var(--btn-icon-size, var(--links-icon-size, 16px));
+    height: var(--btn-icon-size, var(--links-icon-size, 16px));
     flex-shrink: 0;
   }
   .links-button__custom-icon {
@@ -295,7 +299,7 @@
       "type": "range",
       "id": "icon_size",
       "min": 12,
-      "max": 32,
+      "max": 64,
       "step": 2,
       "unit": "px",
       "label": "Tamanho dos Ícones (Botões)",
@@ -371,6 +375,17 @@
           "id": "button_text_color",
           "label": "Cor do Texto Customizada",
           "info": "Se deixada em branco, usará a cor padrão do texto definida na seção."
+        },
+        {
+          "type": "range",
+          "id": "icon_size",
+          "min": 0,
+          "max": 64,
+          "step": 2,
+          "unit": "px",
+          "label": "Tamanho do Ícone",
+          "info": "Defina como 0 para usar o tamanho padrão da seção.",
+          "default": 0
         }
       ]
     }
