@@ -11,20 +11,6 @@
   "sections": {
     "banner": {
       "type": "collection-banner",
-      "blocks": {
-        "collection_customization_i7WYne": {
-          "type": "collection_customization",
-          "settings": {
-            "collection": "aneis",
-            "image": "shopify://shop_images/Aneis.png",
-            "title": "",
-            "show_title": false
-          }
-        }
-      },
-      "block_order": [
-        "collection_customization_i7WYne"
-      ],
       "settings": {
         "show_title": true,
         "title": ""
@@ -33,35 +19,35 @@
     "main": {
       "type": "collection",
       "blocks": {
-        "category_menu_xhLPdb": {
-          "type": "category_menu",
-          "settings": {
-            "collection": "brincos",
-            "menu": ""
-          }
-        },
-        "category_menu_RF7yzA": {
-          "type": "category_menu",
-          "settings": {
-            "collection": "colares",
-            "menu": "menu-joias"
-          }
-        },
-        "category_menu_P6paaC": {
-          "type": "category_menu",
-          "settings": {
-            "collection": "brincos",
-            "menu": "menu-joias"
-          }
-        },
-        "category_menu_3az6QG": {
+        "category_menu_GfrXpU": {
           "type": "category_menu",
           "settings": {
             "collection": "joias",
             "menu": "menu-joias"
           }
         },
-        "category_menu_EWPTHd": {
+        "category_menu_9XBTNF": {
+          "type": "category_menu",
+          "settings": {
+            "collection": "pulseiras",
+            "menu": ""
+          }
+        },
+        "category_menu_atrdbU": {
+          "type": "category_menu",
+          "settings": {
+            "collection": "colares",
+            "menu": "menu-joias"
+          }
+        },
+        "category_menu_8KywzX": {
+          "type": "category_menu",
+          "settings": {
+            "collection": "brincos",
+            "menu": "menu-joias"
+          }
+        },
+        "category_menu_CHkbBT": {
           "type": "category_menu",
           "settings": {
             "collection": "aneis",
@@ -70,11 +56,11 @@
         }
       },
       "block_order": [
-        "category_menu_xhLPdb",
-        "category_menu_RF7yzA",
-        "category_menu_P6paaC",
-        "category_menu_3az6QG",
-        "category_menu_EWPTHd"
+        "category_menu_GfrXpU",
+        "category_menu_9XBTNF",
+        "category_menu_atrdbU",
+        "category_menu_8KywzX",
+        "category_menu_CHkbBT"
       ],
       "settings": {}
     },
