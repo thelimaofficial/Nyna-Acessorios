@@ -16,55 +16,71 @@
         "link_DELpcz": {
           "type": "link",
           "settings": {
-            "text": "VAI BRASILLL",
-            "url": "",
+            "text": "Coleção canarinho",
+            "url": "shopify://collections/colecao-canarinho",
             "icon": "sparkle",
-            "custom_svg": ""
+            "icon_image": "shopify://shop_images/brasilbandeira.png",
+            "custom_svg": "",
+            "button_bg_color": "#009537",
+            "button_text_color": "",
+            "icon_size": 36
           }
         },
         "link_4bNWLM": {
           "type": "link",
           "settings": {
             "text": "Anéis",
-            "url": "",
+            "url": "shopify://collections/aneis",
             "icon": "sparkle",
-            "custom_svg": ""
+            "custom_svg": "",
+            "button_bg_color": "#B08F7A",
+            "button_text_color": "",
+            "icon_size": 0
+          }
+        },
+        "link_kCzfQT": {
+          "type": "link",
+          "settings": {
+            "text": "Brincos",
+            "url": "shopify://collections/brincos",
+            "icon": "sparkle",
+            "custom_svg": "",
+            "button_bg_color": "",
+            "button_text_color": "",
+            "icon_size": 0
           }
         },
         "link_R8tPt6": {
           "type": "link",
           "settings": {
-            "text": "NOVA COLEÇÃO",
+            "text": "Colares",
             "url": "",
             "icon": "sparkle",
-            "custom_svg": ""
+            "custom_svg": "",
+            "button_bg_color": "",
+            "button_text_color": "",
+            "icon_size": 0
           }
         },
         "link_dRT4Nw": {
           "type": "link",
           "settings": {
-            "text": "whatsapp",
-            "url": "",
+            "text": "Pulseiras",
+            "url": "shopify://collections/pulseiras",
             "icon": "sparkle",
-            "custom_svg": ""
-          }
-        },
-        "link_BnPNVP": {
-          "type": "link",
-          "settings": {
-            "text": "NOVA COLEÇÃO",
-            "url": "",
-            "icon": "sparkle",
-            "custom_svg": ""
+            "custom_svg": "",
+            "button_bg_color": "",
+            "button_text_color": "",
+            "icon_size": 0
           }
         }
       },
       "block_order": [
         "link_DELpcz",
         "link_4bNWLM",
+        "link_kCzfQT",
         "link_R8tPt6",
-        "link_dRT4Nw",
-        "link_BnPNVP"
+        "link_dRT4Nw"
       ],
       "settings": {
         "logo_image": "shopify://shop_images/Logo-nyna.png",
@@ -72,11 +88,12 @@
         "logo_width_mobile": 200,
         "logo_text": "nyna",
         "logo_text_sub": "ACESSÓRIOS",
-        "subtitle": "Elegância em cada detalhe.",
+        "subtitle": "✨ Torça com brilho e elegância ✨",
         "bg_color": "#faf8f5",
         "accent_color": "#b08f7a",
         "text_color_on_accent": "#ffffff",
-        "text_color_dark": "#b08f7a"
+        "text_color_dark": "#009537",
+        "icon_size": 16
       }
     },
     "social_buttons": {
@@ -88,7 +105,9 @@
             "network": "whatsapp",
             "url": "https://wa.me/5511926015138?text=Olá!%20Vim%20pelo%20Instagram%20e%20gostaria%20de%20conhecer%20os%20acessórios%20da%20loja.",
             "aria_label": "",
-            "custom_svg": ""
+            "custom_svg": "",
+            "button_bg_color": "",
+            "button_icon_color": ""
           }
         },
         "instagram": {
@@ -97,7 +116,9 @@
             "network": "instagram",
             "url": "https://www.instagram.com/bynyna/",
             "aria_label": "",
-            "custom_svg": ""
+            "custom_svg": "",
+            "button_bg_color": "",
+            "button_icon_color": ""
           }
         },
         "tiktok": {
@@ -106,7 +127,9 @@
             "network": "tiktok",
             "url": "https://www.tiktok.com/@byynyna",
             "aria_label": "",
-            "custom_svg": ""
+            "custom_svg": "",
+            "button_bg_color": "",
+            "button_icon_color": ""
           }
         },
         "email": {
@@ -115,7 +138,9 @@
             "network": "email",
             "url": "mailto:byynyna@gmail.com",
             "aria_label": "",
-            "custom_svg": ""
+            "custom_svg": "",
+            "button_bg_color": "",
+            "button_icon_color": ""
           }
         }
       },
@@ -129,6 +154,7 @@
         "bg_color": "#faf8f5",
         "button_bg_color": "#b08f7a",
         "button_icon_color": "#ffffff",
+        "icon_size": 46,
         "button_size": 52,
         "gap": 16,
         "padding_top": 20,
@@ -138,7 +164,7 @@
     "instagram_feed_3m4BN9": {
       "type": "instagram-feed",
       "custom_css": [
-        "h2 {color: #b08f7a;}"
+        "h2 {color: #101010;}"
       ],
       "name": "Instagram Feed",
       "settings": {
@@ -153,6 +179,7 @@
     },
     "links_footer_CQhXAe": {
       "type": "links-footer",
+      "custom_css": [],
       "name": "Links - Rodapé",
       "settings": {
         "bg_color": "#faf8f5",
