@@ -41,16 +41,22 @@
         {%- if forloop.last == false -%}
           {%- assign is_mega_menu = false -%}
           {%- assign handle_check = link.title | handleize -%}
-          {%- if handle_check == 'joias' and linklists['menu-joias'].links.size > 0 -%}
+          {%- assign mega_menu_links = nil -%}
+
+          {%- if link.links.size > 0 -%}
             {%- assign is_mega_menu = true -%}
+            {%- assign mega_menu_links = link.links -%}
+          {%- elsif handle_check == 'joias' and linklists['menu-joias'].links.size > 0 -%}
+            {%- assign is_mega_menu = true -%}
+            {%- assign mega_menu_links = linklists['menu-joias'].links -%}
           {%- endif -%}
 
           {%- assign is_active = link.active -%}
           {%- if is_mega_menu -%}
-            {%- if collection.handle == 'joias' -%}
+            {%- if handle_check == 'joias' and collection.handle == 'joias' -%}
               {%- assign is_active = true -%}
             {%- else -%}
-              {%- for child_link in linklists['menu-joias'].links -%}
+              {%- for child_link in mega_menu_links -%}
                 {%- if request.path == child_link.url or collection.url == child_link.url or child_link.active -%}
                   {%- assign is_active = true -%}
                 {%- endif -%}
@@ -81,7 +87,7 @@
               <div class="mega-menu" aria-hidden="true" data-mega-menu>
                 <div class="mega-menu__inner">
                   <div class="mega-menu__list">
-                    {%- for child_link in linklists['menu-joias'].links -%}
+                    {%- for child_link in mega_menu_links -%}
                       <a href="{{ child_link.url }}" class="mega-menu__link">{{ child_link.title }}</a>
                     {%- endfor -%}
                   </div>
