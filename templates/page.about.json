@@ -27,10 +27,9 @@
     "story": {
       "type": "image-with-text",
       "settings": {
-        "image": "shopify://shop_images/Aneis.png",
         "layout": "text_first",
         "subheading": "SOBRE NÓS",
-        "heading": "Nyna Acessórios",
+        "heading": "Elegância em cada detalhe",
         "text": "<p>Na Nyna Acessórios, acreditamos que cada detalhe faz a diferença. Mais do que simples acessórios, nossas peças são escolhidas para acompanhar momentos especiais, expressar personalidade e realçar a beleza única de cada mulher.<br/><br/>Nossa história nasceu da paixão pela elegância, pelo cuidado nos detalhes e pelo desejo de oferecer acessórios que unem qualidade, estilo e delicadeza. <br/><br/>Sabemos que um brinco, um colar, uma pulseira ou um anel pode ir muito além de complementar um visual. Eles podem transmitir confiança, marcar lembranças e refletir quem você é. Por isso, buscamos oferecer produtos que encantem não apenas pela beleza, mas também pela experiência e pelo carinho presentes em cada etapa do nosso trabalho.<br/><br/>Agradecemos por escolher a Nyna Acessórios. É um prazer fazer parte dos seus momentos e contribuir para que você se sinta ainda mais bonita, confiante e especial.</p>",
         "button_label": "",
         "button_link": ""
@@ -65,23 +64,12 @@
             "title": "QUALIDADE",
             "text": "Selecionamos o melhor para você."
           }
-        },
-        "value_VLp3WC": {
-          "type": "value",
-          "settings": {
-            "icon": "diamond",
-            "image": "shopify://shop_images/favcon.svg",
-            "image_width": 75,
-            "title": "QUALIDADE",
-            "text": "Selecionamos o melhor para você."
-          }
         }
       },
       "block_order": [
         "value_KAT7CP",
         "value_addCW3",
-        "value_z7wydM",
-        "value_VLp3WC"
+        "value_z7wydM"
       ],
       "settings": {
         "heading": "Nossos valores"
