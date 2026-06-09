@@ -11,7 +11,27 @@
   "sections": {
     "main": {
       "type": "contact",
-      "settings": {}
+      "settings": {
+        "heading": "Precisando de ajuda?",
+        "text": "<p>Estamos disponíveis para ajudar você em cada<br/>etapa da sua experiencia</p>",
+        "first_name_placeholder": "Nome",
+        "last_name_placeholder": "Sobrenome",
+        "email_placeholder": "Email",
+        "subject_placeholder": "Assunto",
+        "message_placeholder": "Mensagem",
+        "button_label": "Enviar mensagem",
+        "info_aria_label": "Informações de contato",
+        "email_title": "Email",
+        "email": "sacbynyna@gmail.com",
+        "email_note": "Respondemos em até 24h úteis",
+        "phone_title": "WhatsApp",
+        "phone": "(11)92601-5138",
+        "phone_link": "https://wa.me/5511989310950",
+        "phone_note": "Segunda a sexta, das 09h às 18h.",
+        "hours_title": "Horário de atendimento",
+        "hours_text": "<p>Segunda a sexta-feira<br/>09h às 18h.</p>",
+        "success_message": "Obrigada pelo contato. Retornaremos em breve."
+      }
     }
   },
   "order": [
