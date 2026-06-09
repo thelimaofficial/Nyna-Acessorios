@@ -158,7 +158,8 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 15px 24px;
+    min-height: 52px;
+    padding: 6px 24px;
     background-color: var(--btn-bg, var(--links-accent-color));
     color: var(--btn-text, var(--links-text-color-on-accent));
     border-radius: 50px;
@@ -176,13 +177,20 @@
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     filter: brightness(0.95);
   }
-  .links-button__icon-left,
-  .links-button__icon-right {
+  .links-button__icon-left {
     display: flex;
     align-items: center;
     justify-content: center;
     width: var(--btn-icon-size, var(--links-icon-size, 16px));
     height: var(--btn-icon-size, var(--links-icon-size, 16px));
+    flex-shrink: 0;
+  }
+  .links-button__icon-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
     flex-shrink: 0;
   }
   .links-button__custom-icon {
