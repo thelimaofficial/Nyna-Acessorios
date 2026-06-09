@@ -97,9 +97,9 @@
       "type": "promotional-banner-products",
       "settings": {
         "banner_bg_color": "#c5a491",
-        "banner_text": "banner",
+        "banner_text": "",
         "banner_text_color": "#ffffff",
-        "right_heading": "Custom text",
+        "right_heading": "",
         "right_collection": ""
       }
     },
