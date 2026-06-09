@@ -16,7 +16,7 @@
         "link_DELpcz": {
           "type": "link",
           "settings": {
-            "text": "NOVA COLEÇÃO",
+            "text": "VAI BRASILLL",
             "url": "",
             "icon": "sparkle",
             "custom_svg": ""
@@ -46,7 +46,15 @@
             "text": "whatsapp",
             "url": "",
             "icon": "sparkle",
-            "icon_image": "shopify://shop_images/wpplinks.svg",
+            "custom_svg": ""
+          }
+        },
+        "link_BnPNVP": {
+          "type": "link",
+          "settings": {
+            "text": "NOVA COLEÇÃO",
+            "url": "",
+            "icon": "sparkle",
             "custom_svg": ""
           }
         }
@@ -55,10 +63,11 @@
         "link_DELpcz",
         "link_4bNWLM",
         "link_R8tPt6",
-        "link_dRT4Nw"
+        "link_dRT4Nw",
+        "link_BnPNVP"
       ],
       "settings": {
-        "logo_image": "shopify://shop_images/LogoNyna.svg",
+        "logo_image": "shopify://shop_images/Logo-nyna.png",
         "logo_width": 280,
         "logo_width_mobile": 200,
         "logo_text": "nyna",
@@ -77,9 +86,8 @@
           "type": "social_link",
           "settings": {
             "network": "whatsapp",
-            "url": "",
+            "url": "https://wa.me/5511926015138?text=Olá!%20Vim%20pelo%20Instagram%20e%20gostaria%20de%20conhecer%20os%20acessórios%20da%20loja.",
             "aria_label": "",
-            "custom_icon": "shopify://shop_images/wpplinks.svg",
             "custom_svg": ""
           }
         },
@@ -87,7 +95,7 @@
           "type": "social_link",
           "settings": {
             "network": "instagram",
-            "url": "",
+            "url": "https://www.instagram.com/bynyna/",
             "aria_label": "",
             "custom_svg": ""
           }
@@ -96,7 +104,7 @@
           "type": "social_link",
           "settings": {
             "network": "tiktok",
-            "url": "",
+            "url": "https://www.tiktok.com/@byynyna",
             "aria_label": "",
             "custom_svg": ""
           }
@@ -105,7 +113,7 @@
           "type": "social_link",
           "settings": {
             "network": "email",
-            "url": "",
+            "url": "mailto:byynyna@gmail.com",
             "aria_label": "",
             "custom_svg": ""
           }
@@ -129,6 +137,9 @@
     },
     "instagram_feed_3m4BN9": {
       "type": "instagram-feed",
+      "custom_css": [
+        "h2 {color: #b08f7a;}"
+      ],
       "name": "Instagram Feed",
       "settings": {
         "heading": "@bynyna",
