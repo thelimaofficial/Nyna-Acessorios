@@ -32,12 +32,16 @@
         <div class="promo-banner-products__grid">
           {%- assign collection = section.settings.right_collection -%}
           {%- if collection != blank -%}
-            {%- for product in collection.products limit: 2 -%}
-              {% render 'product-card', product: product %}
+            {%- for product in collection.products limit: 8 -%}
+              <div class="promo-banner-products__slide">
+                {% render 'product-card', product: product %}
+              </div>
             {%- endfor -%}
           {%- else -%}
-            {%- for i in (1..2) -%}
-              {% render 'product-card' %}
+            {%- for i in (1..4) -%}
+              <div class="promo-banner-products__slide">
+                {% render 'product-card' %}
+              </div>
             {%- endfor -%}
           {%- endif -%}
         </div>
@@ -105,9 +109,23 @@
   }
 
   .promo-banner-products__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    padding-bottom: 0.5rem;
+  }
+
+  .promo-banner-products__grid::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  .promo-banner-products__slide {
+    flex: 0 0 65%;
+    scroll-snap-align: start;
+    min-width: 0;
   }
 
   @media (max-width: 768px) {
@@ -124,6 +142,20 @@
     .promo-banner-products__grid {
       gap: 1rem;
     }
+    .promo-banner-products__slide {
+      flex: 0 0 75%;
+    }
+  }
+
+  /* Fix for the strange hover jumping behavior */
+  .promo-banner-products__grid .product-card {
+    margin-bottom: 0 !important;
+  }
+  .promo-banner-products__grid .product-card:hover {
+    margin-bottom: 0 !important;
+  }
+  .promo-banner-products__grid .product-card__sizes-wrapper {
+    display: none !important;
   }
 {% endstylesheet %}
 
