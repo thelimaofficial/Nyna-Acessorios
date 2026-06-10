@@ -15,12 +15,14 @@
         "slide-1": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/BANNER.png",
+            "image": "shopify://shop_images/3_22.png",
+            "image_mobile": "shopify://shop_images/3_22.png",
+            "entire_banner_link": true,
             "subheading": "",
             "heading": "",
             "description": "",
             "button_label": "",
-            "button_link": "/collections/all"
+            "button_link": "shopify://collections/all"
           }
         }
       },
@@ -89,6 +91,8 @@
         "subheading": "",
         "heading": "Novidades",
         "collection": "",
+        "pull_related_by_type": false,
+        "pull_latest": true,
         "products_to_show": 5,
         "show_view_all": false
       }
