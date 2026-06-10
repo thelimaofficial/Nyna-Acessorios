@@ -21,32 +21,10 @@
             "button_label": "Descubra",
             "button_link": "/collections/all"
           }
-        },
-        "slide-2": {
-          "type": "slide",
-          "settings": {
-            "subheading": "Nova Coleção",
-            "heading": "Brilho atemporal",
-            "description": "Peças exclusivas feitas para destacar sua beleza natural em todas as ocasiões.",
-            "button_label": "Ver Novidades",
-            "button_link": "/collections/new"
-          }
-        },
-        "slide-3": {
-          "type": "slide",
-          "settings": {
-            "subheading": "O Presente Ideal",
-            "heading": "Surpreenda",
-            "description": "Joias selecionadas a dedo para criar momentos inesquecíveis.",
-            "button_label": "Comprar Agora",
-            "button_link": "/collections/gifts"
-          }
         }
       },
       "block_order": [
-        "slide-1",
-        "slide-2",
-        "slide-3"
+        "slide-1"
       ],
       "settings": {}
     },
@@ -56,7 +34,8 @@
         "rings": {
           "type": "collection",
           "settings": {
-            "collection": "",
+            "collection": "aneis",
+            "image": "shopify://shop_images/411.png",
             "title": "Anéis"
           }
         },
@@ -100,7 +79,7 @@
         "banner_text": "",
         "banner_text_color": "#ffffff",
         "right_heading": "",
-        "right_collection": ""
+        "right_collection": "colecao-canarinho"
       }
     },
     "featured-products": {
