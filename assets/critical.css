@@ -284,3 +284,64 @@ body {
   font-size: 0.875rem;
 }
 
+/* Policy Pages */
+.shopify-policy__container {
+  --content-width: min(
+    calc(var(--page-width) - var(--page-margin) * 2),
+    calc(100% - var(--page-margin) * 2)
+  );
+  --content-margin: minmax(var(--page-margin), 1fr);
+  --content-grid: var(--content-margin) var(--content-width) var(--content-margin);
+
+  position: relative;
+  grid-template-columns: var(--content-grid);
+  display: grid;
+  width: 100%;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.shopify-policy__container > * {
+  grid-column: 2;
+}
+
+.shopify-policy__title {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.shopify-policy__body {
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.shopify-policy__body h1,
+.shopify-policy__body h2,
+.shopify-policy__body h3,
+.shopify-policy__body h4 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: var(--color-foreground);
+}
+
+.shopify-policy__body ul,
+.shopify-policy__body ol {
+  margin-bottom: 1rem;
+  padding-left: 2rem;
+}
+
+.shopify-policy__body li {
+  margin-bottom: 0.5rem;
+}
+
+.shopify-policy__body a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.shopify-policy__body a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: none;
+}
+
