@@ -593,6 +593,21 @@
               url.searchParams.set('variant', matchedVariant.id);
               window.history.replaceState({}, '', url);
 
+              const featuredMediaId = matchedVariant.featured_media ? matchedVariant.featured_media.id : (matchedVariant.featured_image ? matchedVariant.featured_image.id : null);
+              if (featuredMediaId) {
+                const targetBtn = document.querySelector(`.product-media__thumbnail-btn[data-media-id="${featuredMediaId}"]`);
+                if (targetBtn) {
+                  targetBtn.click();
+                } else {
+                  const targetImg = document.querySelector(`.product-media__item[data-media-id="${featuredMediaId}"]`);
+                  if (targetImg && !targetImg.classList.contains('is-active')) {
+                    document.querySelectorAll('.product-media__thumbnail-btn').forEach(t => t.classList.remove('is-active'));
+                    document.querySelectorAll('.product-media__item').forEach(img => img.classList.remove('is-active'));
+                    targetImg.classList.add('is-active');
+                  }
+                }
+              }
+
               if (addToCartBtn) {
                 if (matchedVariant.available) {
                   addToCartBtn.disabled = false;
@@ -622,8 +637,23 @@
         const initialVariant = variants.find(v => {
           return v.options.every((opt, index) => opt === initialSelected[index]);
         });
-        if (initialVariant && addToCartBtn) {
-          if (!initialVariant.available) {
+        if (initialVariant) {
+          const featuredMediaId = initialVariant.featured_media ? initialVariant.featured_media.id : (initialVariant.featured_image ? initialVariant.featured_image.id : null);
+          if (featuredMediaId) {
+            const targetBtn = document.querySelector(`.product-media__thumbnail-btn[data-media-id="${featuredMediaId}"]`);
+            if (targetBtn) {
+              targetBtn.click();
+            } else {
+              const targetImg = document.querySelector(`.product-media__item[data-media-id="${featuredMediaId}"]`);
+              if (targetImg && !targetImg.classList.contains('is-active')) {
+                document.querySelectorAll('.product-media__thumbnail-btn').forEach(t => t.classList.remove('is-active'));
+                document.querySelectorAll('.product-media__item').forEach(img => img.classList.remove('is-active'));
+                targetImg.classList.add('is-active');
+              }
+            }
+          }
+
+          if (addToCartBtn && !initialVariant.available) {
             addToCartBtn.disabled = true;
             addToCartBtn.textContent = 'Esgotado';
           }
