@@ -8,12 +8,16 @@
       {%- comment -%} Background image {%- endcomment -%}
       <div class="hero-slide__media">
         {%- if block.settings.image != blank -%}
-          {{
-            block.settings.image
-            | image_url: width: 2000
-            | image_tag: class: 'hero-slide__img', alt: block.settings.image.alt
-            | default: block.settings.heading, loading: 'eager'
-          }}
+          <picture>
+            {%- if block.settings.image_mobile != blank -%}
+              <source media="(max-width: 768px)" srcset="{{ block.settings.image_mobile | image_url: width: 800 }}">
+            {%- endif -%}
+            {{
+              block.settings.image
+              | image_url: width: 2000
+              | image_tag: class: 'hero-slide__img', alt: block.settings.image.alt, loading: 'eager'
+            }}
+          </picture>
         {%- else -%}
           <img
             class="hero-slide__img"
@@ -25,6 +29,10 @@
           >
         {%- endif -%}
       </div>
+
+      {%- if block.settings.entire_banner_link and block.settings.button_link != blank -%}
+        <a href="{{ block.settings.button_link }}" class="hero-slide__stretched-link" aria-label="{{ block.settings.heading | escape | default: 'Banner link' }}"></a>
+      {%- endif -%}
 
       {%- comment -%} Overlay gradient {%- endcomment -%}
       <div class="hero-slide__overlay" aria-hidden="true"></div>
@@ -151,6 +159,12 @@
     opacity: 1;
     visibility: visible;
     z-index: 2;
+  }
+
+  .hero-slide__stretched-link {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
   }
 
   /* ── Background image ── */
@@ -322,6 +336,19 @@
           "type": "image_picker",
           "id": "image",
           "label": "Background image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Background image (Mobile)",
+          "info": "Optional. Image used on mobile screens."
+        },
+        {
+          "type": "checkbox",
+          "id": "entire_banner_link",
+          "label": "Make entire banner clickable",
+          "info": "Requires a Button link to be set.",
+          "default": false
         },
         {
           "type": "text",
