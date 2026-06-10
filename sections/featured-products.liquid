@@ -16,6 +16,17 @@
       {%- for product in collection.products limit: products_to_show -%}
         {% render 'product-card', product: product %}
       {%- endfor -%}
+    {%- elsif section.settings.pull_latest -%}
+      {%- assign recent_products = collections.all.products | sort: 'created_at' | reverse -%}
+      {%- if recent_products.size > 0 -%}
+        {%- for product in recent_products limit: products_to_show -%}
+          {% render 'product-card', product: product %}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..products_to_show) -%}
+          {% render 'product-card' %}
+        {%- endfor -%}
+      {%- endif -%}
     {%- else -%}
       {%- for i in (1..products_to_show) -%}
         {% render 'product-card' %}
@@ -146,6 +157,13 @@
       "type": "collection",
       "id": "collection",
       "label": "Collection"
+    },
+    {
+      "type": "checkbox",
+      "id": "pull_latest",
+      "label": "Auto-pull latest products",
+      "info": "Mostra os produtos mais recentes da loja caso nenhuma coleção seja selecionada.",
+      "default": true
     },
     {
       "type": "range",

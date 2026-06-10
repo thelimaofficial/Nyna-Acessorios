@@ -295,12 +295,13 @@
   /* ── Mobile ── */
   @media (max-width: 768px) {
     .hero-carousel {
-      min-height: 65svh;
-      align-items: flex-end;
+      min-height: unset;
+      aspect-ratio: 16 / 9;
+      align-items: center;
     }
 
     .hero-slide {
-      align-items: flex-end;
+      align-items: center;
     }
 
     .hero-slide__overlay {
@@ -311,7 +312,13 @@
       margin-inline-start: 0;
       max-width: 100%;
       padding-inline: var(--page-margin, 1.25rem);
-      padding-bottom: 4.5rem;
+      padding-bottom: 0;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero-slide__btn {
+      align-self: center;
     }
   }
 {% endstylesheet %}
