@@ -131,7 +131,7 @@
 
   .product-card:hover {
     z-index: 20;
-    margin-bottom: 4px;
+    margin-bottom: 0px;
     transition: margin-bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1), z-index 0s 0s;
   }
 
@@ -202,7 +202,6 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 0.5rem;
     flex-grow: 1;
   }
 
@@ -232,7 +231,7 @@
     flex-direction: column;
     gap: 0.2rem;
     justify-content: center;
-    margin-top: auto;
+    margin-top: 0.5rem;
   }
 
   .product-card__price-compare {
@@ -252,12 +251,13 @@
     overflow: hidden;
     transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, margin-top 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     width: 100%;
+    margin-top: 0;
   }
 
   .product-card:hover .product-card__sizes-wrapper {
     max-height: 68px;
     opacity: 1;
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
   }
 
   .product-card__sizes-inner {
@@ -324,7 +324,7 @@
     cursor: pointer;
     width: 100%;
     max-width: 240px;
-    margin: 0.25rem auto 0;
+    margin: 0.75rem auto 0;
     display: block;
     transition: background-color 0.3s ease, transform 0.2s ease;
     text-transform: uppercase;
@@ -351,7 +351,7 @@
     .product-card__sizes-wrapper {
       max-height: 68px;
       opacity: 1;
-      margin-top: 0.5rem;
+      margin-top: 0.75rem;
     }
     .product-card__size-btn {
       min-width: 32px;
