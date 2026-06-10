@@ -81,6 +81,7 @@
                       <input type="radio" id="Option-{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" 
                              name="options[{{ option.name | escape }}]" 
                              value="{{ value | escape }}"
+                             data-position="{{ option.position }}"
                              {% if option.selected_value == value %}checked{% endif %}
                              data-variant-option>
                       <label for="Option-{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">
@@ -349,6 +350,14 @@
     border-color: #111;
   }
 
+  .product-variant-options label.is-unavailable {
+    opacity: 0.4;
+    text-decoration: line-through;
+    border-color: #eee;
+    background-color: #f9f9f9;
+    color: #999;
+  }
+
   /* Actions */
   .product-actions {
     display: flex;
@@ -531,19 +540,48 @@
     const variantRadios = document.querySelectorAll('[data-variant-option]');
     const variantIdInput = document.querySelector('[data-variant-id]');
     const variantsJsonEl = document.querySelector('[data-product-variants-json]');
+    const addToCartBtn = document.getElementById('product-add-to-cart-btn');
     
     if (variantsJsonEl && variantRadios.length > 0) {
       try {
         const variants = JSON.parse(variantsJsonEl.textContent);
         
+        function updateVariantAvailability() {
+          const form = document.querySelector('[data-product-form]');
+          const checkedRadios = form.querySelectorAll('[data-variant-option]:checked');
+          
+          const selectedOptions = [];
+          checkedRadios.forEach(r => {
+            const pos = parseInt(r.dataset.position) - 1;
+            selectedOptions[pos] = r.value;
+          });
+          
+          variantRadios.forEach(radio => {
+            const pos = parseInt(radio.dataset.position) - 1;
+            const hypotheticalOptions = [...selectedOptions];
+            hypotheticalOptions[pos] = radio.value;
+
+            const matchedVariant = variants.find(v => {
+              return v.options.every((opt, index) => opt === hypotheticalOptions[index]);
+            });
+
+            const isAvailable = matchedVariant ? matchedVariant.available : false;
+            const label = radio.nextElementSibling;
+
+            if (!isAvailable) {
+              label.classList.add('is-unavailable');
+            } else {
+              label.classList.remove('is-unavailable');
+            }
+          });
+        }
+
         variantRadios.forEach(radio => {
           radio.addEventListener('change', function() {
-            // Get selected options
             const form = this.closest('form');
             const checkedRadios = form.querySelectorAll('[data-variant-option]:checked');
             const selectedOptions = Array.from(checkedRadios).map(r => r.value);
             
-            // Find matching variant
             const matchedVariant = variants.find(v => {
               return v.options.every((opt, index) => opt === selectedOptions[index]);
             });
@@ -551,13 +589,45 @@
             if (matchedVariant) {
               variantIdInput.value = matchedVariant.id;
               
-              // Update URL
               const url = new URL(window.location);
               url.searchParams.set('variant', matchedVariant.id);
               window.history.replaceState({}, '', url);
+
+              if (addToCartBtn) {
+                if (matchedVariant.available) {
+                  addToCartBtn.disabled = false;
+                  addToCartBtn.textContent = 'Comprar';
+                } else {
+                  addToCartBtn.disabled = true;
+                  addToCartBtn.textContent = 'Esgotado';
+                }
+              }
+            } else {
+              if (addToCartBtn) {
+                addToCartBtn.disabled = true;
+                addToCartBtn.textContent = 'Indisponível';
+              }
             }
+            
+            updateVariantAvailability();
           });
         });
+
+        // Initialize availability state on load
+        updateVariantAvailability();
+        
+        // Also initialize Add to Cart button state on load
+        const initialChecked = document.querySelectorAll('[data-variant-option]:checked');
+        const initialSelected = Array.from(initialChecked).map(r => r.value);
+        const initialVariant = variants.find(v => {
+          return v.options.every((opt, index) => opt === initialSelected[index]);
+        });
+        if (initialVariant && addToCartBtn) {
+          if (!initialVariant.available) {
+            addToCartBtn.disabled = true;
+            addToCartBtn.textContent = 'Esgotado';
+          }
+        }
       } catch (e) {
         console.error('Error parsing variants JSON', e);
       }
