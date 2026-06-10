@@ -99,19 +99,25 @@
     {%- if product != blank and product.available -%}
       <button 
         type="button" 
-        class="product-card__add-to-cart" 
+        class="product-card__add-to-cart hidden-mobile" 
         data-variant-id="{{ product.selected_or_first_available_variant.id }}"
       >
         ADICIONAR A SACOLA
       </button>
+      <a href="{{ product.url }}" class="product-card__add-to-cart hidden-desktop" style="text-decoration: none; text-align: center; box-sizing: border-box;">
+        ADICIONAR
+      </a>
     {%- elsif product != blank -%}
       <button type="button" class="product-card__add-to-cart" disabled>
         ESGOTADO
       </button>
     {%- else -%}
-      <button type="button" class="product-card__add-to-cart">
+      <button type="button" class="product-card__add-to-cart hidden-mobile">
         ADICIONAR A SACOLA
       </button>
+      <a href="#" class="product-card__add-to-cart hidden-desktop" style="text-decoration: none; text-align: center; box-sizing: border-box;">
+        ADICIONAR
+      </a>
     {%- endif -%}
   </div>
 </div>
@@ -204,6 +210,7 @@
     text-align: center;
     flex-grow: 1;
     position: relative;
+    gap: 0.5rem;
   }
 
   .product-card__title {
@@ -237,7 +244,7 @@
     flex-direction: column;
     gap: 0.2rem;
     justify-content: center;
-    margin-top: 0.5rem;
+    margin-top: 0;
   }
 
   .product-card__price-compare {
@@ -330,7 +337,7 @@
     cursor: pointer;
     width: 100%;
     max-width: 240px;
-    margin: 0.75rem auto 0;
+    margin: auto auto 0;
     display: block;
     text-transform: uppercase;
     font-family: 'Inter', sans-serif;
@@ -347,7 +354,17 @@
     cursor: not-allowed;
   }
 
+  .hidden-desktop {
+    display: none !important;
+  }
+
   @media (max-width: 768px) {
+    .hidden-mobile {
+      display: none !important;
+    }
+    .hidden-desktop {
+      display: block !important;
+    }
     .product-card {
       margin-bottom: 40px;
     }
@@ -355,9 +372,7 @@
       margin-bottom: 40px;
     }
     .product-card__sizes-wrapper {
-      max-height: 68px;
-      opacity: 1;
-      margin-top: 0.75rem;
+      display: none !important;
     }
     .product-card__size-btn {
       min-width: 32px;
