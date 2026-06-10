@@ -15,10 +15,11 @@
         "slide-1": {
           "type": "slide",
           "settings": {
-            "subheading": "NYNA Acessórios",
-            "heading": "Elegância em cada detalhe",
-            "description": "Acessórios que traduzem feminilidade moderna de forma leve e sofisticada.",
-            "button_label": "Descubra",
+            "image": "shopify://shop_images/BANNER.png",
+            "subheading": "",
+            "heading": "",
+            "description": "",
+            "button_label": "",
             "button_link": "/collections/all"
           }
         }
