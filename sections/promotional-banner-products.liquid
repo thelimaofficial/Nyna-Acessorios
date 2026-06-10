@@ -123,7 +123,7 @@
   }
 
   .promo-banner-products__slide {
-    flex: 0 0 65%;
+    flex: 0 0 calc(50% - 0.75rem);
     scroll-snap-align: start;
     min-width: 0;
   }
@@ -143,7 +143,7 @@
       gap: 1rem;
     }
     .promo-banner-products__slide {
-      flex: 0 0 75%;
+      flex: 0 0 calc(50% - 0.5rem);
     }
   }
 
@@ -205,3 +205,44 @@
   ]
 }
 {% endschema %}
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function() {
+    const grids = document.querySelectorAll('.promo-banner-products__grid');
+    
+    grids.forEach(grid => {
+      const slides = grid.querySelectorAll('.promo-banner-products__slide');
+      if (slides.length <= 2) return; // Don't auto-scroll if 2 or fewer items
+      
+      let isPaused = false;
+      let scrollInterval;
+      
+      const startScroll = () => {
+        scrollInterval = setInterval(() => {
+          if (isPaused) return;
+          
+          const maxScroll = grid.scrollWidth - grid.clientWidth;
+          
+          // se faltar menos de 5px pro final, resetar pro inicio
+          if (grid.scrollLeft >= maxScroll - 5) {
+            grid.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            const itemWidth = slides[0].offsetWidth;
+            const gap = parseFloat(getComputedStyle(grid).gap) || 0;
+            grid.scrollBy({ left: itemWidth + gap, behavior: 'smooth' });
+          }
+        }, 3000);
+      };
+      
+      startScroll();
+      
+      // Allow user to interact without it jumping away
+      grid.addEventListener('mouseenter', () => isPaused = true);
+      grid.addEventListener('mouseleave', () => isPaused = false);
+      grid.addEventListener('touchstart', () => isPaused = true, {passive: true});
+      grid.addEventListener('touchend', () => {
+        setTimeout(() => isPaused = false, 3000);
+      }, {passive: true});
+    });
+  });
+{% endjavascript %}
