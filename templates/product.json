@@ -57,6 +57,7 @@
       "settings": {
         "heading": "Você também pode gostar",
         "subheading": "",
+        "pull_related_by_type": true,
         "products_to_show": 5,
         "show_view_all": false
       }

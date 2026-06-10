@@ -12,15 +12,26 @@
     {%- assign collection = section.settings.collection -%}
     {%- assign products_to_show = section.settings.products_to_show -%}
 
-    {%- if collection != blank -%}
-      {%- for product in collection.products limit: products_to_show -%}
-        {% render 'product-card', product: product %}
+    {%- if section.settings.pull_related_by_type and product != blank -%}
+      {%- assign related_products = collections.all.products | where: 'type', product.type | reject: 'handle', product.handle -%}
+      {%- if related_products.size > 0 -%}
+        {%- for item in related_products limit: products_to_show -%}
+          {% render 'product-card', product: item %}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..products_to_show) -%}
+          {% render 'product-card' %}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- elsif collection != blank -%}
+      {%- for item in collection.products limit: products_to_show -%}
+        {% render 'product-card', product: item %}
       {%- endfor -%}
     {%- elsif section.settings.pull_latest -%}
       {%- assign recent_products = collections.all.products | sort: 'created_at' | reverse -%}
       {%- if recent_products.size > 0 -%}
-        {%- for product in recent_products limit: products_to_show -%}
-          {% render 'product-card', product: product %}
+        {%- for item in recent_products limit: products_to_show -%}
+          {% render 'product-card', product: item %}
         {%- endfor -%}
       {%- else -%}
         {%- for i in (1..products_to_show) -%}
@@ -157,6 +168,13 @@
       "type": "collection",
       "id": "collection",
       "label": "Collection"
+    },
+    {
+      "type": "checkbox",
+      "id": "pull_related_by_type",
+      "label": "Auto-pull related products by type",
+      "info": "Se ativado na página de um produto, mostra outras joias do mesmo tipo (ex: anéis puxam anéis). Ignora a coleção e lançamentos.",
+      "default": false
     },
     {
       "type": "checkbox",
