@@ -16,7 +16,7 @@
         "link_DELpcz": {
           "type": "link",
           "settings": {
-            "text": "Coleção canarinho",
+            "text": "Coleção Copa 2026",
             "url": "shopify://collections/colecao-canarinho",
             "icon": "sparkle",
             "icon_image": "shopify://shop_images/brasilbandeira.png",
@@ -33,7 +33,7 @@
             "url": "shopify://collections/aneis",
             "icon": "sparkle",
             "custom_svg": "",
-            "button_bg_color": "#B08F7A",
+            "button_bg_color": "#b08f7a",
             "button_text_color": "",
             "icon_size": 0
           }
