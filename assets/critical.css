@@ -345,3 +345,17 @@ body {
   text-decoration: none;
 }
 
+/* Fix global para posição do botão do app de desconto injetado após o botão de checkout */
+[name="checkout"] ~ * {
+  display: flex !important;
+  width: 100% !important;
+  margin-top: 0.75rem !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+.cart-drawer__buttons [name="checkout"] ~ * {
+  margin-top: 0 !important; /* flex gap handles spacing here */
+}
+
+
