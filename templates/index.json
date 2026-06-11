@@ -45,7 +45,7 @@
         "earrings": {
           "type": "collection",
           "settings": {
-            "collection": "",
+            "collection": "brincos",
             "title": "Brincos"
           }
         },
@@ -83,7 +83,7 @@
         "banner_bg_color": "#c5a491",
         "banner_text": "",
         "banner_text_color": "#ffffff",
-        "right_heading": "",
+        "right_heading": "Coleção Copa 2026",
         "right_collection": "colecao-canarinho"
       }
     },
