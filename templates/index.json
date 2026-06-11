@@ -46,6 +46,7 @@
           "type": "collection",
           "settings": {
             "collection": "brincos",
+            "image": "shopify://shop_images/IMG_1396.heic",
             "title": "Brincos"
           }
         },
