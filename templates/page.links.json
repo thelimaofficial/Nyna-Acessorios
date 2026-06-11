@@ -54,7 +54,7 @@
           "type": "link",
           "settings": {
             "text": "Colares",
-            "url": "",
+            "url": "shopify://collections/colares",
             "icon": "sparkle",
             "custom_svg": "",
             "button_bg_color": "",
