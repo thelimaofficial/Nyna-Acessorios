@@ -37,5 +37,108 @@
     {% sections 'footer-group' %}
 
     {% render 'cart-drawer' %}
+
+    {% comment %}
+      Script e estilos globais para o botão do app Scala Descontos (Pagar com Pix).
+      Usamos MutationObserver para garantir que o estilo será aplicado assim que o app carregar o botão na tela.
+    {% endcomment %}
+    <style>
+      .scala-pix-button {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        padding: 1.125rem !important;
+        background-color: transparent !important;
+        color: var(--color-accent, #c5a491) !important;
+        border: 2px solid var(--color-accent, #c5a491) !important;
+        border-radius: 9999px !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 0.9375rem !important;
+        font-weight: 600 !important;
+        text-transform: none !important;
+        letter-spacing: 0.05em !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        margin-top: 1rem !important;
+        gap: 8px !important;
+        text-decoration: none !important;
+        box-sizing: border-box !important;
+      }
+      
+      /* Ajuste especial caso o botão seja renderizado no drawer (que tem padding menor nas variáveis) */
+      .cart-drawer__buttons .scala-pix-button {
+        padding: 1rem !important;
+        margin-top: 0.75rem !important;
+      }
+
+      .scala-pix-button:hover {
+        background-color: var(--color-accent-hover, #a48270) !important;
+        border-color: var(--color-accent-hover, #a48270) !important;
+        color: #ffffff !important;
+        transform: translateY(-2px) !important;
+      }
+
+      .scala-pix-button svg {
+        width: 20px !important;
+        height: 20px !important;
+        fill: currentColor !important;
+        flex-shrink: 0 !important;
+      }
+    </style>
+
+    <script>
+      (function() {
+        function styleScalaButton() {
+          // Busca todos os elementos que podem ser o botão do Scala Pix
+          const elements = document.querySelectorAll('button, a, div.scala-btn, div[id*="scala"]');
+          elements.forEach(el => {
+            // Verifica se contém o texto "PIX" ou está próximo ao checkout
+            const text = el.textContent || '';
+            const isPixBtn = text.toLowerCase().includes('pix') && (text.toLowerCase().includes('pagar') || text.toLowerCase().includes('5%'));
+            const isScalaClass = el.id.includes('scala') || el.classList.contains('scala-btn');
+            
+            if ((isPixBtn || isScalaClass) && !el.classList.contains('scala-pix-button')) {
+              // Se for um container div, tentamos achar o botão ou link real dentro
+              if (el.tagName === 'DIV') {
+                const innerBtn = el.querySelector('button, a');
+                if (innerBtn) {
+                  innerBtn.classList.add('scala-pix-button');
+                  // Remove estilos inline que o app possa colocar
+                  innerBtn.style.cssText = ''; 
+                } else {
+                  el.classList.add('scala-pix-button');
+                }
+              } else {
+                el.classList.add('scala-pix-button');
+                el.style.cssText = ''; // Limpa inline styles
+              }
+            }
+          });
+        }
+
+        // Executa imediatamente e agenda verificações
+        styleScalaButton();
+        setTimeout(styleScalaButton, 500);
+        setTimeout(styleScalaButton, 1500);
+        setTimeout(styleScalaButton, 3000);
+
+        // Usa MutationObserver para pegar injeções tardias (ex: abrindo e fechando o drawer lateral)
+        const observer = new MutationObserver((mutations) => {
+          let shouldCheck = false;
+          for (const mutation of mutations) {
+            if (mutation.addedNodes.length > 0) {
+              shouldCheck = true;
+              break;
+            }
+          }
+          if (shouldCheck) {
+            styleScalaButton();
+          }
+        });
+        
+        observer.observe(document.body, { childList: true, subtree: true });
+      })();
+    </script>
   </body>
 </html>
