@@ -11,6 +11,16 @@
   "current": {
     "content_for_index": [],
     "blocks": {
+      "1232542678405107163": {
+        "type": "shopify://apps/instafeed/blocks/head-block/c447db20-095d-4a10-9725-b5977662c9d5",
+        "disabled": false,
+        "settings": {}
+      },
+      "12948015482042402483": {
+        "type": "shopify://apps/mercado-pago-antifraud-plus/blocks/embed-block/b19ea721-f94a-4308-bee5-0057c043bac5",
+        "disabled": false,
+        "settings": {}
+      },
       "15188581332139481108": {
         "type": "shopify://apps/scala-descontos/blocks/cartButton/24748891-1ee0-454d-bfde-d80e65983c18",
         "disabled": false,
@@ -21,18 +31,8 @@
           "message": "PAGAR COM PIX (-5%)",
           "icon": "shopify://shop_images/pix-svgrepo-com_1.png",
           "position": "after",
-          "customliquid": "<style>\n/* Estilo principal do botão Pix */\nbutton, .scala-btn, a {\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  width: 100% !important;\n  padding: 1.125rem !important;\n  background-color: transparent !important;\n  color: #c5a491 !important;\n  border: 2px solid #c5a491 !important;\n  border-radius: 9999px !important;\n  font-family: 'Inter', sans-serif !important;\n  font-size: 0.9375rem !important;\n  font-weight: 600 !important;\n  text-transform: none !important;\n  letter-spacing: 0.05em !important;\n  cursor: pointer !important;\n  transition: all 0.3s ease !important;\n  margin-top: 1rem !important;\n  gap: 8px !important;\n  text-decoration: none !important;\n}\n\n/* Efeito Hover (apenas sobe levemente, mantém fundo transparente) */\nbutton:hover, .scala-btn:hover, a:hover {\n  background-color: transparent !important; /* Mantém transparente */\n  border-color: #a48270 !important; /* Escurece a borda levemente */\n  color: #a48270 !important; /* Escurece o texto levemente */\n  transform: translateY(-2px) !important; /* Animação de subir igual ao checkout */\n}\n\n/* Ajuste do ícone */\nbutton svg, .scala-btn svg, a svg, img {\n  width: 22px !important;\n  height: 22px !important;\n  object-fit: contain !important;\n  margin-right: 4px !important;\n}\n\n/* Garante que o container do app não quebre a largura */\ndiv {\n  width: 100% !important;\n  display: flex !important;\n  justify-content: center !important;\n}\n</style>"
+          "customliquid": "<style>\n/* Estilo principal do botão Pix */\nbutton, .scala-btn, a {\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  width: 100% !important;\n  padding: 1.125rem !important;\n  background-color: transparent !important;\n  color: #c5a491 !important;\n  border: 2px solid #c5a491 !important;\n  border-radius: 9999px !important;\n  font-family: 'Inter', sans-serif !important;\n  font-size: 0.9375rem !important;\n  font-weight: 600 !important;\n  text-transform: none !important;\n  letter-spacing: 0.05em !important;\n  cursor: pointer !important;\n  transition: all 0.3s ease !important;\n  margin-top: -0.25rem !important; /* <--- Puxa o botão para cima, aproximando do Finalizar Compra */\n  margin-bottom: 1.5rem !important; /* <--- Mantém o Ambiente Seguro afastado para baixo */\n  gap: 8px !important;\n  text-decoration: none !important;\n}\n\n/* Efeito Hover (apenas sobe levemente, sem pintar de marrom) */\nbutton:hover, .scala-btn:hover, a:hover {\n  background-color: transparent !important; \n  border-color: #a48270 !important; \n  color: #a48270 !important; \n  transform: translateY(-2px) !important; \n}\n\n/* Ajuste do ícone */\nbutton svg, .scala-btn svg, a svg, img {\n  width: 22px !important;\n  height: 22px !important;\n  object-fit: contain !important;\n  margin-right: 4px !important;\n}\n\n/* Garante que o container do app ocupe o espaço correto */\ndiv {\n  width: 100% !important;\n  display: flex !important;\n  justify-content: center !important;\n}\n</style>"
         }
-      },
-      "1232542678405107163": {
-        "type": "shopify://apps/instafeed/blocks/head-block/c447db20-095d-4a10-9725-b5977662c9d5",
-        "disabled": false,
-        "settings": {}
-      },
-      "12948015482042402483": {
-        "type": "shopify://apps/mercado-pago-antifraud-plus/blocks/embed-block/b19ea721-f94a-4308-bee5-0057c043bac5",
-        "disabled": false,
-        "settings": {}
       }
     }
   }
