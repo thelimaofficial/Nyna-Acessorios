@@ -19,7 +19,7 @@
           "textSelector2": "finalizar compra, Check out, checkout, check-out",
           "selector": ":is(button,input)[name=\"checkout\"]",
           "message": "PAGAR COM PIX (-5%)",
-          "position": "before",
+          "position": "after",
           "customliquid": "{% comment %}\n<style>\nbutton {\n  background: #000000;\n}\n</style>\n{% endcomment %}"
         }
       }
