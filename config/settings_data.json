@@ -11,10 +11,17 @@
   "current": {
     "content_for_index": [],
     "blocks": {
-      "286197278318599166": {
-        "type": "shopify://apps/bitlogin-social-login/blocks/app-block/9099a221-3716-4376-9c77-be195a34de99",
-        "disabled": true,
-        "settings": {}
+      "15188581332139481108": {
+        "type": "shopify://apps/scala-descontos/blocks/cartButton/24748891-1ee0-454d-bfde-d80e65983c18",
+        "disabled": false,
+        "settings": {
+          "textSelector": "Finalizar a compra",
+          "textSelector2": "finalizar compra, Check out, checkout, check-out",
+          "selector": ":is(button,input)[name=\"checkout\"]",
+          "message": "Pix com desconto",
+          "position": "before",
+          "customliquid": "{% comment %}\n<style>\nbutton {\n  background: #000000;\n}\n</style>\n{% endcomment %}"
+        }
       }
     }
   }
