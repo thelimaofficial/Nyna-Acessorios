@@ -654,6 +654,50 @@
   .site-header {
     transition: filter 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
+
+  /* Estilos para o botão do app Scala Descontos (Pix) */
+  .cart-drawer__buttons > button:not([name="checkout"]),
+  .cart-drawer__buttons [id^="scala"],
+  .cart-drawer__buttons .scala-btn,
+  .cart-drawer__buttons > form > button:not([name="checkout"]) {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    padding: 1rem !important;
+    background-color: transparent !important;
+    color: var(--cart-drawer-accent) !important;
+    border: 2px solid var(--cart-drawer-accent) !important;
+    border-radius: 9999px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.9375rem !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    letter-spacing: 0.02em !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    margin-top: 0.25rem !important;
+    gap: 8px !important;
+  }
+
+  .cart-drawer__buttons > button:not([name="checkout"]):hover,
+  .cart-drawer__buttons [id^="scala"]:hover,
+  .cart-drawer__buttons .scala-btn:hover,
+  .cart-drawer__buttons > form > button:not([name="checkout"]):hover {
+    background-color: var(--cart-drawer-accent-hover) !important;
+    border-color: var(--cart-drawer-accent-hover) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) !important;
+  }
+
+  .cart-drawer__buttons > button:not([name="checkout"]) svg,
+  .cart-drawer__buttons [id^="scala"] svg,
+  .cart-drawer__buttons .scala-btn svg,
+  .cart-drawer__buttons > form > button:not([name="checkout"]) svg {
+    width: 20px !important;
+    height: 20px !important;
+    fill: currentColor !important;
+  }
 </style>
 
 <script>
