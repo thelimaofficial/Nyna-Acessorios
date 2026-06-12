@@ -82,6 +82,7 @@
       "type": "promotional-banner-products",
       "settings": {
         "banner_bg_color": "#c5a491",
+        "banner_image": "shopify://shop_images/3_22.png",
         "banner_text": "",
         "banner_text_color": "#ffffff",
         "right_heading": "Coleção Copa 2026",
