@@ -11,7 +11,7 @@
   "current": {
     "type_primary_font": "inter_n4",
     "max_page_width": "90rem",
-    "cart_drawer_free_shipping_icon": "shopify://shop_images/caixa-de-presente.png",
+    "cart_drawer_free_shipping_icon": "shopify://shop_images/caixa-de-presente_1.png",
     "cart_drawer_free_shipping_threshold": 450,
     "cart_drawer_free_shipping_remaining_text": "Faltam apenas [amount] para você ganhar um brinde exclusivo!",
     "cart_drawer_free_shipping_success_text": "Parabéns! Você ganhou um brinde exclusivo!",
