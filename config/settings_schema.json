@@ -223,6 +223,11 @@
         "default": true
       },
       {
+        "type": "image_picker",
+        "id": "cart_drawer_free_shipping_icon",
+        "label": "Icone da barra de frete"
+      },
+      {
         "type": "range",
         "id": "cart_drawer_free_shipping_threshold",
         "min": 0,
