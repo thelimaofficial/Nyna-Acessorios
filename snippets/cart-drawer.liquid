@@ -56,6 +56,7 @@
     </button>
   </div>
 
+  <form action="{{ routes.cart_url }}" method="post" id="cart-drawer-form" class="cart-drawer__form" style="display: flex; flex-direction: column; flex: 1; overflow: hidden; margin: 0; padding: 0; height: 100%;">
   <div class="cart-drawer__content">
     {% if cart.item_count == 0 %}
       <div class="cart-drawer__empty">
@@ -85,7 +86,7 @@
 
       {% comment %} Items list {% endcomment %}
       <div class="cart-drawer__items">
-        <form action="{{ routes.cart_url }}" method="post" id="cart-drawer-form" class="cart-drawer__form">
+        <div class="cart-drawer__form-inner">
           {% for item in cart.items %}
             <div class="cart-drawer__item" id="CartDrawer-Item-{{ item.index | plus: 1 }}">
               <a href="{{ item.url }}" class="cart-drawer__item-image-wrapper">
@@ -115,7 +116,7 @@
               </div>
             </div>
           {% endfor %}
-        </form>
+        </div>
       </div>
     {% endif %}
   </div>
@@ -138,7 +139,7 @@
       {% endif %}
       
       <div class="cart-drawer__buttons">
-        <button type="submit" name="checkout" form="cart-drawer-form" class="cart-drawer__btn cart-drawer__btn--checkout">{{ settings.cart_drawer_checkout_label }}</button>
+        <button type="submit" name="checkout" class="cart-drawer__btn cart-drawer__btn--checkout">{{ settings.cart_drawer_checkout_label }}</button>
       </div>
       
       {% if settings.cart_drawer_show_secure_badge %}
@@ -153,6 +154,7 @@
       {% endif %}
     </div>
   {% endif %}
+  </form>
 </div>
 
 <style>
