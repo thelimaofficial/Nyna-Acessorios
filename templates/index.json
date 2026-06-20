@@ -61,7 +61,7 @@
         "bracelets": {
           "type": "collection",
           "settings": {
-            "collection": "",
+            "collection": "pulseiras",
             "image": "shopify://shop_images/152.png",
             "title": "Pulseiras"
           }
