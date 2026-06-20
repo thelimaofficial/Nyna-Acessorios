@@ -53,7 +53,7 @@
         "necklaces": {
           "type": "collection",
           "settings": {
-            "collection": "",
+            "collection": "colares",
             "image": "shopify://shop_images/WhatsAppImage2026-06-10at17.40.31_1.jpg",
             "title": "Colares"
           }
