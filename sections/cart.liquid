@@ -82,7 +82,18 @@
                     <div class="cart-page__quantity">
                       <button type="button" class="cart-page__qty-btn" aria-label="Diminuir" onclick="updateCartItem({{ item.index | plus: 1 }}, {{ item.quantity | minus: 1 }})">-</button>
                       <input class="cart-page__qty-input" type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Quantidade" readonly>
-                      <button type="button" class="cart-page__qty-btn" aria-label="Aumentar" onclick="updateCartItem({{ item.index | plus: 1 }}, {{ item.quantity | plus: 1 }})">+</button>
+                      {% assign max_qty = '' %}
+                      {% if item.variant.inventory_management == 'shopify' and item.variant.inventory_policy == 'deny' %}
+                        {% assign max_qty = item.variant.inventory_quantity %}
+                      {% endif %}
+                      {% assign next_qty = item.quantity | plus: 1 %}
+                      {% if max_qty != '' and next_qty > max_qty %}
+                        {% assign next_qty = max_qty %}
+                        {% assign disable_plus = true %}
+                      {% else %}
+                        {% assign disable_plus = false %}
+                      {% endif %}
+                      <button type="button" class="cart-page__qty-btn" aria-label="Aumentar" onclick="updateCartItem({{ item.index | plus: 1 }}, {{ next_qty }})"{% if disable_plus %} disabled{% endif %}>+</button>
                     </div>
                   </div>
                   

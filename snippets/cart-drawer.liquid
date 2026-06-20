@@ -107,7 +107,18 @@
                   <div class="cart-drawer__quantity" style="width: 92px; min-width: 92px; height: 42px; border-radius: 999px;">
                     <button type="button" class="cart-drawer__qty-btn" style="width: 28px; font-size: 16px;" aria-label="Diminuir" onclick="updateCartItem({{ item.index | plus: 1 }}, {{ item.quantity | minus: 1 }})">-</button>
                     <input class="cart-drawer__qty-input" style="width: 34px; font-size: 15px;" type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Quantidade" readonly>
-                    <button type="button" class="cart-drawer__qty-btn" style="width: 28px; font-size: 16px;" aria-label="Aumentar" onclick="updateCartItem({{ item.index | plus: 1 }}, {{ item.quantity | plus: 1 }})">+</button>
+                    {% assign max_qty = '' %}
+                    {% if item.variant.inventory_management == 'shopify' and item.variant.inventory_policy == 'deny' %}
+                      {% assign max_qty = item.variant.inventory_quantity %}
+                    {% endif %}
+                    {% assign next_qty = item.quantity | plus: 1 %}
+                    {% if max_qty != '' and next_qty > max_qty %}
+                      {% assign next_qty = max_qty %}
+                      {% assign disable_plus = true %}
+                    {% else %}
+                      {% assign disable_plus = false %}
+                    {% endif %}
+                    <button type="button" class="cart-drawer__qty-btn" style="width: 28px; font-size: 16px;" aria-label="Aumentar" onclick="updateCartItem({{ item.index | plus: 1 }}, {{ next_qty }})"{% if disable_plus %} disabled{% endif %}>+</button>
                   </div>
                   <a href="{{ item.url_to_remove }}" class="cart-drawer__remove" aria-label="Remover" onclick="event.preventDefault(); updateCartItem({{ item.index | plus: 1 }}, 0)">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>

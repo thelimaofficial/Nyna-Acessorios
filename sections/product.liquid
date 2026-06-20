@@ -96,13 +96,29 @@
             <script type="application/json" data-product-variants-json>
               {{ product.variants | json }}
             </script>
+            <script type="application/json" data-product-inventory-json>
+              {
+                {% for variant in product.variants %}
+                  "{{ variant.id }}": {
+                    "inventory_management": {{ variant.inventory_management | json }},
+                    "inventory_policy": {{ variant.inventory_policy | json }},
+                    "inventory_quantity": {{ variant.inventory_quantity | json }}
+                  }{% unless forloop.last %},{% endunless %}
+                {% endfor %}
+              }
+            </script>
           {% endunless %}
 
           <!-- Actions (Qty + Add to cart) -->
           <div class="product-actions">
             <div class="product-quantity">
               <button type="button" class="qty-btn qty-btn--minus" data-qty-minus>-</button>
-              <input type="number" name="quantity" min="1" value="1" class="qty-input" data-qty-input>
+              {% assign current_variant = product.selected_or_first_available_variant %}
+              {% assign initial_max = '' %}
+              {% if current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'deny' %}
+                {% assign initial_max = current_variant.inventory_quantity %}
+              {% endif %}
+              <input type="number" name="quantity" min="1" value="1" class="qty-input" data-qty-input {% if initial_max != '' %}max="{{ initial_max }}"{% endif %}>
               <button type="button" class="qty-btn qty-btn--plus" data-qty-plus>+</button>
             </div>
             <button type="submit" name="add" id="product-add-to-cart-btn" class="product-btn product-btn--submit">
@@ -532,7 +548,19 @@
       });
       qtyPlus.addEventListener('click', () => {
         let val = parseInt(qtyInput.value, 10);
-        qtyInput.value = val + 1;
+        let max = parseInt(qtyInput.getAttribute('max'), 10);
+        if (!isNaN(max) && val >= max) {
+          qtyInput.value = max;
+        } else {
+          qtyInput.value = val + 1;
+        }
+      });
+      qtyInput.addEventListener('change', () => {
+        let val = parseInt(qtyInput.value, 10);
+        let max = parseInt(qtyInput.getAttribute('max'), 10);
+        if (!isNaN(max) && val > max) {
+          qtyInput.value = max;
+        }
       });
     }
 
@@ -540,11 +568,13 @@
     const variantRadios = document.querySelectorAll('[data-variant-option]');
     const variantIdInput = document.querySelector('[data-variant-id]');
     const variantsJsonEl = document.querySelector('[data-product-variants-json]');
+    const inventoryJsonEl = document.querySelector('[data-product-inventory-json]');
     const addToCartBtn = document.getElementById('product-add-to-cart-btn');
     
     if (variantsJsonEl && variantRadios.length > 0) {
       try {
         const variants = JSON.parse(variantsJsonEl.textContent);
+        const inventories = inventoryJsonEl ? JSON.parse(inventoryJsonEl.textContent) : null;
         
         function updateVariantAvailability() {
           const form = document.querySelector('[data-product-form]');
@@ -612,9 +642,23 @@
                 if (matchedVariant.available) {
                   addToCartBtn.disabled = false;
                   addToCartBtn.textContent = 'Comprar';
+                  if (inventories && inventories[matchedVariant.id]) {
+                    const inv = inventories[matchedVariant.id];
+                    if (inv.inventory_management === 'shopify' && inv.inventory_policy === 'deny') {
+                      qtyInput.setAttribute('max', inv.inventory_quantity);
+                      if (parseInt(qtyInput.value, 10) > inv.inventory_quantity) {
+                        qtyInput.value = Math.max(1, inv.inventory_quantity);
+                      }
+                    } else {
+                      qtyInput.removeAttribute('max');
+                    }
+                  } else {
+                    qtyInput.removeAttribute('max');
+                  }
                 } else {
                   addToCartBtn.disabled = true;
                   addToCartBtn.textContent = 'Esgotado';
+                  qtyInput.removeAttribute('max');
                 }
               }
             } else {
