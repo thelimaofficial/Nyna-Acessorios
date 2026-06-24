@@ -40,7 +40,8 @@
           {%- else -%}
             {%- for i in (1..4) -%}
               <div class="promo-banner-products__slide">
-                {% render 'product-card' %}
+                {%- comment -%} Renderiza fallback se não houver coleção selecionada {%- endcomment -%}
+                {% render 'product-card', product: blank %}
               </div>
             {%- endfor -%}
           {%- endif -%}

@@ -20,7 +20,8 @@
         {%- endfor -%}
       {%- else -%}
         {%- for i in (1..products_to_show) -%}
-          {% render 'product-card' %}
+          {%- comment -%} Se nenhum produto for encontrado, renderizamos um card vazio {%- endcomment -%}
+          {% render 'product-card', product: blank %}
         {%- endfor -%}
       {%- endif -%}
     {%- elsif collection != blank -%}
@@ -35,12 +36,14 @@
         {%- endfor -%}
       {%- else -%}
         {%- for i in (1..products_to_show) -%}
-          {% render 'product-card' %}
+          {%- comment -%} Fallback para cards vazios se não houver produtos recentes {%- endcomment -%}
+          {% render 'product-card', product: blank %}
         {%- endfor -%}
       {%- endif -%}
     {%- else -%}
       {%- for i in (1..products_to_show) -%}
-        {% render 'product-card' %}
+        {%- comment -%} Fallback final caso nenhuma condição seja atendida {%- endcomment -%}
+        {% render 'product-card', product: blank %}
       {%- endfor -%}
     {%- endif -%}
   </div>
