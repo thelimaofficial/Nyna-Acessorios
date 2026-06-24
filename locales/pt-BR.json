@@ -3,6 +3,59 @@
     "title": "404",
     "not_found_heading": "PÁGINA NÃO ENCONTRADA",
     "not_found_subtext": "A página que você procura não existe ou foi movida.",
-    "back_to_shopping": "CONTINUAR COMPRANDO"
+    "back_to_shopping": "CONTINUAR COMPRANDO",
+    "not_found": "Página não encontrada."
+  },
+  "accessibility": {
+    "announcement_bar": "Anúncio",
+    "nav_left": "Navegação principal",
+    "account": "Conta",
+    "search": "Buscar",
+    "cart": "Carrinho ({{ count }} itens)"
+  },
+  "blog": {
+    "article_comments": "Comentários",
+    "article_metadata_html": "{{ date }} por {{ author }}",
+    "comment_form_body": "Comentário",
+    "comment_form_email": "E-mail",
+    "comment_form_name": "Nome",
+    "comment_form_submit": "Publicar",
+    "comment_form_title": "Adicionar um comentário"
+  },
+  "cart": {
+    "checkout": "Finalizar compra",
+    "title": "Carrinho",
+    "update": "Atualizar",
+    "remove": "Remover"
+  },
+  "customers": {
+    "login": {
+      "email": "E-mail",
+      "password": "Senha",
+      "submit": "Entrar",
+      "title": "Login"
+    }
+  },
+  "collections": {
+    "title": "Coleções"
+  },
+  "gift_card": {
+    "add_to_apple_wallet": "Adicionar à Apple Wallet",
+    "card": "Cartão presente",
+    "expired": "Este cartão presente expirou",
+    "expires_on": "Expira em {{ expires_on }}",
+    "use_at_checkout": "Use este cartão presente na finalização da compra"
+  },
+  "password": {
+    "title": "Esta loja é privada",
+    "password": "Senha",
+    "enter": "Entrar"
+  },
+  "search": {
+    "title": "Busca",
+    "placeholder": "Buscar artigos, páginas ou produtos",
+    "submit": "Buscar",
+    "no_results_html": "Nenhum resultado encontrado para {{ terms }}",
+    "results_for_html": "{{ count }} resultados encontrados para {{ terms }}"
   }
 }

@@ -19,14 +19,8 @@
             }}
           </picture>
         {%- else -%}
-          <img
-            class="hero-slide__img"
-            src="{{ 'hero-model.png' | asset_url }}"
-            alt="Hero placeholder"
-            width="2000"
-            height="1000"
-            loading="eager"
-          >
+          {%- comment -%} Se não houver imagem, renderiza placeholder do Shopify {%- endcomment -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg hero-slide__img' }}
         {%- endif -%}
       </div>
 
