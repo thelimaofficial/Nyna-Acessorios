@@ -1,5 +1,19 @@
 {%- if product != blank -%}
-  {% render 'product-card', product: product %}
+  <div class="intent-minimal-card">
+    <a href="{{ product.url }}" class="intent-minimal-card__link">
+      <div class="intent-minimal-card__image-wrapper">
+        {%- if product.compare_at_price > product.price -%}
+          {%- assign percent = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
+          <span class="intent-minimal-card__badge">{{ percent }}% OFF</span>
+        {%- endif -%}
+        {{ product.featured_media | image_url: width: 400 | image_tag: class: 'intent-minimal-card__image', loading: 'lazy', alt: product.title }}
+      </div>
+      <h3 class="intent-minimal-card__title">{{ product.title }}</h3>
+      <div class="intent-minimal-card__price">
+        {{ product.price | money }}
+      </div>
+    </a>
+  </div>
 {%- endif -%}
 
 {% schema %}

@@ -28,12 +28,12 @@
   
   <div class="nyna-intent-modal">
     <div class="nyna-intent-header">
-      <h2 id="nyna-intent-title" class="nyna-intent-title">Separamos algumas peças para você ✨</h2>
-      <p id="nyna-intent-desc" class="nyna-intent-desc">Com base no que você mais gostou.</p>
+      <h2 id="nyna-intent-title" class="nyna-intent-title">Escolhas que combinam com você</h2>
+      <p id="nyna-intent-desc" class="nyna-intent-desc">Reunimos as peças que mais chamaram sua atenção.</p>
       <button type="button" class="nyna-intent-close" data-intent-close aria-label="Fechar recomendações">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18 6L6 18" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M6 6L18 18" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
     </div>
@@ -45,10 +45,6 @@
       <div id="nyna-intent-grid" class="nyna-intent-grid" style="display: none;">
         <!-- Produtos renderizados via AJAX entrarão aqui -->
       </div>
-    </div>
-    
-    <div class="nyna-intent-footer">
-      <a href="/collections/all" id="nyna-intent-cta" class="nyna-intent-cta">Ver toda a coleção</a>
     </div>
   </div>
 </div>
@@ -84,30 +80,29 @@
     position: relative;
     background-color: var(--color-background, #fff);
     width: 100%;
-    max-width: 900px;
+    max-width: 1000px;
     max-height: 90vh;
-    border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border-radius: 32px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transform: translateY(20px);
+    transform: translateY(20px) scale(0.98);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .nyna-intent-engine.is-active .nyna-intent-modal {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 
   .nyna-intent-header {
-    padding: 1.5rem 2rem 1rem;
+    padding: 3.5rem 3rem 2rem;
     position: relative;
-    border-bottom: 1px solid #f0f0f0;
     text-align: center;
   }
 
   .nyna-intent-title {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 500;
     color: var(--color-foreground, #111);
     margin: 0 0 0.5rem;
@@ -122,8 +117,8 @@
 
   .nyna-intent-close {
     position: absolute;
-    top: 1.25rem;
-    right: 1.25rem;
+    top: 1.5rem;
+    right: 1.5rem;
     background: transparent;
     border: none;
     color: var(--color-foreground, #111);
@@ -133,15 +128,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
   }
 
   .nyna-intent-close:hover {
     background-color: #f5f5f5;
+    transform: scale(1.05);
   }
 
   .nyna-intent-content {
-    padding: 2rem;
+    padding: 0 3rem 4rem;
     overflow-y: auto;
     flex-grow: 1;
     -webkit-overflow-scrolling: touch;
@@ -157,9 +153,9 @@
   .nyna-intent-spinner {
     width: 40px;
     height: 40px;
-    border: 3px solid rgba(0, 0, 0, 0.1);
+    border: 3px solid rgba(0, 0, 0, 0.05);
     border-radius: 50%;
-    border-top-color: var(--color-accent, #c5a491);
+    border-top-color: var(--color-foreground, #111);
     animation: nyna-spin 1s ease-in-out infinite;
   }
 
@@ -168,48 +164,89 @@
   }
 
   .nyna-intent-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: flex;
     gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: #eee transparent;
+  }
+
+  .nyna-intent-grid::-webkit-scrollbar {
+    height: 6px;
+  }
+  .nyna-intent-grid::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .nyna-intent-grid::-webkit-scrollbar-thumb {
+    background-color: #eee;
+    border-radius: 10px;
+  }
+
+  /* Estilos do card minimalista injetado via AJAX */
+  .intent-minimal-card {
+    flex: 0 0 240px;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .intent-minimal-card__link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .intent-minimal-card__image-wrapper {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+    aspect-ratio: 1;
+    background: transparent;
+  }
+
+  .intent-minimal-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
   }
   
-  /* Ajuste no card quando dentro do modal */
-  .nyna-intent-grid .product-card {
-    margin-bottom: 0 !important;
-  }
-  .nyna-intent-grid .product-card:hover {
-    z-index: 1 !important;
-  }
-  .nyna-intent-grid .product-card__sizes-wrapper {
-    display: none !important; /* Desativa a seleção rápida no modal para ficar mais clean */
+  .intent-minimal-card:hover .intent-minimal-card__image {
+    transform: scale(1.03);
   }
 
-  .nyna-intent-footer {
-    padding: 1.25rem 2rem;
-    border-top: 1px solid #f0f0f0;
-    text-align: center;
-    background-color: #fafafa;
-  }
-
-  .nyna-intent-cta {
-    display: inline-block;
-    padding: 0.8rem 2rem;
-    background-color: var(--color-foreground, #111);
-    color: var(--color-background, #fff);
-    text-decoration: none;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-
-  .nyna-intent-cta:hover {
-    background-color: var(--color-accent, #c5a491);
+  .intent-minimal-card__badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #b09586;
     color: #fff;
-    transform: translateY(-1px);
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
+    z-index: 2;
   }
+
+  .intent-minimal-card__title {
+    font-size: 0.95rem;
+    font-weight: 400;
+    margin: 0 0 0.5rem;
+    color: var(--color-foreground, #111);
+  }
+
+  .intent-minimal-card__price {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-foreground, #111);
+  }
+
+
 
   @media (max-width: 768px) {
     .nyna-intent-engine {
@@ -235,13 +272,7 @@
     }
 
     .nyna-intent-grid {
-      grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
-    }
-
-    .nyna-intent-footer {
-      padding: 1rem 1.5rem;
-      padding-bottom: calc(1rem + env(safe-area-inset-bottom));
     }
   }
 {% endstylesheet %}
@@ -495,28 +526,12 @@
 
         const exactProducts = productsArray.slice(0, 2);
         
-        // Define mensagens
         const titleEl = document.getElementById('nyna-intent-title');
         const descEl = document.getElementById('nyna-intent-desc');
-        const ctaEl = document.getElementById('nyna-intent-cta');
 
-        if (state.currentIntentLevel === 'HIGH') {
-          titleEl.textContent = 'Talvez seja difícil escolher só uma ✨';
-          descEl.textContent = 'Essas foram as peças que mais chamaram sua atenção.';
-        } else if (exactProducts.some(p => p.views > 1)) {
-          titleEl.textContent = 'Ainda pensando nessas peças? 👀';
-          descEl.textContent = 'Deixamos suas favoritas aqui para você dar mais uma olhada.';
-        } else if (state.currentCategory) {
-          titleEl.textContent = `Parece que você gostou dos nossos ${state.currentCategory} 👀`;
-          descEl.textContent = 'Separamos algumas peças que podem ser a sua cara.';
-        }
-
-        if (state.currentCategory) {
-          // Simplificação para montar uma URL de coleção a partir do tipo
-          // Isso pode falhar se o tipo do produto não for exato o handle da coleção
-          const handleCat = state.currentCategory.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
-          ctaEl.href = `/collections/${handleCat}`;
-        }
+        // Mantém o texto fixo conforme a imagem
+        if (titleEl) titleEl.textContent = 'Escolhas que combinam com você';
+        if (descEl) descEl.textContent = 'Reunimos as peças que mais chamaram sua atenção.';
 
         RecommendationPopup.open();
 
@@ -542,16 +557,16 @@
           const exactResults = await Promise.all(fetchPromises);
           fetchedHTML += exactResults.join('');
 
-          // 2. Fetch related products via Recommendations API to fill up to 4
+          // 2. Fetch related products via Recommendations API to fill up to 6
           if (exactProducts.length > 0) {
             const topProductId = exactProducts[0].id;
-            const needed = 4 - exactProducts.length;
+            const needed = 6 - exactProducts.length;
             if (needed > 0) {
               const recRes = await fetch(`/recommendations/products?product_id=${topProductId}&limit=${needed + 2}&section_id=intent-recommendations`);
               if (recRes.ok) {
                 const recHtml = await recRes.text();
                 const doc = new DOMParser().parseFromString(recHtml, 'text/html');
-                const cards = doc.querySelectorAll('.shopify-section .product-card');
+                const cards = doc.querySelectorAll('.shopify-section .intent-minimal-card');
                 
                 let added = 0;
                 cards.forEach(card => {
@@ -568,7 +583,7 @@
 
           loading.style.display = 'none';
           grid.innerHTML = fetchedHTML;
-          grid.style.display = 'grid';
+          grid.style.display = 'flex';
 
           // Marca como exibido
           sessionStorage.setItem(SESSION_KEY, 'true');
