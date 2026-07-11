@@ -79,7 +79,7 @@
     width: 100%;
     max-width: 1000px;
     max-height: 90vh;
-    border-radius: 32px;
+    border-radius: 40px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
@@ -254,21 +254,15 @@
 
   @media (max-width: 768px) {
     .nyna-intent-engine {
-      align-items: flex-end;
+      padding: 1.5rem;
     }
 
     .nyna-intent-modal {
-      border-radius: 20px 20px 0 0;
       max-height: 85vh;
-      transform: translateY(100%);
-    }
-
-    .nyna-intent-engine.is-active .nyna-intent-modal {
-      transform: translateY(0);
     }
 
     .nyna-intent-header {
-      padding: 1.25rem 1.5rem 1rem;
+      padding: 2.5rem 1.5rem 1rem;
     }
 
     .nyna-intent-content {
@@ -280,7 +274,6 @@
     }
     
     .intent-minimal-card {
-      /* No mobile, exibe 2 itens por vez com gap de 1rem (1 gap = 1rem / 2 = 0.5rem) */
       flex: 0 0 calc(50% - 0.5rem);
     }
   }
