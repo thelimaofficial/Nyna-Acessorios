@@ -488,15 +488,18 @@
         }, 500);
 
         window.addEventListener('mousemove', updateActivity);
-        window.addEventListener('scroll', updateActivity);
+        window.addEventListener('scroll', updateActivity, { passive: true });
         window.addEventListener('keydown', updateActivity);
         window.addEventListener('click', updateActivity);
-        window.addEventListener('touchstart', updateActivity);
+        window.addEventListener('touchstart', updateActivity, { passive: true });
+        window.addEventListener('touchmove', updateActivity, { passive: true });
+        window.addEventListener('pointermove', updateActivity, { passive: true });
+        window.addEventListener('wheel', updateActivity, { passive: true });
       },
 
       startInactivityTimer() {
         setInterval(() => {
-          if (state.isModalOpen) return;
+          if (state.isModalOpen || document.hidden) return;
 
           const now = Date.now();
 
@@ -536,7 +539,7 @@
         // Desktop only
         if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
           document.addEventListener('mouseleave', (e) => {
-            if (state.isModalOpen) return;
+            if (state.isModalOpen || document.hidden) return;
             if (state.lastCloseTime && (Date.now() - state.lastCloseTime < 120000 || !state.hasInteractedSinceClose)) return;
 
             if (e.clientY <= 0) {
