@@ -308,7 +308,8 @@
       sessionStartTime: Date.now(),
       lastActivityTime: Date.now(),
       pageStartTime: Date.now(),
-      hasShownThisSession: sessionStorage.getItem(SESSION_KEY) === 'true',
+      lastCloseTime: sessionStorage.getItem('nyna_last_close') ? parseInt(sessionStorage.getItem('nyna_last_close')) : null,
+      hasInteractedSinceClose: false,
       isModalOpen: false,
       data: {
         categories: {},
@@ -447,8 +448,6 @@
     // 3. BehaviorTrigger
     const BehaviorTrigger = {
       init() {
-        if (state.hasShownThisSession) return;
-
         this.setupActivityTracking();
         this.setupExitIntent();
         this.startInactivityTimer();
@@ -457,6 +456,10 @@
       setupActivityTracking() {
         const updateActivity = throttle(() => {
           state.lastActivityTime = Date.now();
+          if (state.lastCloseTime && !state.isModalOpen && !state.hasInteractedSinceClose) {
+            state.hasInteractedSinceClose = true;
+            log('Nova interação significativa detectada após fechamento do popup.');
+          }
         }, 500);
 
         window.addEventListener('mousemove', updateActivity);
@@ -468,24 +471,49 @@
 
       startInactivityTimer() {
         setInterval(() => {
-          if (state.hasShownThisSession || state.isModalOpen) return;
+          if (state.isModalOpen) return;
 
-          const inactiveTime = Date.now() - state.lastActivityTime;
-          const sessionTime = Date.now() - state.sessionStartTime;
+          const now = Date.now();
 
-          // 120000ms = 2 mins
-          const hasEnoughTime = sessionTime > 120000;
+          if (state.lastCloseTime) {
+            const timeSinceClose = now - state.lastCloseTime;
+            const cooldownLeft = 120000 - timeSinceClose;
+            
+            if (cooldownLeft > 0) {
+              // Em cooldown
+              // Para evitar flood no console, só logamos o cooldown a cada ~10s
+              if (Math.floor(cooldownLeft / 1000) % 10 === 0) {
+                 log(`Em cooldown. Restante: ${Math.floor(cooldownLeft / 1000)}s`);
+              }
+              return;
+            }
+            if (!state.hasInteractedSinceClose) {
+              // Passou do cooldown mas sem nova interação
+              return;
+            }
+          }
+
+          const inactiveTime = now - state.lastActivityTime;
+          const sessionTime = now - state.sessionStartTime;
+
+          // Tempos de inatividade necessários
+          const requiredInactiveTime = state.currentIntentLevel === 'HIGH' ? 8000 : 15000;
           
-          if (inactiveTime > 30000 && inactiveTime < 45000) {
+          if (inactiveTime > requiredInactiveTime && inactiveTime < requiredInactiveTime + 10000) {
+            // 120000ms = 2 mins (tempo mínimo da primeira exibição se não for HIGH)
+            const hasEnoughTime = sessionTime > 120000;
             this.evaluateTriggers('INACTIVITY', hasEnoughTime);
           }
-        }, 5000);
+        }, 2000); // Check a cada 2 segundos
       },
 
       setupExitIntent() {
         // Desktop only
         if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
           document.addEventListener('mouseleave', (e) => {
+            if (state.isModalOpen) return;
+            if (state.lastCloseTime && (Date.now() - state.lastCloseTime < 120000 || !state.hasInteractedSinceClose)) return;
+
             if (e.clientY <= 0) {
               const sessionTime = Date.now() - state.sessionStartTime;
               const hasEnoughTime = sessionTime > 120000;
@@ -496,7 +524,7 @@
       },
 
       evaluateTriggers(triggerSource, hasEnoughSessionTime) {
-        if (state.hasShownThisSession || state.isModalOpen) return;
+        if (state.isModalOpen) return;
 
         const level = state.currentIntentLevel;
 
@@ -509,7 +537,7 @@
         }
 
         if (shouldShow) {
-          log(`Triggered by ${triggerSource} at ${level} intent.`);
+          log(`Exibição permitida. Motivo: Gatilho de ${triggerSource} atingido com intenção ${level}.`);
           RecommendationEngine.prepareAndShow();
         }
       }
@@ -518,7 +546,7 @@
     // 4 & 5 & 6. RecommendationEngine & Popup
     const RecommendationEngine = {
       async prepareAndShow() {
-        if (state.isModalOpen || state.hasShownThisSession) return;
+        if (state.isModalOpen) return;
         state.isModalOpen = true;
 
         const { products } = state.data;
@@ -588,9 +616,9 @@
           grid.innerHTML = fetchedHTML;
           grid.style.display = 'flex';
 
-          // Marca como exibido
-          sessionStorage.setItem(SESSION_KEY, 'true');
-          state.hasShownThisSession = true;
+          // Remove o bloqueio de apenas 1 por sessão, para permitir reabertura futura
+          // sessionStorage.setItem(SESSION_KEY, 'true');
+          // state.hasShownThisSession = true;
 
           // Inicia carrossel automático
           let autoScrollInterval;
@@ -641,6 +669,12 @@
         engine.classList.remove('is-active');
         engine.setAttribute('aria-hidden', 'true');
         state.isModalOpen = false;
+        
+        // Cooldown Logic
+        state.lastCloseTime = Date.now();
+        state.hasInteractedSinceClose = false;
+        sessionStorage.setItem('nyna_last_close', state.lastCloseTime);
+        log('Popup closed. Cooldown initiated.');
         
         document.removeEventListener('keydown', this.handleEsc);
       },
