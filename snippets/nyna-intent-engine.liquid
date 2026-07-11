@@ -60,6 +60,11 @@
     font-family: 'Inter', sans-serif;
   }
 
+  body.nyna-intent-open {
+    overflow: hidden !important;
+    padding-right: var(--scrollbar-compensate, 0px) !important;
+  }
+
   .nyna-intent-engine.is-active {
     opacity: 1;
     pointer-events: auto;
@@ -262,7 +267,21 @@
     }
 
     .nyna-intent-header {
-      padding: 2.5rem 1.5rem 1rem;
+      padding: 2rem 0.5rem 1rem;
+    }
+
+    .nyna-intent-title {
+      font-size: 1.15rem;
+      padding: 0 1.5rem;
+    }
+
+    .nyna-intent-desc {
+      font-size: 0.85rem;
+    }
+
+    .nyna-intent-close {
+      top: 1rem;
+      right: 1rem;
     }
 
     .nyna-intent-content {
@@ -653,6 +672,12 @@
     const RecommendationPopup = {
       open() {
         const engine = document.getElementById('nyna-intent-engine');
+        
+        // Compensate for scrollbar to prevent layout shift
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        document.body.style.setProperty('--scrollbar-compensate', `${scrollbarWidth}px`);
+        document.body.classList.add('nyna-intent-open');
+
         engine.classList.add('is-active');
         engine.setAttribute('aria-hidden', 'false');
         
@@ -668,6 +693,9 @@
         engine.classList.remove('is-active');
         engine.setAttribute('aria-hidden', 'true');
         state.isModalOpen = false;
+        
+        document.body.style.removeProperty('--scrollbar-compensate');
+        document.body.classList.remove('nyna-intent-open');
         
         // Cooldown Logic
         state.lastCloseTime = Date.now();
