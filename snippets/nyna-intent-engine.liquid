@@ -1,0 +1,636 @@
+{% doc %}
+  NYNA Intent Engine - Sistema de recomendação comportamental
+  Este snippet rastreia o comportamento do usuário e exibe recomendações contextuais
+  baseadas em pontuação de intenção (Intent Score).
+{% enddoc %}
+
+<script>
+  window.NYNA_INTENT_DATA = {
+    pageType: {{ request.page_type | json }},
+    product: {
+      id: {{ product.id | json }},
+      handle: {{ product.handle | json }},
+      title: {{ product.title | json }},
+      type: {{ product.type | default: collection.title | json }},
+      available: {{ product.available | json }}
+    },
+    collection: {
+      id: {{ collection.id | json }},
+      handle: {{ collection.handle | json }},
+      title: {{ collection.title | json }}
+    }
+  };
+  window.NYNA_INTENT_DEBUG = true; // Habilitado para debug inicial, pode ser desativado depois
+</script>
+
+<div id="nyna-intent-engine" class="nyna-intent-engine" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="nyna-intent-title">
+  <div class="nyna-intent-backdrop" data-intent-close></div>
+  
+  <div class="nyna-intent-modal">
+    <div class="nyna-intent-header">
+      <h2 id="nyna-intent-title" class="nyna-intent-title">Separamos algumas peças para você ✨</h2>
+      <p id="nyna-intent-desc" class="nyna-intent-desc">Com base no que você mais gostou.</p>
+      <button type="button" class="nyna-intent-close" data-intent-close aria-label="Fechar recomendações">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="nyna-intent-content">
+      <div id="nyna-intent-loading" class="nyna-intent-loading">
+        <div class="nyna-intent-spinner"></div>
+      </div>
+      <div id="nyna-intent-grid" class="nyna-intent-grid" style="display: none;">
+        <!-- Produtos renderizados via AJAX entrarão aqui -->
+      </div>
+    </div>
+    
+    <div class="nyna-intent-footer">
+      <a href="/collections/all" id="nyna-intent-cta" class="nyna-intent-cta">Ver toda a coleção</a>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .nyna-intent-engine {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .nyna-intent-engine.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nyna-intent-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .nyna-intent-modal {
+    position: relative;
+    background-color: var(--color-background, #fff);
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(20px);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .nyna-intent-engine.is-active .nyna-intent-modal {
+    transform: translateY(0);
+  }
+
+  .nyna-intent-header {
+    padding: 1.5rem 2rem 1rem;
+    position: relative;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+
+  .nyna-intent-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--color-foreground, #111);
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .nyna-intent-desc {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary, #666);
+    margin: 0;
+  }
+
+  .nyna-intent-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: transparent;
+    border: none;
+    color: var(--color-foreground, #111);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+  }
+
+  .nyna-intent-close:hover {
+    background-color: #f5f5f5;
+  }
+
+  .nyna-intent-content {
+    padding: 2rem;
+    overflow-y: auto;
+    flex-grow: 1;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nyna-intent-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+  }
+
+  .nyna-intent-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--color-accent, #c5a491);
+    animation: nyna-spin 1s ease-in-out infinite;
+  }
+
+  @keyframes nyna-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .nyna-intent-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  /* Ajuste no card quando dentro do modal */
+  .nyna-intent-grid .product-card {
+    margin-bottom: 0 !important;
+  }
+  .nyna-intent-grid .product-card:hover {
+    z-index: 1 !important;
+  }
+  .nyna-intent-grid .product-card__sizes-wrapper {
+    display: none !important; /* Desativa a seleção rápida no modal para ficar mais clean */
+  }
+
+  .nyna-intent-footer {
+    padding: 1.25rem 2rem;
+    border-top: 1px solid #f0f0f0;
+    text-align: center;
+    background-color: #fafafa;
+  }
+
+  .nyna-intent-cta {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background-color: var(--color-foreground, #111);
+    color: var(--color-background, #fff);
+    text-decoration: none;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .nyna-intent-cta:hover {
+    background-color: var(--color-accent, #c5a491);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 768px) {
+    .nyna-intent-engine {
+      align-items: flex-end;
+    }
+
+    .nyna-intent-modal {
+      border-radius: 20px 20px 0 0;
+      max-height: 85vh;
+      transform: translateY(100%);
+    }
+
+    .nyna-intent-engine.is-active .nyna-intent-modal {
+      transform: translateY(0);
+    }
+
+    .nyna-intent-header {
+      padding: 1.25rem 1.5rem 1rem;
+    }
+
+    .nyna-intent-content {
+      padding: 1.5rem;
+    }
+
+    .nyna-intent-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .nyna-intent-footer {
+      padding: 1rem 1.5rem;
+      padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    // Utilities
+    const log = (...args) => {
+      if (window.NYNA_INTENT_DEBUG) console.log('[NYNA Intent]', ...args);
+    };
+
+    const throttle = (func, limit) => {
+      let inThrottle;
+      return function() {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+          func.apply(context, args);
+          inThrottle = true;
+          setTimeout(() => inThrottle = false, limit);
+        }
+      }
+    };
+
+    const STORAGE_KEY = 'nyna_intent_data';
+    const SESSION_KEY = 'nyna_intent_shown';
+
+    // State
+    const state = {
+      sessionStartTime: Date.now(),
+      lastActivityTime: Date.now(),
+      pageStartTime: Date.now(),
+      hasShownThisSession: sessionStorage.getItem(SESSION_KEY) === 'true',
+      isModalOpen: false,
+      data: {
+        categories: {},
+        products: {}
+      },
+      currentCategory: null,
+      currentIntentLevel: 'LOW'
+    };
+
+    // 1 & 2. IntentTracker & IntentScore
+    const IntentTracker = {
+      init() {
+        this.loadData();
+        this.trackPageLoad();
+        this.setupEventListeners();
+      },
+
+      loadData() {
+        try {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          if (stored) {
+            state.data = JSON.parse(stored);
+          }
+        } catch (e) {
+          log('Error loading data', e);
+        }
+        this.evaluateScore();
+      },
+
+      saveData() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
+        } catch (e) {
+          log('Error saving data', e);
+        }
+        this.evaluateScore();
+      },
+
+      addCategoryScore(category, points) {
+        if (!category) return;
+        if (!state.data.categories[category]) state.data.categories[category] = 0;
+        state.data.categories[category] += points;
+        log(`Added ${points} to category ${category}`);
+      },
+
+      addProductScore(handle, id, category, points) {
+        if (!handle || !id) return;
+        if (!state.data.products[handle]) {
+          state.data.products[handle] = { id, category, score: 0, views: 0 };
+        }
+        state.data.products[handle].score += points;
+        log(`Added ${points} to product ${handle}`);
+      },
+
+      trackPageLoad() {
+        const pd = window.NYNA_INTENT_DATA;
+        if (!pd) return;
+
+        if (pd.pageType === 'collection' && pd.collection.title) {
+          const cat = pd.collection.title;
+          this.addCategoryScore(cat, 1);
+          
+          setTimeout(() => {
+            this.addCategoryScore(cat, 2);
+            this.saveData();
+          }, 15000);
+        } 
+        else if (pd.pageType === 'product' && pd.product.handle) {
+          const { handle, id, type } = pd.product;
+          
+          if (state.data.products[handle]) {
+            this.addProductScore(handle, id, type, 5); // Revisit
+            state.data.products[handle].views += 1;
+          } else {
+            this.addCategoryScore(type, 3);
+            this.addProductScore(handle, id, type, 0); // Init
+            state.data.products[handle].views = 1;
+            
+            // Check if viewed 3+ products in same category
+            const productsInCat = Object.values(state.data.products).filter(p => p.category === type).length;
+            if (productsInCat >= 3) {
+              this.addCategoryScore(type, 4);
+            }
+          }
+          
+          setTimeout(() => {
+            this.addCategoryScore(type, 3);
+            this.addProductScore(handle, id, type, 3);
+            this.saveData();
+          }, 20000);
+        }
+        this.saveData();
+      },
+
+      setupEventListeners() {
+        // Track Add to Cart as high intent
+        document.body.addEventListener('click', (e) => {
+          const btn = e.target.closest('form[action^="/cart/add"] button[type="submit"], .product-card__add-to-cart');
+          if (btn) {
+            const pd = window.NYNA_INTENT_DATA;
+            if (pd && pd.product && pd.product.handle) {
+              this.addProductScore(pd.product.handle, pd.product.id, pd.product.type, 15);
+              this.saveData();
+            }
+          }
+        });
+      },
+
+      evaluateScore() {
+        // Find top category
+        let topCat = null;
+        let maxCatScore = 0;
+        for (const [cat, score] of Object.entries(state.data.categories)) {
+          if (score > maxCatScore) {
+            maxCatScore = score;
+            topCat = cat;
+          }
+        }
+        state.currentCategory = topCat;
+
+        // Calculate total score for Intent Level
+        const totalScore = Object.values(state.data.categories).reduce((a, b) => a + b, 0);
+        
+        if (totalScore >= 15) {
+          state.currentIntentLevel = 'HIGH';
+        } else if (totalScore >= 5) {
+          state.currentIntentLevel = 'MEDIUM';
+        } else {
+          state.currentIntentLevel = 'LOW';
+        }
+        
+        log(`Intent Level: ${state.currentIntentLevel}, Top Category: ${state.currentCategory} (Score: ${maxCatScore})`);
+      }
+    };
+
+    // 3. BehaviorTrigger
+    const BehaviorTrigger = {
+      init() {
+        if (state.hasShownThisSession) return;
+
+        this.setupActivityTracking();
+        this.setupExitIntent();
+        this.startInactivityTimer();
+      },
+
+      setupActivityTracking() {
+        const updateActivity = throttle(() => {
+          state.lastActivityTime = Date.now();
+        }, 500);
+
+        window.addEventListener('mousemove', updateActivity);
+        window.addEventListener('scroll', updateActivity);
+        window.addEventListener('keydown', updateActivity);
+        window.addEventListener('click', updateActivity);
+        window.addEventListener('touchstart', updateActivity);
+      },
+
+      startInactivityTimer() {
+        setInterval(() => {
+          if (state.hasShownThisSession || state.isModalOpen) return;
+
+          const inactiveTime = Date.now() - state.lastActivityTime;
+          const sessionTime = Date.now() - state.sessionStartTime;
+
+          // 120000ms = 2 mins
+          const hasEnoughTime = sessionTime > 120000;
+          
+          if (inactiveTime > 30000 && inactiveTime < 45000) {
+            this.evaluateTriggers('INACTIVITY', hasEnoughTime);
+          }
+        }, 5000);
+      },
+
+      setupExitIntent() {
+        // Desktop only
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+          document.addEventListener('mouseleave', (e) => {
+            if (e.clientY <= 0) {
+              const sessionTime = Date.now() - state.sessionStartTime;
+              const hasEnoughTime = sessionTime > 120000;
+              this.evaluateTriggers('EXIT_INTENT', hasEnoughTime);
+            }
+          });
+        }
+      },
+
+      evaluateTriggers(triggerSource, hasEnoughSessionTime) {
+        if (state.hasShownThisSession || state.isModalOpen) return;
+
+        const level = state.currentIntentLevel;
+
+        let shouldShow = false;
+
+        if (level === 'HIGH') {
+          shouldShow = true; // High intent sempre mostra quando há gatilho
+        } else if (level === 'MEDIUM' && hasEnoughSessionTime) {
+          shouldShow = true; // Medium intent precisa de tempo de navegação
+        }
+
+        if (shouldShow) {
+          log(`Triggered by ${triggerSource} at ${level} intent.`);
+          RecommendationEngine.prepareAndShow();
+        }
+      }
+    };
+
+    // 4 & 5 & 6. RecommendationEngine & Popup
+    const RecommendationEngine = {
+      async prepareAndShow() {
+        if (state.isModalOpen || state.hasShownThisSession) return;
+        state.isModalOpen = true;
+
+        const { products } = state.data;
+        const productsArray = Object.entries(products).map(([handle, data]) => ({ handle, ...data }));
+        
+        // Ordena produtos por score e visualizações
+        productsArray.sort((a, b) => b.score - a.score || b.views - a.views);
+
+        const exactProducts = productsArray.slice(0, 2);
+        
+        // Define mensagens
+        const titleEl = document.getElementById('nyna-intent-title');
+        const descEl = document.getElementById('nyna-intent-desc');
+        const ctaEl = document.getElementById('nyna-intent-cta');
+
+        if (state.currentIntentLevel === 'HIGH') {
+          titleEl.textContent = 'Talvez seja difícil escolher só uma ✨';
+          descEl.textContent = 'Essas foram as peças que mais chamaram sua atenção.';
+        } else if (exactProducts.some(p => p.views > 1)) {
+          titleEl.textContent = 'Ainda pensando nessas peças? 👀';
+          descEl.textContent = 'Deixamos suas favoritas aqui para você dar mais uma olhada.';
+        } else if (state.currentCategory) {
+          titleEl.textContent = `Parece que você gostou dos nossos ${state.currentCategory} 👀`;
+          descEl.textContent = 'Separamos algumas peças que podem ser a sua cara.';
+        }
+
+        if (state.currentCategory) {
+          // Simplificação para montar uma URL de coleção a partir do tipo
+          // Isso pode falhar se o tipo do produto não for exato o handle da coleção
+          const handleCat = state.currentCategory.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
+          ctaEl.href = `/collections/${handleCat}`;
+        }
+
+        RecommendationPopup.open();
+
+        try {
+          const grid = document.getElementById('nyna-intent-grid');
+          const loading = document.getElementById('nyna-intent-loading');
+          grid.innerHTML = '';
+          
+          let fetchedHTML = '';
+          
+          // 1. Fetch exact products by handle
+          const fetchPromises = exactProducts.map(p => 
+            fetch(`/products/${p.handle}?section_id=intent-recommendations-card`)
+              .then(res => res.text())
+              .then(html => {
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                const card = doc.querySelector('.shopify-section');
+                return card ? card.innerHTML : '';
+              })
+              .catch(() => '')
+          );
+
+          const exactResults = await Promise.all(fetchPromises);
+          fetchedHTML += exactResults.join('');
+
+          // 2. Fetch related products via Recommendations API to fill up to 4
+          if (exactProducts.length > 0) {
+            const topProductId = exactProducts[0].id;
+            const needed = 4 - exactProducts.length;
+            if (needed > 0) {
+              const recRes = await fetch(`/recommendations/products?product_id=${topProductId}&limit=${needed + 2}&section_id=intent-recommendations`);
+              if (recRes.ok) {
+                const recHtml = await recRes.text();
+                const doc = new DOMParser().parseFromString(recHtml, 'text/html');
+                const cards = doc.querySelectorAll('.shopify-section .product-card');
+                
+                let added = 0;
+                cards.forEach(card => {
+                  // Previne duplicidade simples verificando hrefs
+                  const href = card.querySelector('a')?.getAttribute('href');
+                  if (href && !fetchedHTML.includes(href) && added < needed) {
+                    fetchedHTML += card.outerHTML;
+                    added++;
+                  }
+                });
+              }
+            }
+          }
+
+          loading.style.display = 'none';
+          grid.innerHTML = fetchedHTML;
+          grid.style.display = 'grid';
+
+          // Marca como exibido
+          sessionStorage.setItem(SESSION_KEY, 'true');
+          state.hasShownThisSession = true;
+
+        } catch (err) {
+          log('Error fetching recommendations', err);
+          RecommendationPopup.close(); // Close on failure
+        }
+      }
+    };
+
+    const RecommendationPopup = {
+      open() {
+        const engine = document.getElementById('nyna-intent-engine');
+        engine.classList.add('is-active');
+        engine.setAttribute('aria-hidden', 'false');
+        
+        // Accessibility Focus Trap
+        const closeBtn = document.querySelector('.nyna-intent-close');
+        if (closeBtn) closeBtn.focus();
+        
+        document.addEventListener('keydown', this.handleEsc);
+      },
+      
+      close() {
+        const engine = document.getElementById('nyna-intent-engine');
+        engine.classList.remove('is-active');
+        engine.setAttribute('aria-hidden', 'true');
+        state.isModalOpen = false;
+        
+        document.removeEventListener('keydown', this.handleEsc);
+      },
+      
+      handleEsc(e) {
+        if (e.key === 'Escape') {
+          RecommendationPopup.close();
+        }
+      },
+
+      setupListeners() {
+        document.querySelectorAll('[data-intent-close]').forEach(el => {
+          el.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.close();
+          });
+        });
+      }
+    };
+
+    // Initialize
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        IntentTracker.init();
+        BehaviorTrigger.init();
+        RecommendationPopup.setupListeners();
+      });
+    } else {
+      IntentTracker.init();
+      BehaviorTrigger.init();
+      RecommendationPopup.setupListeners();
+    }
+
+  })();
+{% endjavascript %}

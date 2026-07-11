@@ -1,0 +1,10 @@
+{%- if product != blank -%}
+  {% render 'product-card', product: product %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Intent Recs Card",
+  "settings": []
+}
+{% endschema %}
