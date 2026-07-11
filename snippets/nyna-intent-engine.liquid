@@ -31,10 +31,7 @@
       <h2 id="nyna-intent-title" class="nyna-intent-title">Escolhas que combinam com você</h2>
       <p id="nyna-intent-desc" class="nyna-intent-desc">Reunimos as peças que mais chamaram sua atenção.</p>
       <button type="button" class="nyna-intent-close" data-intent-close aria-label="Fechar recomendações">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18 6L6 18" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M6 6L18 18" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        {{ 'icon-x.svg' | inline_asset_content }}
       </button>
     </div>
     
@@ -186,7 +183,8 @@
 
   /* Estilos do card minimalista injetado via AJAX */
   .intent-minimal-card {
-    flex: 0 0 240px;
+    /* Exatamente 3 itens por vez considerando o gap de 1.5rem (2 gaps entre 3 itens = 3rem / 3 = 1rem) */
+    flex: 0 0 calc(33.333% - 1rem);
     scroll-snap-align: start;
     display: flex;
     flex-direction: column;
@@ -273,6 +271,11 @@
 
     .nyna-intent-grid {
       gap: 1rem;
+    }
+    
+    .intent-minimal-card {
+      /* No mobile, exibe 2 itens por vez com gap de 1rem (1 gap = 1rem / 2 = 0.5rem) */
+      flex: 0 0 calc(50% - 0.5rem);
     }
   }
 {% endstylesheet %}
@@ -588,6 +591,30 @@
           // Marca como exibido
           sessionStorage.setItem(SESSION_KEY, 'true');
           state.hasShownThisSession = true;
+
+          // Inicia carrossel automático
+          let autoScrollInterval;
+          const startAutoScroll = () => {
+            if (autoScrollInterval) clearInterval(autoScrollInterval);
+            autoScrollInterval = setInterval(() => {
+              const card = grid.querySelector('.intent-minimal-card');
+              if (!card) return;
+              const cardWidth = card.offsetWidth + parseInt(window.getComputedStyle(grid).gap || 24);
+              if (grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 10) {
+                grid.scrollTo({ left: 0, behavior: 'smooth' });
+              } else {
+                grid.scrollBy({ left: cardWidth, behavior: 'smooth' });
+              }
+            }, 3000);
+          };
+          const stopAutoScroll = () => clearInterval(autoScrollInterval);
+
+          if (exactProducts.length + (exactProducts.length > 0 ? (6 - exactProducts.length) : 0) > 3) {
+            startAutoScroll();
+            grid.addEventListener('mouseenter', stopAutoScroll);
+            grid.addEventListener('mouseleave', startAutoScroll);
+            grid.addEventListener('touchstart', stopAutoScroll);
+          }
 
         } catch (err) {
           log('Error fetching recommendations', err);
