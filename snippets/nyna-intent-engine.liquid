@@ -116,21 +116,27 @@
     position: absolute;
     top: 1.5rem;
     right: 1.5rem;
-    background: transparent;
+    background: none;
     border: none;
-    color: var(--color-foreground, #111);
-    cursor: pointer;
     padding: 0.5rem;
-    border-radius: 50%;
+    cursor: pointer;
+    color: var(--color-foreground, #111);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .nyna-intent-close svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    stroke-width: 1px;
   }
 
   .nyna-intent-close:hover {
-    background-color: #f5f5f5;
-    transform: scale(1.05);
+    background: none;
+    opacity: 0.5;
+    transform: rotate(90deg);
   }
 
   .nyna-intent-content {
