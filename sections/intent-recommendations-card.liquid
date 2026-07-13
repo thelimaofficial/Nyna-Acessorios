@@ -10,9 +10,15 @@
       </div>
       <h3 class="intent-minimal-card__title">{{ product.title }}</h3>
       <div class="intent-minimal-card__price">
-        {{ product.price | money }}
+        {%- if product.compare_at_price > product.price -%}
+          <span class="intent-minimal-card__price-compare"><s>{{ product.compare_at_price | money }}</s></span>
+          <span class="intent-minimal-card__price-current">{{ product.price | money }}</span>
+        {%- else -%}
+          <span class="intent-minimal-card__price-current">{{ product.price | money }}</span>
+        {%- endif -%}
       </div>
     </a>
+    <a href="{{ product.url }}" class="intent-minimal-card__btn">ADICIONAR A SACOLA</a>
   </div>
 {%- endif -%}
 

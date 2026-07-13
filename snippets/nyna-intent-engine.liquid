@@ -151,10 +151,10 @@
   }
 
   .nyna-intent-content {
-    padding: 0 3rem 4rem;
-    overflow-y: auto;
+    padding: 0 3rem 3rem;
+    overflow-y: hidden;
+    overflow-x: hidden;
     flex-grow: 1;
-    -webkit-overflow-scrolling: touch;
   }
 
   .nyna-intent-loading {
@@ -182,20 +182,12 @@
     gap: 1.5rem;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    padding-bottom: 1.5rem;
-    scrollbar-width: thin;
-    scrollbar-color: #eee transparent;
+    padding-bottom: 0.25rem;
+    scrollbar-width: none;
   }
 
   .nyna-intent-grid::-webkit-scrollbar {
-    height: 6px;
-  }
-  .nyna-intent-grid::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .nyna-intent-grid::-webkit-scrollbar-thumb {
-    background-color: #eee;
-    border-radius: 10px;
+    display: none;
   }
 
   /* Estilos do card minimalista injetado via AJAX */
@@ -256,9 +248,49 @@
   }
 
   .intent-minimal-card__price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .intent-minimal-card__price-compare {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--color-text-secondary, #888);
+  }
+
+  .intent-minimal-card__price-compare s {
+    text-decoration: line-through;
+  }
+
+  .intent-minimal-card__price-current {
     font-size: 0.95rem;
     font-weight: 600;
     color: var(--color-foreground, #111);
+  }
+
+  .intent-minimal-card__btn {
+    display: block;
+    width: 100%;
+    background-color: var(--color-accent, #b09586);
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+    padding: 0.6rem 1rem;
+    border-radius: 9999px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .intent-minimal-card__btn:hover {
+    background-color: var(--color-accent-hover, #9a7e70);
+    transform: translateY(-1px);
   }
 
 
