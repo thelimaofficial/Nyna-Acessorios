@@ -16,14 +16,14 @@
         "link_DELpcz": {
           "type": "link",
           "settings": {
-            "text": "Coleção Copa 2026",
+            "text": "Coleção Inverno 2026",
             "url": "shopify://collections/colecao-canarinho",
             "icon": "sparkle",
-            "icon_image": "shopify://shop_images/brasilbandeira.png",
+            "icon_image": "shopify://shop_images/floco.svg",
             "custom_svg": "",
-            "button_bg_color": "#009537",
+            "button_bg_color": "#18343B",
             "button_text_color": "",
-            "icon_size": 36
+            "icon_size": 0
           }
         },
         "link_4bNWLM": {
@@ -88,11 +88,11 @@
         "logo_width_mobile": 200,
         "logo_text": "nyna",
         "logo_text_sub": "ACESSÓRIOS",
-        "subtitle": "✨ Torça com brilho e elegância ✨",
+        "subtitle": "❄️ Brilhe na estação mais elegante ❄️",
         "bg_color": "#faf8f5",
         "accent_color": "#b08f7a",
         "text_color_on_accent": "#ffffff",
-        "text_color_dark": "#009537",
+        "text_color_dark": "#315A63",
         "icon_size": 16
       }
     },
