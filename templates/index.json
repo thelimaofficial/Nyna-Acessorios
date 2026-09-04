@@ -80,6 +80,7 @@
     },
     "promotional-banner": {
       "type": "promotional-banner-products",
+      "disabled": true,
       "settings": {
         "banner_bg_color": "#c5a491",
         "banner_image": "shopify://shop_images/bunner-inverno.png",
