@@ -15,13 +15,14 @@
       "blocks": {
         "link_DELpcz": {
           "type": "link",
+          "disabled": true,
           "settings": {
             "text": "Coleção Inverno 2026",
             "url": "shopify://collections/colecao-canarinho",
             "icon": "sparkle",
             "icon_image": "shopify://shop_images/floco.svg",
             "custom_svg": "",
-            "button_bg_color": "#18343B",
+            "button_bg_color": "#18343b",
             "button_text_color": "",
             "icon_size": 0
           }
@@ -88,11 +89,11 @@
         "logo_width_mobile": 200,
         "logo_text": "nyna",
         "logo_text_sub": "ACESSÓRIOS",
-        "subtitle": "❄️ Brilhe na estação mais elegante ❄️",
+        "subtitle": "",
         "bg_color": "#faf8f5",
         "accent_color": "#b08f7a",
         "text_color_on_accent": "#ffffff",
-        "text_color_dark": "#315A63",
+        "text_color_dark": "#315a63",
         "icon_size": 16
       }
     },
